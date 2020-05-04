@@ -1,5 +1,7 @@
 # Melanoma Detection Web App
   
-migrate `python manage.py migrate`
+make migrations : `python manage.py makemigrations melanomaApp`
   
-start the server `python manage.py runserver`
+migrate : `python manage.py migrate`
+  
+start the server : `python manage.py runserver`
