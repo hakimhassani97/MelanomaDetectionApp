@@ -6,4 +6,4 @@ def index(request):
     context = {
         'users': users,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'forms.html', context)
