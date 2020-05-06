@@ -26,11 +26,19 @@ def uploadImg(request):
         form = UploadImageForm(request.POST, request.FILES)
         print(form)
         if form.is_valid():
-            # handle_uploaded_file(request.FILES['file'])
-            f = form.save()
-            car = Caracteristics.extractCaracteristics(f.image.path)
-            car = Car(**car)
-            car.save()
+            # multiple Images
+            files = request.FILES.getlist('image')
+            for f in files:
+                i = Image(imgName=form.cleaned_data['imgName'], image=f)
+                i.save()
+                car = Caracteristics.extractCaracteristics(i.image.path)
+                car = Car(**car)
+                car.save()
+            # one Image
+            # f = form.save()
+            # car = Caracteristics.extractCaracteristics(f.image.path)
+            # car = Car(**car)
+            # car.save()
             form = UploadImageForm()
             return render(request, 'uploadImg.html', {'form': form, 'success':True})
             # return redirect('uploadImg')

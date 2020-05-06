@@ -9,3 +9,4 @@ class UploadImageForm(forms.ModelForm):
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         self.fields['imgName'].widget.attrs['class'] = 'form-control'
         self.fields['image'].widget.attrs['class'] = 'form-control-file'
+        self.fields['image'].widget.attrs['multiple'] = True
