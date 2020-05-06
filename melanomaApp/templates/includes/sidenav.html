@@ -63,17 +63,22 @@
 							</span>
 							<h4 class="text-section">{% trans "Traitements" %}</h4>
 						</li>
-						<li class="nav-item {% if url_name in 'forms,uploadImg' %}active{% endif %}">
+						<li class="nav-item {% if url_name in 'forms,uploadImg,images' %}active{% endif %}">
 							<a data-toggle="collapse" href="#images">
 								<i class="far fa-images"></i>
 								<p>{% trans "Images" %}</p>
 								<span class="caret"></span>
 							</a>
-							<div class="collapse {% if url_name in 'forms,uploadImg' %}show{% endif %}" id="images">
+							<div class="collapse {% if url_name in 'forms,uploadImg,images' %}show{% endif %}" id="images">
 								<ul class="nav nav-collapse">
 									<li class="{% if url_name == 'uploadImg' %}active{% endif %}">
 										<a href="{% url 'uploadImg' %}">
 											<span class="sub-item">{% trans "Charger une Image" %}</span>
+										</a>
+									</li>
+									<li class="{% if url_name == 'images' %}active{% endif %}">
+										<a href="{% url 'images' %}">
+											<span class="sub-item">{% trans "Liste des Images" %}</span>
 										</a>
 									</li>
 									<li class="{% if url_name == 'forms' %}active{% endif %}">

@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('uploadImg', views.uploadImg, name='uploadImg'),
+    path('images', views.images, name='images'),
     path('forms.html', views.forms, name='forms'),
 ]
 
