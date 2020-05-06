@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.safestring import mark_safe
 
 class User(models.Model):
     '''
@@ -9,3 +10,46 @@ class User(models.Model):
 
     def __str__(self):
         return self.username+' '+str(self.date)
+
+class Image(models.Model):
+    '''
+        the Image model
+    '''
+    imgName = models.CharField(max_length=30)
+    image = models.ImageField(upload_to='images', default=None)
+    date = models.DateTimeField('upload date', auto_now_add=True)
+
+    def __str__(self):
+        return self.imgName+' '+str(self.date)+' '+self.image.url
+
+class Caracteristic(models.Model):
+    '''
+        Image Caracteristic model
+    '''
+    car0 = models.FloatField('asymmetryByBestFitEllipse', default=0)
+    car1 = models.FloatField('asymmetryByDistanceByCircle', default=0)
+    car2 = models.FloatField('asymmetryIndex', default=0)
+    car3 = models.FloatField('asymmetryBySubRegion', default=0)
+    car4 = models.FloatField('asymmetryBySubRegionCentered', default=0)
+    car5 = models.FloatField('asymmetryBySubRegionCentered2', default=0)
+    car6 = models.FloatField('borderRoundness', default=0)
+    car7 = models.FloatField('borderLength', default=0)
+    car8 = models.FloatField('borderRegularityIndex', default=0)
+    car9 = models.FloatField('borderRegularityIndexRatio', default=0)
+    car10 = models.FloatField('borderCompactIndex', default=0)
+    car11 = models.FloatField('borderHeywoodCircularityIndex', default=0)
+    car12 = models.FloatField('borderHarrisCorner', default=0)
+    car13 = models.FloatField('borderFractalDimension', default=0)
+    car14 = models.FloatField('colorHSVIntervals', default=0)
+    car15 = models.FloatField('colorYUVIntervals', default=0)
+    car16 = models.FloatField('colorYCbCrIntervals', default=0)
+    car17 = models.FloatField('colorSDG', default=0)
+    car18 = models.FloatField('colorKurtosis', default=0)
+    car19 = models.FloatField('diameterMinEnclosingCircle', default=0)
+    car20 = models.FloatField('diameterOpenCircle', default=0)
+    car21 = models.FloatField('diameterLengtheningIndex', default=0)
+    date = models.DateTimeField('computing date', auto_now_add=True)
+
+    def __str__(self):
+        return str([self.car0,self.car1,self.car2,self.car3,self.car4,self.car5,self.car6,self.car7,self.car8,self.car9,self.car10,
+        self.car11,self.car12,self.car13,self.car14,self.car15,self.car16,self.car17,self.car18,self.car19,self.car20,self.car21])
