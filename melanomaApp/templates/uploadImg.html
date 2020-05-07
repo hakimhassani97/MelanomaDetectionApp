@@ -29,7 +29,7 @@
 					<div class="card-header">
 						<div class="card-title">{% trans "Charger une Image" %}</div>
 					</div>
-					<form method="POST" action="{% url 'uploadImg' %}" enctype="multipart/form-data">
+					<form id="uploadImg" method="POST" action="{% url 'uploadImg' %}" enctype="multipart/form-data">
 						{% csrf_token %}
 						<div class="card-body">
 							<div class="row">
@@ -56,6 +56,9 @@
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
 <script>
+	$('#uploadImg').on('submit', ()=>{
+		$('#loader').show()
+	})
 	{% if success %}
 	  //Notify
 		$.notify({
