@@ -32,13 +32,15 @@
 					<form id="uploadImg" method="POST" action="{% url 'uploadImg' %}" enctype="multipart/form-data">
 						{% csrf_token %}
 						<div class="card-body">
-							<div class="row">
-								<div class="form-group row">
-									{% for field in form %}
-										<div class="col-md-6">
-											{{ field.label_tag }} {{ field }}
-										</div>
-									{% endfor %}
+							<div class="form-group row">
+								{% for field in form %}
+									<div class="col-md-4">
+										{{ field.label_tag }} {{ field }}
+									</div>
+								{% endfor %}
+								<div class="col-md-4" style="padding-top:15px">
+									<input name="compute" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="small"
+										data-on="{% trans "Faire les Calcules" %}" data-off="{% trans "Juste Charger l'image" %}">
 								</div>
 							</div>
 						</div>
