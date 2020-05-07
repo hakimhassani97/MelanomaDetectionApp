@@ -1,18 +1,18 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from .models import User, Caracteristic as Car, Image
+from .models import Doctor, Caracteristic as Car, Image
 from .forms import UploadImageForm
 from .detector.Caracteristics import Caracteristics
 
 def forms(request):
-    users = User.objects.order_by('-date')[:5]
+    users = Doctor.objects.order_by('-date')[:5]
     context = {
         'users': users,
     }
     return render(request, 'forms.html', context)
 
 def index(request):
-    users = User.objects.order_by('-date')[:5]
+    users = Doctor.objects.order_by('-date')[:5]
     context = {
         'users': users,
     }
