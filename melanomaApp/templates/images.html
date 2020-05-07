@@ -32,11 +32,11 @@
                     <div class="card-body row">
                         {% for img in images %}
                             <div class="card card-post card-round col-md-4">
-                                <img class="card-img-top" src="{{img.image.url}}" alt="{{img.imgName}}">
+                                <img class="card-img-top" src="{{img.image.url}}" alt="{{img.name}}">
                                 <div class="card-body">
                                     <div class="d-flex">
                                         <div class="info-post ml-2">
-                                            <p class="username">{{img.imgName}}</p>
+                                            <p class="username">{{img.name}}</p>
                                             <p class="date text-muted">{{img.date}}</p>
                                         </div>
                                         <div class="ml-auto">
