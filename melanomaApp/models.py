@@ -1,26 +1,34 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.safestring import mark_safe
 
-class User(models.Model):
+class Doctor(models.Model):
     '''
-        the User model
+        the Doctor model
     '''
-    username = models.CharField(max_length=20)
-    date = models.DateTimeField('registration date')
-
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    image = models.ImageField(upload_to='avatars', null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    class Meta:
+        verbose_name = 'Doctor'
     def __str__(self):
-        return self.username+' '+str(self.date)
+        if self.user:
+            return self.user.email
+        else:
+            return 'h'
 
 class Image(models.Model):
     '''
         the Image model
     '''
-    imgName = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
     image = models.ImageField(upload_to='images', default=None)
     date = models.DateTimeField('upload date', auto_now_add=True)
 
     def __str__(self):
-        return self.imgName+' '+str(self.date)+' '+self.image.url
+        return self.name+' '+str(self.date)+' '+self.image.url
 
 class Caracteristic(models.Model):
     '''

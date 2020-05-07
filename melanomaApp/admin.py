@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import User
-admin.site.register(User)
+from .models import Doctor
+admin.site.register(Doctor)
 
 from .models import Image
 admin.site.register(Image)
