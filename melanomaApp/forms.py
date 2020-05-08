@@ -1,5 +1,5 @@
 from django import forms
-from .models import Image, Doctor
+from .models import Image, Doctor,Patient
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
@@ -42,3 +42,18 @@ class UploadImageForm(forms.ModelForm):
         self.fields['name'].widget.attrs['class'] = 'form-control'
         self.fields['image'].widget.attrs['class'] = 'form-control-file'
         self.fields['image'].widget.attrs['multiple'] = True
+
+class AddPatientForm(forms.ModelForm):
+    '''
+        Add Patient form
+    '''
+    firstName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "First Name","class": "form-control"}))
+    lastName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Last Name","class": "form-control"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder" : "Email","class": "form-control"}))
+    phone = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Phone","class": "form-control"}))
+
+    # address = models.TextField(null=True, blank=True)
+
+    class Meta:
+        model = Patient
+        fields = ('firstName', 'lastName','email','phone')

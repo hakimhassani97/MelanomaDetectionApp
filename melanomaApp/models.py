@@ -19,13 +19,26 @@ class Doctor(models.Model):
         else:
             return 'h'
 
+class Patient(models.Model):
+    '''
+        the Patient model
+    '''
+    firstName = models.CharField(max_length=30, null=False, blank=False)
+    lastName = models.CharField(max_length=30, null=False, blank=False)
+    birthDate = models.DateTimeField('birth date', auto_now_add=True) 
+    
+    address = models.TextField(null=True, blank=True)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    email = models.EmailField(max_length=254,null=True, blank=True)
+
+
 class Image(models.Model):
     '''
         the Image model
     '''
     name = models.CharField(max_length=30)
     image = models.ImageField(upload_to='images', default=None)
-    date = models.DateTimeField('upload date', auto_now_add=True)
+    date = models.DateTimeField()
 
     def __str__(self):
         return self.name+' '+str(self.date)+' '+self.image.url

@@ -11,6 +11,7 @@
 					<div class="user">
 						<div class="avatar-sm float-left mr-2">
 							<img src="/static/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+						
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
@@ -69,6 +70,8 @@
 								<p>{% trans "Images" %}</p>
 								<span class="caret"></span>
 							</a>
+
+							<!--              this for patients                   -->
 							<div class="collapse {% if url_name in 'forms,uploadImg,images' %}show{% endif %}" id="images">
 								<ul class="nav nav-collapse">
 									<li class="{% if url_name == 'uploadImg' %}active{% endif %}">
@@ -89,6 +92,34 @@
 								</ul>
 							</div>
 						</li>
+						
+						<!--             this for patients                      -->
+						<li class="nav-item {% if url_name in 'addPatient' %}active{% endif %}">
+							<a data-toggle="collapse" href="#patients">
+								<i class="fa fa-bed"></i>
+								<p>{% trans "patients" %}</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse {% if url_name in 'addPatient' %}show{% endif %}" id="patients">
+								<ul class="nav nav-collapse">		
+								<!-- 
+									<li class="{% if url_name == 'images' %}active{% endif %}">
+										<a href="{% url 'images' %}">
+											<span class="sub-item">{% trans "Liste des patients" %}</span>
+										</a>
+									</li> -->
+									 
+									<li class="{% if url_name == 'addPatient' %}active{% endif %}">
+										<a href="{% url 'addPatient' %}">
+											<span class="sub-item">{% trans "Ajouter patient" %}</span>
+										</a>
+									</li>
+
+								</ul>
+							</div>
+						</li>
+						<!--             end patients                      -->
+						
 					</ul>
 				{% endif %}	
 

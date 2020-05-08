@@ -9,3 +9,6 @@ admin.site.register(Image)
 
 from .models import Caracteristic
 admin.site.register(Caracteristic)
+
+from .models import Patient
+admin.site.register(Patient)
