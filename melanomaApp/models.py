@@ -25,7 +25,7 @@ class Patient(models.Model):
     '''
     firstName = models.CharField(max_length=30, null=False, blank=False)
     lastName = models.CharField(max_length=30, null=False, blank=False)
-    birthDate = models.DateTimeField('birth date', auto_now_add=True) 
+    birthDate = models.DateTimeField(null=True, blank=True) 
     
     address = models.TextField(null=True, blank=True)
     phone = models.CharField(max_length=15, null=True, blank=True)
