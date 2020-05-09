@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login as doLogin
 from .models import Doctor, Caracteristic as Car, Image
-from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm
+from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm,AddPatientForm
 from .detector.Caracteristics import Caracteristics
 
 def forms(request):
@@ -98,6 +98,8 @@ def uploadImg(request):
         form = UploadImageForm()
     return render(request, 'uploadImg.html', {'form': form})
 
+
+
 def images(request):
     '''
         returns a list of all the images
@@ -107,6 +109,33 @@ def images(request):
         'images': images,
     }
     return render(request, 'images.html', context)
+
+
+
+
+def addPatient(request):
+    '''
+        process the request img
+    '''
+    msg = None
+    success = False
+    if request.method == "POST":
+        form = AddPatientForm(request.POST, request.FILES) 
+        if form.is_valid() :
+            Patient = form.save(commit=False)
+            Patient.save()
+            msg = 'Le Patient est enregistrée avec succes'
+            success = True
+            #return redirect("/login/")
+            return render(request, 'addPatient.html',{"form": form, "msg" : msg, "success" : success })
+        else:
+            msg = 'Verifiez les champs'
+            return render(request, 'addPatient.html', {"form": form, "msg" : msg, "success" : success })
+    else:
+        form = AddPatientForm()
+        return render(request, 'addPatient.html', {'form': form})
+
+
 
 def error_404(request, exception):
     data = {}
