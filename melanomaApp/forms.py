@@ -34,14 +34,16 @@ class UploadImageForm(forms.ModelForm):
         Image lesion upload form
     '''
     name = forms.CharField(max_length=30, required=False)
+    patient = forms.ModelChoiceField(Patient.objects.all())
     class Meta:
         model = Image
-        fields = ['name', 'image']
+        fields = ['name', 'image', 'patient']
     def __init__(self, *args, **kwargs):
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'form-control'
         self.fields['image'].widget.attrs['class'] = 'form-control-file'
         self.fields['image'].widget.attrs['multiple'] = True
+        self.fields['patient'].widget.attrs['class'] = 'form-control'
 
 class AddPatientForm(forms.ModelForm):
     '''
