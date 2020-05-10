@@ -1,130 +1,130 @@
 {% load i18n %}
 {% with url_name=request.resolver_match.url_name %}
-	<!-- Sidebar -->
-	<div class="sidebar sidebar-style-2" data-background-color="dark2">
-				
-		<div class="sidebar-wrapper scrollbar scrollbar-inner">
-			<div class="sidebar-content">
-			
-				{% if user.is_authenticated %}
+<!-- Sidebar -->
+<div class="sidebar sidebar-style-2" data-background-color="dark2">
 
-					<div class="user">
-						<div class="avatar-sm float-left mr-2">
-							<img src="/static/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
-						
-						</div>
-						<div class="info">
-							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-								<span>
-									{{ request.user.user }}
-									<span class="user-level">
-										{{ request.user.username }}  
-									</span>
-									<span class="caret"></span>
-								</span>
-							</a>
-							<div class="clearfix"></div>
+	<div class="sidebar-wrapper scrollbar scrollbar-inner">
+		<div class="sidebar-content">
 
-							<div class="collapse in" id="collapseExample">
-								<ul class="nav">
-									<li>
-										<a href="#profile">
-											<span class="link-collapse">My Profile</span>
-										</a>
-									</li>
-									{% comment %} <li>
-										<a href={% url 'logout' %}>
-											<span class="link-collapse">Logout</span>
-										</a>
-									</li> {% endcomment %}
-								</ul>
-							</div>
-						</div>
-					</div>
-					<ul class="nav nav-primary">
-						<li class="nav-item {% if url_name in 'index' %}active{% endif %}">
-							<a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
-								<i class="fas fa-home"></i>
-								<p>Dashboard</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse {% if url_name == 'index' %}show{% endif %}" id="dashboard">
-								<ul class="nav nav-collapse">
-									<li class="{% if url_name == 'index' %}active{% endif %}">
-										<a href="{% url 'index' %}">
-											<span class="sub-item">Dashboard 1</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<li class="nav-section">
-							<span class="sidebar-mini-icon">
-								<i class="fa fa-ellipsis-h"></i>
+			{% if user.is_authenticated %}
+
+			<div class="user">
+				<div class="avatar-sm float-left mr-2">
+					<img src="/static/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+
+				</div>
+				<div class="info">
+					<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+						<span>
+							{{ request.user.user }}
+							<span class="user-level">
+								{{ request.user.username }}
 							</span>
-							<h4 class="text-section">{% trans "Traitements" %}</h4>
-						</li>
-						<li class="nav-item {% if url_name in 'forms,uploadImg,images' %}active{% endif %}">
-							<a data-toggle="collapse" href="#images">
-								<i class="far fa-images"></i>
-								<p>{% trans "Images" %}</p>
-								<span class="caret"></span>
-							</a>
+							<span class="caret"></span>
+						</span>
+					</a>
+					<div class="clearfix"></div>
 
-							<!--              this for patients                   -->
-							<div class="collapse {% if url_name in 'forms,uploadImg,images' %}show{% endif %}" id="images">
-								<ul class="nav nav-collapse">
-									<li class="{% if url_name == 'uploadImg' %}active{% endif %}">
-										<a href="{% url 'uploadImg' %}">
-											<span class="sub-item">{% trans "Charger une Image" %}</span>
-										</a>
-									</li>
-									<li class="{% if url_name == 'images' %}active{% endif %}">
-										<a href="{% url 'images' %}">
-											<span class="sub-item">{% trans "Liste des Images" %}</span>
-										</a>
-									</li>
-									<li class="{% if url_name == 'forms' %}active{% endif %}">
-										<a href="{% url 'forms' %}">
-											<span class="sub-item">{% trans "Basic Form" %}</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-						
-						<!--             this for patients                      -->
-						<li class="nav-item {% if url_name in 'addPatient' %}active{% endif %}">
-							<a data-toggle="collapse" href="#patients">
-								<i class="fa fa-bed"></i>
-								<p>{% trans "patients" %}</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse {% if url_name in 'addPatient' %}show{% endif %}" id="patients">
-								<ul class="nav nav-collapse">		
-								<!-- 
-									<li class="{% if url_name == 'images' %}active{% endif %}">
-										<a href="{% url 'images' %}">
-											<span class="sub-item">{% trans "Liste des patients" %}</span>
-										</a>
-									</li> -->
-									 
-									<li class="{% if url_name == 'addPatient' %}active{% endif %}">
-										<a href="{% url 'addPatient' %}">
-											<span class="sub-item">{% trans "Ajouter patient" %}</span>
-										</a>
-									</li>
-
-								</ul>
-							</div>
-						</li>
-						<!--             end patients                      -->
-						
-					</ul>
-				{% endif %}	
-
+					<div class="collapse in" id="collapseExample">
+						<ul class="nav">
+							<li>
+								<a href="#profile">
+									<span class="link-collapse">My Profile</span>
+								</a>
+							</li>
+							{% comment %} <li>
+								<a href={% url 'logout' %}>
+									<span class="link-collapse">Logout</span>
+								</a>
+							</li> {% endcomment %}
+						</ul>
+					</div>
+				</div>
 			</div>
+			<ul class="nav nav-primary">
+				<li class="nav-item {% if url_name in 'index' %}active{% endif %}">
+					<a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
+						<i class="fas fa-home"></i>
+						<p>Dashboard</p>
+						<span class="caret"></span>
+					</a>
+					<div class="collapse {% if url_name == 'index' %}show{% endif %}" id="dashboard">
+						<ul class="nav nav-collapse">
+							<li class="{% if url_name == 'index' %}active{% endif %}">
+								<a href="{% url 'index' %}">
+									<span class="sub-item">Dashboard 1</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li class="nav-section">
+					<span class="sidebar-mini-icon">
+						<i class="fa fa-ellipsis-h"></i>
+					</span>
+					<h4 class="text-section">{% trans "Traitements" %}</h4>
+				</li>
+				<li class="nav-item {% if url_name in 'forms,uploadImg,images' %}active{% endif %}">
+					<a data-toggle="collapse" href="#images">
+						<i class="far fa-images"></i>
+						<p>{% trans "Images" %}</p>
+						<span class="caret"></span>
+					</a>
+
+					<!--              this for patients                   -->
+					<div class="collapse {% if url_name in 'forms,uploadImg,images' %}show{% endif %}" id="images">
+						<ul class="nav nav-collapse">
+							<li class="{% if url_name == 'uploadImg' %}active{% endif %}">
+								<a href="{% url 'uploadImg' %}">
+									<span class="sub-item">{% trans "Charger une Image" %}</span>
+								</a>
+							</li>
+							<li class="{% if url_name == 'images' %}active{% endif %}">
+								<a href="{% url 'images' %}">
+									<span class="sub-item">{% trans "Liste des Images" %}</span>
+								</a>
+							</li>
+							<li class="{% if url_name == 'forms' %}active{% endif %}">
+								<a href="{% url 'forms' %}">
+									<span class="sub-item">{% trans "Basic Form" %}</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+
+				<!--             this for patients                      -->
+				<li class="nav-item {% if url_name in 'addPatient,patientsList' %}active{% endif %}">
+					<a data-toggle="collapse" href="#patients">
+						<i class="fa fa-bed"></i>
+						<p>{% trans "patients" %}</p>
+						<span class="caret"></span>
+					</a>
+					<div class="collapse {% if url_name in 'addPatient,patientsList' %}show{% endif %}" id="patients">
+						<ul class="nav nav-collapse">
+
+							<li class="{% if url_name == 'patientsList' %}active{% endif %}">
+								<a href="{% url 'patientsList' %}">
+									<span class="sub-item">{% trans "Liste des patients" %}</span>
+								</a>
+							</li>
+
+							<li class="{% if url_name == 'addPatient' %}active{% endif %}">
+								<a href="{% url 'addPatient' %}">
+									<span class="sub-item">{% trans "Ajouter patient" %}</span>
+								</a>
+							</li>
+
+						</ul>
+					</div>
+				</li>
+				<!--             end patients                      -->
+
+			</ul>
+			{% endif %}
+
 		</div>
 	</div>
-	<!-- End Sidebar -->
+</div>
+<!-- End Sidebar -->
 {% endwith %}

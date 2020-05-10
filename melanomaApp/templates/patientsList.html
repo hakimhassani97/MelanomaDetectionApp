@@ -1,0 +1,93 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans "Patients" %} {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">{% trans "Patients" %}</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="{% url 'index' %}">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'uploadImg' %}">{% trans "Liste des patients" %}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span>{% trans "Liste des patients" %}</span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="PatientsTable" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <td>Date de naissance</td>
+                                <td>Mobile</td>
+                                <!-- <td>Email</td> -->
+                                <!-- <td>Address</td> -->
+                                <th style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient in patients %}
+                            <tr>
+                                <td>{{patient.firstName}}</td>
+                                <td>{{patient.firstName}}</td>
+                                <td>{{patient.birthDate}}</td>
+                                <td>{{patient.phone}}</td>
+                                <!-- <td>{{patient.email}}</td> -->
+                                <!-- <td>{{patient.address}}</td> -->
+                                <td>
+                                    <div class="form-button-action">
+                                        <button type="button" data-toggle="tooltip" title=""
+                                            class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button type="button" data-toggle="tooltip" title=""
+                                            class="btn btn-link btn-danger" data-original-title="Remove">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block javascripts %}
+
+<script>
+    $(document).ready(function () {
+
+        // Add Row
+        $('#PatientsTable').DataTable({
+            "pageLength": 5,
+        });
+
+
+
+    });
+</script>
+
+{% endblock javascripts %}
