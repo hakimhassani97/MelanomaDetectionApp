@@ -34,7 +34,15 @@
 						<div class="card-body">
 							<div class="form-group row">
 								{% for field in form %}
-									<div class="col-md-4">
+									{% if field.name in 'patient' %}
+										<div class="col-md-2">
+											<label for="">{% trans "Ajouter patient" %}</label>
+											<a href="{% url 'addPatient' %}" type="button" class="btn btn-icon btn-round btn-success text-light">
+												<i class="fa fa-plus" style="margin-top:12px"></i>
+											</a>
+										</div>
+									{% endif %}
+									<div class="col-md-3">
 										{{ field.label_tag }} {{ field }}
 									</div>
 								{% endfor %}

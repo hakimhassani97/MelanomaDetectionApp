@@ -37,7 +37,7 @@ class UploadImageForm(forms.ModelForm):
     patient = forms.ModelChoiceField(Patient.objects.all())
     class Meta:
         model = Image
-        fields = ['name', 'image', 'patient']
+        fields = ['patient', 'name', 'image']
     def __init__(self, *args, **kwargs):
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'form-control'
