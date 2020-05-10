@@ -12,3 +12,6 @@ admin.site.register(Caracteristic)
 
 from .models import Patient
 admin.site.register(Patient)
+
+from .models import Details
+admin.site.register(Details)

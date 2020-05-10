@@ -1,10 +1,17 @@
+import cv2
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
+from django.core.files import File
 from django.contrib.auth import authenticate, login as doLogin
 from django.contrib.auth.decorators import user_passes_test
-from .models import Doctor, Caracteristic as Car, Image, Patient
+from .models import Doctor, Caracteristic as Car, Image, Patient, Details
 from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm, AddPatientForm
 from .detector.Caracteristics import Caracteristics
+from .detector.utils.Caracteristics import Caracteristics as Cars
+from .detector.utils.Contours import Contours
+from .detector.utils.Preprocess import Preprocess
+import shutil
+import os
 
 def checkDoctorIsLoggedIn(user):
     '''
@@ -95,9 +102,27 @@ def uploadImg(request):
                 i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'])
                 i.save()
                 if 'compute' in request.POST:
+                    # image caracteristics
                     car = Caracteristics.extractCaracteristics(i.image.path)
                     car = Car(**car, image=i)
                     car.save()
+                    # image details
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    contour = Contours.contours2(img)
+                    # extractLesion
+                    img = Cars.extractLesion(img, contour)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_extract.')
+                    cv2.imwrite(imgPath, img)
+                    det = Details(image=i)
+                    with open(imgPath, 'rb') as dest:
+                        # name = i.image.name.replace('.','_extract.')
+                        name = imgPath.replace('media/images/','')
+                        det.extract.save(name, File(dest), save=False)
+                    # remove temporary files
+                    # shutil.rmtree(imgPath, ignore_errors=True)
+                    os.remove(imgPath)
+                    det.save()
             # one Image
             # f = form.save()
             # car = Caracteristics.extractCaracteristics(f.image.path)

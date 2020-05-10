@@ -47,17 +47,15 @@ class Image(models.Model):
     def __str__(self):
         return self.name+' '+str(self.date)+' '+self.image.url
 
-# class Details(models.Model):
-#     '''
-#         the image Details model
-#     '''
-#     name = models.CharField(max_length=30)
-#     image = models.ImageField(upload_to='images', default=None)
-#     date = models.DateTimeField('upload date', auto_now_add=True)
-#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
+class Details(models.Model):
+    '''
+        the image Details model
+    '''
+    image = models.OneToOneField(Image, on_delete=models.CASCADE, null=True, blank=True)
+    extract = models.ImageField(upload_to='images', default=None)
 
-#     def __str__(self):
-#         return self.name+' '+str(self.date)+' '+self.image.url
+    def __str__(self):
+        return str(self.image)
 
 class Caracteristic(models.Model):
     '''
