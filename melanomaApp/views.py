@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login as doLogin
-from .models import Doctor, Caracteristic as Car, Image
-from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm,AddPatientForm
+from .models import Doctor, Caracteristic as Car, Image, Patient
+from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm, AddPatientForm
 from .detector.Caracteristics import Caracteristics
+
 
 def forms(request):
     users = Doctor.objects.order_by('-date')[:5]
@@ -12,6 +13,7 @@ def forms(request):
     }
     return render(request, 'forms.html', context)
 
+
 def index(request):
     users = Doctor.objects.order_by('-date')[:5]
     context = {
@@ -19,6 +21,8 @@ def index(request):
     }
     return render(request, 'index.html', context)
 # auth views
+
+
 def login(request):
     '''
         Doctor login view
@@ -33,11 +37,12 @@ def login(request):
             if user is not None:
                 doLogin(request, user)
                 return redirect("/")
-            else:    
+            else:
                 msg = 'Email ou mot de passe incorrectes'
         else:
             msg = 'Erreur lors de validation du formulaire'
-    return render(request, "auth/login.html", {"form": form, "msg" : msg})
+    return render(request, "auth/login.html", {"form": form, "msg": msg})
+
 
 def register(request):
     '''
@@ -61,13 +66,14 @@ def register(request):
             user = authenticate(username=username, password=raw_password)
             msg = 'Compte Cree avec succes, veuillez attendre notre validation'
             success = True
-            #return redirect("/login/")
+            # return redirect("/login/")
         else:
             msg = 'Verifiez les champs'
     else:
         form = RegisterForm()
         userform = UserRegisterForm()
-    return render(request, "auth/register.html", {"form": form, "userform": userform, "msg" : msg, "success" : success })
+    return render(request, "auth/register.html", {"form": form, "userform": userform, "msg": msg, "success": success})
+
 
 def uploadImg(request):
     '''
@@ -92,12 +98,11 @@ def uploadImg(request):
             # car = Car(**car)
             # car.save()
             form = UploadImageForm()
-            return render(request, 'uploadImg.html', {'form': form, 'success':True})
+            return render(request, 'uploadImg.html', {'form': form, 'success': True})
             # return redirect('uploadImg')
     else:
         form = UploadImageForm()
     return render(request, 'uploadImg.html', {'form': form})
-
 
 
 def images(request):
@@ -111,32 +116,40 @@ def images(request):
     return render(request, 'images.html', context)
 
 
-
-
 def addPatient(request):
     '''
-        process the request img
+        Add Patient
     '''
     msg = None
     success = False
     if request.method == "POST":
-        form = AddPatientForm(request.POST, request.FILES) 
-        if form.is_valid() :
+        form = AddPatientForm(request.POST, request.FILES)
+        if form.is_valid():
             Patient = form.save(commit=False)
             Patient.save()
             msg = 'Le Patient est enregistrée avec succes'
             success = True
-            #return redirect("/login/")
-            return render(request, 'addPatient.html',{"form": form, "msg" : msg, "success" : success })
+            # return redirect("/login/")
+            return render(request, 'addPatient.html', {"form": form, "msg": msg, "success": success})
         else:
             msg = 'Verifiez les champs'
-            return render(request, 'addPatient.html', {"form": form, "msg" : msg, "success" : success })
+            return render(request, 'addPatient.html', {"form": form, "msg": msg, "success": success})
     else:
         form = AddPatientForm()
         return render(request, 'addPatient.html', {'form': form})
 
 
+def patientsList(request):
+    '''
+        returns a list of all Patients
+    '''
+    patients = Patient.objects.all()
+    context = {
+        'patients': patients,
+    }
+    return render(request, 'patientsList.html', context)
+
 
 def error_404(request, exception):
     data = {}
-    return render(request,'404.html', data)
+    return render(request, '404.html', data)
