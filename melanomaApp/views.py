@@ -1,10 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login as doLogin
+from django.contrib.auth.decorators import user_passes_test
 from .models import Doctor, Caracteristic as Car, Image, Patient
 from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm, AddPatientForm
 from .detector.Caracteristics import Caracteristics
 
+def checkDoctorIsLoggedIn(user):
+    '''
+        checks if the doctor is logged in and active
+    '''
+    return user.is_authenticated and hasattr(user, 'doctor') and user.doctor!=None
 
 def forms(request):
     users = Doctor.objects.order_by('-date')[:5]
@@ -13,7 +19,7 @@ def forms(request):
     }
     return render(request, 'forms.html', context)
 
-
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def index(request):
     users = Doctor.objects.order_by('-date')[:5]
     context = {
@@ -86,7 +92,7 @@ def uploadImg(request):
             # multiple Images
             files = request.FILES.getlist('image')
             for f in files:
-                i = Image(name=form.cleaned_data['name'], image=f)
+                i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'])
                 i.save()
                 if 'compute' in request.POST:
                     car = Caracteristics.extractCaracteristics(i.image.path)
