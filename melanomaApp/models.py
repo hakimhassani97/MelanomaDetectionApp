@@ -25,11 +25,14 @@ class Patient(models.Model):
     '''
     firstName = models.CharField(max_length=30, null=False, blank=False)
     lastName = models.CharField(max_length=30, null=False, blank=False)
-    birthDate = models.DateTimeField(null=True, blank=True) 
-    
+    birthDate = models.DateTimeField(null=True, blank=True)     
     address = models.TextField(null=True, blank=True)
     phone = models.CharField(max_length=15, null=True, blank=True)
     email = models.EmailField(max_length=254,null=True, blank=True)
+
+    def __str__(self):
+        return self.firstName+' '+self.lastName+' ('+self.phone+')'
+    
 
 
 class Image(models.Model):
@@ -39,6 +42,7 @@ class Image(models.Model):
     name = models.CharField(max_length=30)
     image = models.ImageField(upload_to='images', default=None)
     date = models.DateTimeField('upload date', auto_now_add=True)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name+' '+str(self.date)+' '+self.image.url
