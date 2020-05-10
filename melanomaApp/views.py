@@ -96,7 +96,7 @@ def uploadImg(request):
                 i.save()
                 if 'compute' in request.POST:
                     car = Caracteristics.extractCaracteristics(i.image.path)
-                    car = Car(**car)
+                    car = Car(**car, image=i)
                     car.save()
             # one Image
             # f = form.save()

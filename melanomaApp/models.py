@@ -47,6 +47,18 @@ class Image(models.Model):
     def __str__(self):
         return self.name+' '+str(self.date)+' '+self.image.url
 
+# class Details(models.Model):
+#     '''
+#         the image Details model
+#     '''
+#     name = models.CharField(max_length=30)
+#     image = models.ImageField(upload_to='images', default=None)
+#     date = models.DateTimeField('upload date', auto_now_add=True)
+#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
+
+#     def __str__(self):
+#         return self.name+' '+str(self.date)+' '+self.image.url
+
 class Caracteristic(models.Model):
     '''
         Image Caracteristic model
@@ -74,6 +86,7 @@ class Caracteristic(models.Model):
     car20 = models.FloatField('diameterOpenCircle', default=0)
     car21 = models.FloatField('diameterLengtheningIndex', default=0)
     date = models.DateTimeField('computing date', auto_now_add=True)
+    image = models.OneToOneField(Image, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str([self.car0,self.car1,self.car2,self.car3,self.car4,self.car5,self.car6,self.car7,self.car8,self.car9,self.car10,
