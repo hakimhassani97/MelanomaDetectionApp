@@ -94,13 +94,12 @@ def uploadImg(request):
     '''
     if request.method == 'POST':
         form = UploadImageForm(request.POST, request.FILES)
-        print(form)
         if form.is_valid():
             # multiple Images
             files = request.FILES.getlist('image')
             for f in files:
                 i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'])
-                i.save()
+                i.save()                
                 if 'compute' in request.POST:
                     # image caracteristics
                     car = Caracteristics.extractCaracteristics(i.image.path)
@@ -123,6 +122,7 @@ def uploadImg(request):
                     # shutil.rmtree(imgPath, ignore_errors=True)
                     os.remove(imgPath)
                     det.save()
+                    
             # one Image
             # f = form.save()
             # car = Caracteristics.extractCaracteristics(f.image.path)
@@ -179,6 +179,48 @@ def patientsList(request):
         'patients': patients,
     }
     return render(request, 'patientsList.html', context)
+
+
+
+def preparation(request,imgId):
+    '''
+        returns preparation
+    '''
+    
+    details=Details.objects.raw('SELECT * FROM melanomaApp_details WHERE image_id  = %s',[imgId])[0]
+    
+    context = {
+        
+        'details': details,
+    }
+
+    return render(request, 'preparation.html',context)
+    
+
+def asymmetry(request):
+    '''
+        returns asymmetry
+    '''
+    return render(request, 'asymmetry.html')
+
+def border(request):
+    '''
+        returns border
+    '''
+    return render(request, 'border.html')
+
+def color(request):
+    '''
+        returns color
+    '''
+    return render(request, 'color.html')
+
+
+def diameter(request):
+    '''
+        returns diameter
+    '''
+    return render(request, 'diameter.html')
 
 
 def error_404(request, exception):

@@ -12,6 +12,12 @@ urlpatterns = [
     path('forms.html', views.forms, name='forms'),
     path('addPatient', views.addPatient, name='addPatient'),
     path('patientsList', views.patientsList, name='patientsList'),
+    path('preparation/<int:imgId>', views.preparation, name='preparation'),
+    path('asymmetry', views.asymmetry, name='asymmetry'),
+    path('border', views.border, name='border'),
+    path('color', views.color, name='color'),
+    path('diameter', views.diameter, name='diameter'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

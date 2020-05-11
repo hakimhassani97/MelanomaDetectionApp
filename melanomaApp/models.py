@@ -53,6 +53,7 @@ class Details(models.Model):
     '''
     image = models.OneToOneField(Image, on_delete=models.CASCADE, null=True, blank=True)
     extract = models.ImageField(upload_to='images', default=None)
+ 
 
     def __str__(self):
         return str(self.image)
