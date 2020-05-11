@@ -190,6 +190,7 @@ def preparation(request,imgId):
     details=Details.objects.raw('SELECT * FROM melanomaApp_details WHERE image_id  = %s',[imgId])[0]
     
     context = {
+        
         'details': details,
     }
 
