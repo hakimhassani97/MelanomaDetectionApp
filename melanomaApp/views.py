@@ -181,6 +181,40 @@ def patientsList(request):
     return render(request, 'patientsList.html', context)
 
 
+
+def preparation(request):
+    '''
+        returns preparation
+    '''
+    return render(request, 'preparation.html')
+    
+
+def asymmetry(request):
+    '''
+        returns asymmetry
+    '''
+    return render(request, 'asymmetry.html')
+
+def border(request):
+    '''
+        returns border
+    '''
+    return render(request, 'border.html')
+
+def color(request):
+    '''
+        returns color
+    '''
+    return render(request, 'color.html')
+
+
+def diameter(request):
+    '''
+        returns diameter
+    '''
+    return render(request, 'diameter.html')
+
+
 def error_404(request, exception):
     data = {}
     return render(request, '404.html', data)

@@ -64,34 +64,6 @@
 					</span>
 					<h4 class="text-section">{% trans "Traitements" %}</h4>
 				</li>
-				<li class="nav-item {% if url_name in 'forms,uploadImg,images' %}active{% endif %}">
-					<a data-toggle="collapse" href="#images">
-						<i class="far fa-images"></i>
-						<p>{% trans "Images" %}</p>
-						<span class="caret"></span>
-					</a>
-
-					<!--              this for patients                   -->
-					<div class="collapse {% if url_name in 'forms,uploadImg,images' %}show{% endif %}" id="images">
-						<ul class="nav nav-collapse">
-							<li class="{% if url_name == 'uploadImg' %}active{% endif %}">
-								<a href="{% url 'uploadImg' %}">
-									<span class="sub-item">{% trans "Charger une Image" %}</span>
-								</a>
-							</li>
-							<li class="{% if url_name == 'images' %}active{% endif %}">
-								<a href="{% url 'images' %}">
-									<span class="sub-item">{% trans "Liste des Images" %}</span>
-								</a>
-							</li>
-							<li class="{% if url_name == 'forms' %}active{% endif %}">
-								<a href="{% url 'forms' %}">
-									<span class="sub-item">{% trans "Basic Form" %}</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</li>
 
 				<!--             this for patients                      -->
 				<li class="nav-item {% if url_name in 'addPatient,patientsList' %}active{% endif %}">
@@ -119,6 +91,93 @@
 					</div>
 				</li>
 				<!--             end patients                      -->
+
+				<li class="nav-item {% if url_name in 'forms,uploadImg,images' %}active{% endif %}">
+					<a data-toggle="collapse" href="#images">
+						<i class="far fa-images"></i>
+						<p>{% trans "Images" %}</p>
+						<span class="caret"></span>
+					</a>
+
+					<div class="collapse {% if url_name in 'forms,uploadImg,images' %}show{% endif %}" id="images">
+						<ul class="nav nav-collapse">
+							<li class="{% if url_name == 'uploadImg' %}active{% endif %}">
+								<a href="{% url 'uploadImg' %}">
+									<span class="sub-item">{% trans "Charger une Image" %}</span>
+								</a>
+							</li>
+							<li class="{% if url_name == 'images' %}active{% endif %}">
+								<a href="{% url 'images' %}">
+									<span class="sub-item">{% trans "Liste des Images" %}</span>
+								</a>
+							</li>
+							<li class="{% if url_name == 'forms' %}active{% endif %}">
+								<a href="{% url 'forms' %}">
+									<span class="sub-item">{% trans "Basic Form" %}</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+
+
+
+				<li
+					class="nav-item {% if url_name in 'preparation,asymmetry,border,color,diameter' %}active{% endif %}">
+					<a data-toggle="collapse" href="#traitement">
+						<i class="far fa-paper-plane"></i>
+						<p>{% trans "Traitement" %}</p>
+						<span class="caret"></span>
+					</a>
+					<div class="collapse {% if url_name in 'preparation,asymmetry,border,color,diameter' %}show{% endif %}"
+						id="traitement">
+						<ul class="nav nav-collapse">
+
+							<li class="{% if url_name == 'preparation' %}active{% endif %}">
+								<a href="{% url 'preparation' %}">
+									<span class="sub-item">{% trans "Préparation" %}</span>
+								</a>
+							</li>
+							<li class="{% if url_name == 'asymmetry' %}active{% endif %}">
+								<a href="{% url 'asymmetry' %}">
+									<span class="sub-item">{% trans "Asymétrie" %}</span>
+								</a>
+							</li>
+							<li class="{% if url_name == 'border' %}active{% endif %}">
+								<a href="{% url 'border' %}">
+									<span class="sub-item">{% trans "Bordure" %}</span>
+								</a>
+							</li>
+							<li class="{% if url_name == 'color' %}active{% endif %}">
+								<a href="{% url 'color' %}">
+									<span class="sub-item">{% trans "Couleur" %}</span>
+								</a>
+							</li>
+							<li class="{% if url_name == 'diameter' %}active{% endif %}">
+								<a href="{% url 'diameter' %}">
+									<span class="sub-item">{% trans "Diamètre" %}</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+
+
+				<!--             end patients                      -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 			</ul>
 			{% endif %}
