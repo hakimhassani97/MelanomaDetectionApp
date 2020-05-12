@@ -29,7 +29,8 @@ class Patient(models.Model):
     address = models.TextField(null=True, blank=True)
     phone = models.CharField(max_length=15, null=True, blank=True)
     email = models.EmailField(max_length=254,null=True, blank=True)
-
+    sexe = models.CharField(max_length=30, null=False, blank=False, default="male")
+    
     def __str__(self):
         return self.firstName+' '+self.lastName+' ('+self.phone+')'
     

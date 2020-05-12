@@ -51,15 +51,16 @@ class AddPatientForm(forms.ModelForm):
     '''
     firstName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "First Name","class": "form-control","type":"text"}))
     lastName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Last Name","class": "form-control","type":"text"}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder" : "Email","class": "form-control","email":"email" }))
+    # email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder" : "Email","class": "form-control","email":"email" }))
     phone = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Phone","class": "form-control"}))
     birthDate=forms.DateField(widget=forms.DateInput(attrs={"placeholder" : "Birth Date","class": "form-control" ,"type" :"Date"}))
     
     address=forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Address","class": "form-control","type":"text"}))
-
-
-    # address = models.TextField(null=True, blank=True)
+    
+    CHOICES = (('', 'Sexe'),('male', 'Male'),('femelle', 'Femelle'))
+    sexe = forms.ChoiceField(choices=CHOICES ,widget=forms.Select(attrs={"placeholder" : "Sexe","class": "form-control"}))
+   
 
     class Meta:
         model = Patient
-        fields = ('firstName', 'lastName','email','phone','birthDate','address')
+        fields = ('firstName', 'lastName','phone','birthDate','address','sexe')
