@@ -186,11 +186,12 @@ def preparation(request,imgId):
     '''
         returns preparation
     '''
-    
-    details=Details.objects.raw('SELECT * FROM melanomaApp_details WHERE image_id  = %s',[imgId])[0]
+    img = Image.objects.get(id=imgId)
+    # details=Details.objects.raw('SELECT * FROM melanomaApp_details WHERE image_id  = %s',[imgId])[0]
+    details = img.details
     
     context = {
-        
+        'img': img,
         'details': details,
     }
 
