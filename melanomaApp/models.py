@@ -70,6 +70,7 @@ class Details(models.Model):
     contour = models.ImageField(upload_to='images', null=True, blank=True)
     circle = models.ImageField(upload_to='images', null=True, blank=True)
     preprocess = models.ImageField(upload_to='images', null=True, blank=True)
+    rect = models.ImageField(upload_to='images', null=True, blank=True)
 
     def __str__(self):
         return str(self.image)

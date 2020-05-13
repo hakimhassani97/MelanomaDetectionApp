@@ -143,6 +143,17 @@ def uploadImg(request):
                         det.circle.save(name, File(dest), save=False)
                     # remove temporary files
                     os.remove(imgPath)
+                    ######################## draw rect
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    Contours.boundingRectangleRotated(img, contour)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_rect.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.rect.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
                     ######################## draw preprocess
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     img = Preprocess.removeArtifactYUV(img)
