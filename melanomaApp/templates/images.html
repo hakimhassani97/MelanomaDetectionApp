@@ -41,10 +41,12 @@
 								</div>
 								<div class="ml-auto">
 									<a href={% url 'preparation' imgId=img.id  %}
-										class="btn btn-primary btn-rounded btn-sm">{% trans "Details" %}</a>
-									<button class="btn btn-icon btn-primary btn-round btn-xs">
+										class="btn btn-primary btn-rounded btn-sm">{% trans "Details" %}</a><br/>
+									<a href={% url 'results' imgId=img.id  %}
+										class="btn btn-primary btn-rounded btn-sm">{% trans "Resultats" %}</a>
+									{% comment %} <button class="btn btn-icon btn-primary btn-round btn-xs">
 										<i class="fa fa-plus"></i>
-									</button>
+									</button> {% endcomment %}
 								</div>
 							</div>
 						</div>
