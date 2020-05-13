@@ -76,7 +76,7 @@ class Contours:
         cv2.putText(
             img,
             'lesion ('+str(round(height*0.026458333))+'cm x '+str(round(width*0.026458333))+'cm)',
-            (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 1)
+            (10, 20), cv2.FONT_HERSHEY_COMPLEX, 0.7, (255, 255, 255), 1)
         # line
         [vx,vy,x,y] = cv2.fitLine(contour, cv2.DIST_L2,0,0.01,0.01)
         lefty = int((-x*vy/vx) + y)
