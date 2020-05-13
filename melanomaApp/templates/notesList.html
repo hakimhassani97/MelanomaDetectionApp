@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load i18n %}
-{% block title %} {% trans "Patients" %} {% endblock title %}
+{% block title %} {% trans "Liste des Notes" %} {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -8,7 +8,7 @@
 {% block content %}
 <div class="page-inner">
     <div class="page-header">
-        <h4 class="page-title">{% trans "Patients" %}</h4>
+        <h4 class="page-title">{% trans "Liste des Notes" %}</h4>
         <ul class="breadcrumbs">
             <li class="nav-home">
                 <a href="{% url 'index' %}">
@@ -19,7 +19,7 @@
                 <i class="flaticon-right-arrow"></i>
             </li>
             <li class="nav-item">
-                <a href="{% url 'uploadImg' %}">{% trans "Liste des patients" %}</a>
+                <a href="{% url 'uploadImg' %}">{% trans "Liste des Notes" %}</a>
             </li>
         </ul>
     	
@@ -29,47 +29,40 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title" style ="float: left;">
-                        <span>{% trans "Liste des patients" %}</span>
+                        <span>{% trans "Liste des Notes" %}</span>
                     </div>
                     <div style ="float: right;" class="col-md-2">
-                        <a href="{% url 'addPatient' %}"  type="submit" class="btn btn-success text-light">{% trans "Ajouter" %}</a>
+                        <a href="{% url 'addNote' %}"  type="submit" class="btn btn-success text-light">{% trans "Ajouter" %}</a>
 	
 		            </div>
         
                 </div>
                 <div class="card-body">
-
+               
                     <div class="table-responsive">
                         <table id="patientsTable" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Prénom</th>
-                                    <th>Nom</th>
-                                    <td>Date de naissance</td>
-                                    <td>Sexe</td>
-                                    <td>Mobile</td>
+                                    <th>Id</th>
+                                    <th>Titre</th>
+                                    <td>Date</td>
                                     <th style="width: 10%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for patient in patients %}
+                                {% for note in notes %}
                                 <tr>
-                                    <td>{{patient.firstName}}</td>
-                                    <td>{{patient.firstName}}</td>
-                                    <td>{{patient.birthDate}}</td>
-                                    <td>{{patient.sexe}}</td>
-                                    <td>{{patient.phone}}</td>
-
+                                    <td>{{note.id}}</td>
+                                    <td>{{note.title}}</td>
+                                    <td>{{note.date}}</td>
+                                  
                                     <td>
                                         <div class="form-button-action">
-                                            <a  href={% url 'updatePatient' patientId=patient.id  %} type="button" data-toggle="tooltip" 
-                                                class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
-                                                <i class="fa fa-edit"></i>
-                                        </a>
-                                            <button type="button" data-toggle="tooltip" title=""
+                                         
+                                            <a href={% url 'deleteNote' noteId=note.id  %} type="button" data-toggle="tooltip" title=""
                                                 class="btn btn-link btn-danger" data-original-title="Remove">
                                                 <i class="fa fa-times"></i>
-                                            </button>
+                                           </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -92,6 +85,21 @@
             "pageLength": 5,
         });
     });
+    {% if add %}
+	  //Notify
+		$.notify({
+			icon: 'flaticon-success',
+			title: '{% trans "Image Enregistee avec succes" %}',
+			message: '',
+		},{
+			type: 'success',
+			placement: {
+				from: "bottom",
+				align: "right"
+			},
+			time: 1000,
+		});
+	{% endif %}
 </script>
 
 {% endblock javascripts %}

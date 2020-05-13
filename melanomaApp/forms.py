@@ -1,5 +1,5 @@
 from django import forms
-from .models import Image, Doctor,Patient
+from .models import Image, Doctor,Patient,Note
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
@@ -51,15 +51,24 @@ class AddPatientForm(forms.ModelForm):
     '''
     firstName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "First Name","class": "form-control","type":"text"}))
     lastName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Last Name","class": "form-control","type":"text"}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder" : "Email","class": "form-control","email":"email" }))
+    # email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder" : "Email","class": "form-control","email":"email" }))
     phone = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Phone","class": "form-control"}))
     birthDate=forms.DateField(widget=forms.DateInput(attrs={"placeholder" : "Birth Date","class": "form-control" ,"type" :"Date"}))
     
     address=forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Address","class": "form-control","type":"text"}))
+    
+    CHOICES = (('', 'Sexe'),('male', 'Male'),('femelle', 'Femelle'))
+    sexe = forms.ChoiceField(choices=CHOICES ,widget=forms.Select(attrs={"placeholder" : "Sexe","class": "form-control"}))
+   
 
-
-    # address = models.TextField(null=True, blank=True)
+class AddNoteForm(forms.ModelForm):
+    '''
+        Add Note form
+    '''
+    title = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Titre","class": "form-control","type":"text"}))
+    content=forms.CharField(widget=forms.Textarea(attrs={"placeholder" : "Contenu","class": "form-control","rows":5,}))
+    
 
     class Meta:
-        model = Patient
-        fields = ('firstName', 'lastName','email','phone','birthDate','address')
+        model = Note
+        fields = ('title', 'content')
