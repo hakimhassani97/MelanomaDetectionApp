@@ -51,8 +51,8 @@ class Contours:
         # get center of circle around the contour
         radius = int(perimeter / (2 * np.pi))
         # draw the circle and its center
-        cv2.circle(img, (xe, ye), radius=1, color=(0, 255, 255), thickness=1)
-        cv2.circle(img, (xe, ye), radius=radius, color=(0, 255, 255), thickness=1)
+        cv2.circle(img, (xe, ye), radius=1, color=(255, 255, 255), thickness=2)
+        cv2.circle(img, (xe, ye), radius=radius, color=(255, 255, 255), thickness=2)
 
     '''
         draw bounding rectangle
