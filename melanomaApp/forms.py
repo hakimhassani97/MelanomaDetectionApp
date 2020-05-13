@@ -59,7 +59,7 @@ class AddPatientForm(forms.ModelForm):
     sexe = forms.ChoiceField(choices=CHOICES ,widget=forms.Select(attrs={"placeholder" : "Sexe","class": "form-control"}))
     class Meta:
         model = Patient
-        fields = ('firstName', 'lastName','email','phone','birthDate','address')
+        fields = ('firstName', 'lastName','email','phone','birthDate','address', 'sexe')
 
 class AddNoteForm(forms.ModelForm):
     '''
