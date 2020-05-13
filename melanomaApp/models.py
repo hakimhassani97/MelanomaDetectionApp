@@ -52,8 +52,10 @@ class Details(models.Model):
         the image Details model
     '''
     image = models.OneToOneField(Image, on_delete=models.CASCADE, null=True, blank=True)
-    extract = models.ImageField(upload_to='images', default=None)
- 
+    extract = models.ImageField(upload_to='images', null=True, blank=True)
+    contour = models.ImageField(upload_to='images', null=True, blank=True)
+    circle = models.ImageField(upload_to='images', null=True, blank=True)
+    preprocess = models.ImageField(upload_to='images', null=True, blank=True)
 
     def __str__(self):
         return str(self.image)
