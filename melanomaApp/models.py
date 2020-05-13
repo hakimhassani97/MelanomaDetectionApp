@@ -36,6 +36,19 @@ class Patient(models.Model):
     
 
 
+class Note(models.Model):
+    '''
+        Note model
+    '''
+    title = models.CharField(max_length=254, null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
+    date = models.DateTimeField('Note date', auto_now_add=True)
+    
+    def __str__(self):
+        return self.title +' '+self.content
+    
+
+
 class Image(models.Model):
     '''
         the Image model

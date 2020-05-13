@@ -4,8 +4,8 @@ from django.http import HttpResponseRedirect
 from django.core.files import File
 from django.contrib.auth import authenticate, login as doLogin
 from django.contrib.auth.decorators import user_passes_test
-from .models import Doctor, Caracteristic as Car, Image, Patient, Details
-from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm, AddPatientForm
+from .models import Doctor, Caracteristic as Car, Image, Patient, Details ,Note
+from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm, AddPatientForm,AddNoteForm
 from .detector.Caracteristics import Caracteristics
 from .detector.utils.Caracteristics import Caracteristics as Cars
 from .detector.utils.Contours import Contours
@@ -169,6 +169,14 @@ def addPatient(request):
         form = AddPatientForm()
         return render(request, 'addPatient.html', {'form': form})
 
+def updatePatient(request,patientId):
+    '''
+        Update Patient
+    '''
+   
+    return render(request, 'updatePatient.html')
+
+
 
 def patientsList(request):
     '''
@@ -221,6 +229,54 @@ def diameter(request):
         returns diameter
     '''
     return render(request, 'diameter.html')
+
+
+def addNote(request):
+    '''
+        Add Note
+    '''
+    msg = None
+    success = False
+    add =False
+    if request.method == "POST":
+        form = AddNoteForm(request.POST, request.FILES)
+        if form.is_valid():
+            Note = form.save(commit=False)
+            Note.save()
+            msg = 'Note est enregistrée avec succes'
+            success = True
+            add =True  
+            return redirect(notesList)
+        else:
+            msg = 'Verifiez les champs'
+            return render(request, 'addNote.html', {"form": form, "msg": msg, "success": success})
+    else:
+        form = AddNoteForm()
+        return render(request, 'addNote.html', {'form': form})
+
+
+
+
+def notesList(request):
+    '''
+        returns noteList
+    '''
+    notes = Note.objects.order_by('-date')
+    context = {
+        'notes': notes,
+    }
+    return render(request, 'notesList.html', context)
+
+
+def deleteNote(request,noteId):
+    '''
+        delete note
+    '''
+    note = Note.objects.get(id=noteId)
+    note.delete()
+    return redirect(notesList)
+
+
 
 
 def error_404(request, exception):

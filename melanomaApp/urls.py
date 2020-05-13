@@ -11,13 +11,16 @@ urlpatterns = [
     path('register', views.register, name='register'),
     path('forms.html', views.forms, name='forms'),
     path('addPatient', views.addPatient, name='addPatient'),
+    path('updatePatient/<int:patientId>', views.updatePatient, name='updatePatient'),
     path('patientsList', views.patientsList, name='patientsList'),
     path('preparation/<int:imgId>', views.preparation, name='preparation'),
     path('asymmetry', views.asymmetry, name='asymmetry'),
     path('border', views.border, name='border'),
     path('color', views.color, name='color'),
     path('diameter', views.diameter, name='diameter'),
-
+    path('notesList', views.notesList, name='notesList'),
+    path('addNote', views.addNote, name='addNote'),
+    path('deleteNote/<int:noteId>', views.deleteNote, name='deleteNote'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
