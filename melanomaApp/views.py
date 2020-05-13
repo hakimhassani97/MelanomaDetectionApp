@@ -108,7 +108,7 @@ def uploadImg(request):
                     # image details
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     contour = Contours.contours2(img)
-                    # extractLesion
+                    ######################## extractLesion
                     img = Cars.extractLesion(img, contour)
                     imgPath = 'media/'+i.image.name
                     imgPath = imgPath.replace('.', '_extract.')
@@ -120,6 +120,39 @@ def uploadImg(request):
                         det.extract.save(name, File(dest), save=False)
                     # remove temporary files
                     # shutil.rmtree(imgPath, ignore_errors=True)
+                    os.remove(imgPath)
+                    ######################## draw contour
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = cv2.drawContours(img, [contour], -1, (255, 255, 255), 2)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_contour.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.contour.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    ######################## draw circle
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    Contours.boundingCircle(img, contour)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_circle.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.circle.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    ######################## draw preprocess
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = Preprocess.removeArtifactYUV(img)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_preprocess.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.preprocess.save(name, File(dest), save=False)
+                    # remove temporary files
                     os.remove(imgPath)
                     det.save()
                     
