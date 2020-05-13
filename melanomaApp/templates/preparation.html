@@ -51,10 +51,20 @@
                 </div>
                 <div class="card-body row">
                     <div class="card card-post card-round col-md-4 imgCard">
+                        <img class="card-img-top" src="{{details.preprocess.url}}">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="info-post ml-2">
+                                    {% trans "Pretraitement" %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-post card-round col-md-4 imgCard">
                         <img class="card-img-top" src="{{details.extract.url}}">
                         <div class="card-body">
                             <div class="d-flex">
-                                <div class="info-post ml-2 text-center">
+                                <div class="info-post ml-2">
                                     {% trans "Segmentation" %}
                                 </div>
                                 {% comment %} <div class="ml-auto">
@@ -63,12 +73,32 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card card-post card-round col-md-4 imgCard">
+                        <img class="card-img-top" src="{{details.contour.url}}">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="info-post ml-2">
+                                    {% trans "Contour" %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-post card-round col-md-4 imgCard">
+                        <img class="card-img-top" src="{{details.circle.url}}">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="info-post ml-2">
+                                    {% trans "Cercle" %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="zoomModal" class="modal fade" tabindex="-1" role="dialog">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Modal title</h5>
+                                <h5 class="modal-title" style="font-size:20px;font-weight:bolder">Modal title</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
@@ -103,8 +133,8 @@
     });
     {% endif %}
     $('.imgCard').on('click',(e)=>{
-        var src = $(e.target).closest('.card-img-top').attr('src')
-        var title = $(e.target).closest('.card-body').find('.info-post').html()
+        var src = $(e.target).closest('.imgCard').find('img').attr('src')
+        var title = $(e.target).closest('.imgCard').find('.info-post').html()
         $('#zoomModal .modal-title').html(title)
         $('#imgModal').attr('src', src)
         $('#zoomModal').modal('show')
