@@ -12,6 +12,7 @@ from .detector.utils.Contours import Contours
 from .detector.utils.Preprocess import Preprocess
 import shutil
 import os
+import numpy as np
 
 def checkDoctorIsLoggedIn(user):
     '''
@@ -179,6 +180,55 @@ def uploadImg(request):
         form = UploadImageForm()
     return render(request, 'uploadImg.html', {'form': form})
 
+def results(request, imgId):
+    '''
+        returns table of caracteristics of the image
+    '''
+    image = Image.objects.get(id=imgId)
+    a = [image.caracteristic.car0, image.caracteristic.car1, image.caracteristic.car2, image.caracteristic.car3,
+        image.caracteristic.car4, image.caracteristic.car5]
+    b = [image.caracteristic.car6, image.caracteristic.car7, image.caracteristic.car8, image.caracteristic.car9, image.caracteristic.car10,
+        image.caracteristic.car11, image.caracteristic.car12, image.caracteristic.car13]
+    c = [image.caracteristic.car14, image.caracteristic.car15, image.caracteristic.car16, image.caracteristic.car17, image.caracteristic.car18]
+    d = [image.caracteristic.car19, image.caracteristic.car20, image.caracteristic.car21]
+    thresholdsPH2 = np.array([[2.65, 92.87, 6.39, 13.2, 17.2, 15.44], [55.73, 1560, 0.02, 0.56, 1.81, 1.35, 219, 1], [5, 2, 5, 9.51, 63.69], [560, 572.24, 4.54]])
+    thresholdsISIC = np.array([[4.23, 93.61, 7.31, 12.28, 16.17, 10.18], [73.42, 900, 0.02, 0.71, 1.37, 1.2, 145, 1.6], [3, 2, 3, 10.25, 66.93], [342, 323.27, 3.63]])
+    opsPH2 = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [0, 0, 0]])
+    opsISIC = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [0, 0, 0, 1, 1], [0, 0, 0]])
+    # c[0:3] = np.array(c).astype(int)[0:3]
+    # c[0] = str(c[0])+' couleurs'
+    # c[1] = str(c[1])+' couleurs'
+    # c[2] = str(c[2])+' couleurs'
+    cars = [{'vals':a, 'name':'Asymmetry'}, {'vals':b, 'name':'Border'}, {'vals':c, 'name':'Color'}, {'vals':d, 'name':'Diameter'}]
+    thead = '<thead><tr><th class="bg-warning">Caracteristique</th>'
+    for m in range(1, 9):
+        thead += '<th style="background-color:lightgrey">Méthode '+str(m)+'</th>'
+    thead += '</tr></thead>'
+    tbody = '<tbody>'
+    for i in range(len(cars)):
+        car = cars[i]
+        tbody +='<tr><td style="background-color:rgb(255, 200, 160)">'+car['name']+'</td>'
+        for j in range(len(car['vals'])):
+            m = car['vals'][j]
+            if (opsPH2[i][j]==0 and m<thresholdsPH2[i][j]) or (opsPH2[i][j]==1 and m>=thresholdsPH2[i][j]):
+                tbody += '<td class="bg-success">'+str(m)+'</td>'
+            else:
+                if (opsPH2[i][j]==1 and m<thresholdsPH2[i][j]) or (opsPH2[i][j]==0 and m>=thresholdsPH2[i][j]):
+                    tbody += '<td class="bg-danger">'+str(m)+'</td>'
+        for j in range(len(car['vals'])+1, 9):
+            tbody += '''
+            <td><div>
+                <div style="width: 40px;height: 47px;border-bottom: 1px solid black;
+                -webkit-transform: translateY(-20px) translateX(5px) rotate(27deg);"></div>
+            </div></td>
+            '''
+        tbody += '</tr>'
+    tbody += '</tbody>'
+    context = {
+        'image': image,
+        'table': thead+tbody
+    }
+    return render(request, 'results.html', context)
 
 def images(request):
     '''
