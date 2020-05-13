@@ -10,6 +10,7 @@ from .detector.Caracteristics import Caracteristics
 from .detector.utils.Caracteristics import Caracteristics as Cars
 from .detector.utils.Contours import Contours
 from .detector.utils.Preprocess import Preprocess
+from .detector.utils.Game import Game
 import shutil
 import os
 import numpy as np
@@ -224,9 +225,13 @@ def results(request, imgId):
             '''
         tbody += '</tr>'
     tbody += '</tbody>'
+    # image sample
+    T = np.array(a+b+c+d)
+    result = Game.getResult(T)
     context = {
         'image': image,
-        'table': thead+tbody
+        'table': thead+tbody,
+        'class': 'Melanome' if result==1 else 'Non Melanome'
     }
     return render(request, 'results.html', context)
 
