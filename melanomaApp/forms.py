@@ -53,22 +53,20 @@ class AddPatientForm(forms.ModelForm):
     lastName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Last Name","class": "form-control","type":"text"}))
     # email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder" : "Email","class": "form-control","email":"email" }))
     phone = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Phone","class": "form-control"}))
-    birthDate=forms.DateField(widget=forms.DateInput(attrs={"placeholder" : "Birth Date","class": "form-control" ,"type" :"Date"}))
-    
-    address=forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Address","class": "form-control","type":"text"}))
-    
+    birthDate = forms.DateField(widget=forms.DateInput(attrs={"placeholder" : "Birth Date","class": "form-control" ,"type" :"Date"}))
+    address = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Address","class": "form-control","type":"text"}))
     CHOICES = (('', 'Sexe'),('male', 'Male'),('femelle', 'Femelle'))
     sexe = forms.ChoiceField(choices=CHOICES ,widget=forms.Select(attrs={"placeholder" : "Sexe","class": "form-control"}))
-   
+    class Meta:
+        model = Patient
+        fields = ('firstName', 'lastName','email','phone','birthDate','address')
 
 class AddNoteForm(forms.ModelForm):
     '''
         Add Note form
     '''
     title = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Titre","class": "form-control","type":"text"}))
-    content=forms.CharField(widget=forms.Textarea(attrs={"placeholder" : "Contenu","class": "form-control","rows":5,}))
-    
-
+    content = forms.CharField(widget=forms.Textarea(attrs={"placeholder" : "Contenu","class": "form-control","rows":5,}))
     class Meta:
         model = Note
         fields = ('title', 'content')
