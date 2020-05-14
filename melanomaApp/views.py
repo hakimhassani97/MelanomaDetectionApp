@@ -12,6 +12,7 @@ from .detector.utils.Contours import Contours
 from .detector.utils.Preprocess import Preprocess
 from .detector.utils.Game import Game
 import shutil
+import imutils
 import os
 import numpy as np
 
@@ -154,6 +155,27 @@ def uploadImg(request):
                     with open(imgPath, 'rb') as dest:
                         name = imgPath.replace('media/images/','')
                         det.rect.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    ######################## draw homologue
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = Preprocess.removeArtifactYUV(img)
+                    img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+                    x, y, w, h = cv2.boundingRect(contour)
+                    rect = img[y:y + h, x:x + w]
+                    rotated = imutils.rotate_bound(rect, 180)
+                    # intersection between rect and rotated (search)
+                    intersection = cv2.bitwise_and(rect, rotated)
+                    # img = np.zeros(img.shape)
+                    # img = np.add(img, 255)
+                    # img[y:y + h, x:x + w] = intersection
+                    img = intersection
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_homologue.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.homologue.save(name, File(dest), save=False)
                     # remove temporary files
                     os.remove(imgPath)
                     ######################## draw preprocess

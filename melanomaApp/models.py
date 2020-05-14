@@ -77,6 +77,9 @@ class Details(models.Model):
     preprocess = models.ImageField(upload_to='images', null=True, blank=True)    
     segmentation = models.ImageField(upload_to='images', null=True, blank=True)   
     posttraitement = models.ImageField(upload_to='images', null=True, blank=True)
+
+    ###### asymmetry
+    homologue = models.ImageField(upload_to='images', null=True, blank=True)
     
     ######## diametre 
     enclosingCircle = models.ImageField(upload_to='images', null=True, blank=True)    
