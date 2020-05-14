@@ -72,10 +72,21 @@ class Details(models.Model):
         the image Details model
     '''
     image = models.OneToOneField(Image, on_delete=models.CASCADE, null=True, blank=True)
+    
+    ###### preparation 
+    preprocess = models.ImageField(upload_to='images', null=True, blank=True)    
+    segmentation = models.ImageField(upload_to='images', null=True, blank=True)   
+    posttraitement = models.ImageField(upload_to='images', null=True, blank=True)
+    
+    ######## diametre 
+    enclosingCircle = models.ImageField(upload_to='images', null=True, blank=True)    
+    openCircle = models.ImageField(upload_to='images', null=True, blank=True)   
+    lengtheningIndex = models.ImageField(upload_to='images', null=True, blank=True)
+    
+
     extract = models.ImageField(upload_to='images', null=True, blank=True)
     contour = models.ImageField(upload_to='images', null=True, blank=True)
     circle = models.ImageField(upload_to='images', null=True, blank=True)
-    preprocess = models.ImageField(upload_to='images', null=True, blank=True)
     rect = models.ImageField(upload_to='images', null=True, blank=True)
 
     def __str__(self):

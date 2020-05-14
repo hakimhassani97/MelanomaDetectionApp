@@ -168,7 +168,67 @@ def uploadImg(request):
                     # remove temporary files
                     os.remove(imgPath)
                     det.save()
+
+                    ######################## draw segmentation
+                    img = cv2.drawContours(img, [contour], -1, (255,0, 255), 2)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_segmentation.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.segmentation.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    det.save()
                     
+                    ################### draw PostTraitement
+                    
+                    img = Cars.extractLesion(img, contour)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_posttraitement.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.posttraitement.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    det.save()
+
+                    ################## draw enclosingCircle
+                    tmp =img
+                    (x, y), radius = cv2.minEnclosingCircle(contour)
+                    center = (int(x), int(y))
+                    radius = int(radius)
+                    cv2.circle(img, center, radius=1, color=(0, 255, 255), thickness=1)
+                    cv2.circle(img, center, radius=radius, color=(0,255, 0), thickness=1)     
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_enclosingCircle.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.enclosingCircle.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    det.save()
+                    
+                    ################## draw openCircle
+                    img =tmp 
+                    perimeter = cv2.arcLength(contour, True)
+                    M = cv2.moments(contour)
+                    x = int(M["m10"] / M["m00"])
+                    y = int(M["m01"] / M["m00"])
+                    radius = int(perimeter / (2 * np.pi))
+                    cv2.circle(img, (x,y), radius=1, color=(0, 255, 255), thickness=1)
+                    cv2.circle(img, (x,y), radius=radius, color=(0,255, 0), thickness=1)     
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_openCircle.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.openCircle.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    det.save()
             # one Image
             # f = form.save()
             # car = Caracteristics.extractCaracteristics(f.image.path)

@@ -25,42 +25,73 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<div class="card">
+			<div class="card imgCard">
 				<div class="card-header">
 					<div class="card-title">{% trans "Liste des Images" %}</div>
 				</div>
 				<div class="card-body row">
 					{% for img in images %}
 					<div class="card card-post card-round col-md-4">
-						<img class="card-img-top" src="{{img.image.url}}" alt="{{img.name}}">
-						<div class="card-body">
-							<div class="d-flex">
-								<div class="info-post ml-2">
-									<p class="username">{{img.name}}</p>
-									<p class="date text-muted">{{img.date}}</p>
+						<img class="card-img-top zoom" src="{{img.image.url}}" alt="{{img.name}}">
+						<button style="position: absolute; right: 5%; margin-top: 10px;"
+						 class="btn btn-icon btn-light btn-round btn-xs zoom ">
+							<i class="fa fa-search-plus zoom"></i>
+						</button>
+						<div class="card-body ">
+							<h5 class="card-title ">{{img.name}}</h5>
+							<p class="date text-muted ">{{img.date}}</p>
+							<a href={% url 'preparation' imgId=img.id  %}
+							class="btn btn-primary btn-sm ">{% trans "Details" %}</a>
+							<a href={% url 'results' imgId=img.id  %}
+							class="btn btn-primary  btn-sm ">{% trans "Resultats" %}</a>
+							<a style="float:right;" href="#" class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans "Ajouter Note" %}</a>
+							{% comment %} <button class="btn btn-icon btn-primary btn-round btn-xs ">
+								<i class="fa fa-plus"></i>
+							</button> {% endcomment %}
+						</div>
+					</div>
+				
+					{% endfor %}
+					<div id="zoomModal" class="modal fade" tabindex="-1" role="dialog">
+						<div class="modal-dialog modal-lg" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" style="font-size:20px;font-weight:bolder">Modal title</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
 								</div>
-								<div class="ml-auto">
-									<a href={% url 'preparation' imgId=img.id  %}
-										class="btn btn-primary btn-rounded btn-sm">{% trans "Details" %}</a><br/>
-									<a href={% url 'results' imgId=img.id  %}
-										class="btn btn-primary btn-rounded btn-sm">{% trans "Resultats" %}</a>
-									{% comment %} <button class="btn btn-icon btn-primary btn-round btn-xs">
-										<i class="fa fa-plus"></i>
-									</button> {% endcomment %}
+								<div class="modal-body">
+									<img class="img-responsive" id="imgModal" style="width:100%" src="">
 								</div>
 							</div>
 						</div>
 					</div>
-					{% endfor %}
+					
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+
 {% endblock content %}
 
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
 <script>
+
+   
+    $('.imgCard').on('click',(e)=>{
+		
+		if($(e.target).hasClass('zoom')) {
+		var src = $(e.target).closest('.imgCard').find('img').attr('src')
+        var title = $(e.target).closest('.imgCard').find('.info-post').html()
+        $('#zoomModal .modal-title').html(title)
+        $('#imgModal').attr('src', src)
+		$('#zoomModal').modal('show')
+	}
+    })
 </script>
 {% endblock javascripts %}
+
