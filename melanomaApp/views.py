@@ -13,6 +13,7 @@ from .detector.utils.Preprocess import Preprocess
 from .detector.utils.Game import Game
 import shutil
 import imutils
+from scipy import ndimage
 import os
 import numpy as np
 
@@ -160,6 +161,8 @@ def uploadImg(request):
                     ######################## draw homologue
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     img = Preprocess.removeArtifactYUV(img)
+                    img = Cars.extractLesion(img, contour)
+                    img[img == 0] = 255
                     img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
                     x, y, w, h = cv2.boundingRect(contour)
                     rect = img[y:y + h, x:x + w]
@@ -170,12 +173,64 @@ def uploadImg(request):
                     # img = np.add(img, 255)
                     # img[y:y + h, x:x + w] = intersection
                     img = intersection
+                    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+                    img[intersection <= 20] = [0, 0, 255]
                     imgPath = 'media/'+i.image.name
                     imgPath = imgPath.replace('.', '_homologue.')
                     cv2.imwrite(imgPath, img)
                     with open(imgPath, 'rb') as dest:
                         name = imgPath.replace('media/images/','')
                         det.homologue.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    ######################## draw subregion
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    ####
+                    img = Preprocess.removeArtifactYUV(img)
+                    img = Cars.extractLesion(img, contour)
+                    img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+                    # find best fit ellipse
+                    (_, _), (_, _), angle = cv2.fitEllipse(contour)
+                    # get bounding rect
+                    x, y, w, h = cv2.boundingRect(contour)
+                    padding = 0
+                    # crop the rect
+                    rect = img[y - padding:y + h + padding, x - padding:x + w + padding]
+                    # rotate the lesion according to its best fit ellipse
+                    rect = ndimage.rotate(rect, angle, reshape=True)
+                    rect[rect == 0] = 255
+                    # flip H, flip V, flip VH
+                    rectH = cv2.flip(rect, 0)
+                    rectV = cv2.flip(rect, 1)
+                    rectVH = cv2.flip(rect, -1)
+                    # lesion area
+                    lesionArea = cv2.contourArea(contour)
+                    # intersect rect and rectH
+                    intersection1 = cv2.bitwise_and(rect, rectH)
+                    intersectionArea1 = np.sum(intersection1 != 0)
+                    result1 = (intersectionArea1 / lesionArea) * 100
+                    # intersect rect and rectV
+                    intersection2 = cv2.bitwise_and(rect, rectV)
+                    intersectionArea2 = np.sum(intersection2 != 0)
+                    result2 = (intersectionArea2 / lesionArea) * 100
+                    # intersect rect and rectVH
+                    intersection3 = cv2.bitwise_and(rect, rectVH)
+                    intersectionArea3 = np.sum(intersection3 != 0)
+                    result3 = (intersectionArea3 / lesionArea) * 100
+                    res = [result1, result2, result3]
+                    asymmetry = max(res)
+                    index = res.index(asymmetry)
+                    intersections = [intersection1, intersection2, intersection3]
+                    img = intersections[index]
+                    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+                    img[intersections[index] <= 20] = [0, 0, 255]
+                    ####
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_subregion.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.subregion.save(name, File(dest), save=False)
                     # remove temporary files
                     os.remove(imgPath)
                     ######################## draw preprocess
