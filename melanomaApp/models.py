@@ -81,6 +81,7 @@ class Details(models.Model):
 
     ###### border
     border = models.ImageField(upload_to='images', null=True, blank=True)
+    borderlength = models.ImageField(upload_to='images', null=True, blank=True)
     
     ######## diametre 
     enclosingCircle = models.ImageField(upload_to='images', null=True, blank=True)    
