@@ -59,15 +59,14 @@
                                     <td>{{patient.birthDate}}</td>
                                     <td>{{patient.sexe}}</td>
                                     <td>{{patient.phone}}</td>
-
                                     <td>
                                         <div class="form-button-action">
-                                            <a  href={% url 'updatePatient' patientId=patient.id  %} type="button" data-toggle="tooltip" 
-                                                class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
+                                            <a href={% url 'updatePatient' patientId=patient.id %} type="button" data-toggle="tooltip"
+                                                class="btn btn-link btn-primary btn-lg" data-original-title="Modifier patient">
                                                 <i class="fa fa-edit"></i>
-                                        </a>
-                                            <button type="button" data-toggle="tooltip" title=""
-                                                class="btn btn-link btn-danger" data-original-title="Remove">
+                                            </a>
+                                            <button type="button" data-toggle="tooltip" title="" onclick="deletePatient('{% url 'deletePatient' patient.id %}','{{patient.firstName}} {{patient.lastName}}')"
+                                                class="btn btn-link btn-danger" data-original-title="Supprimer">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </div>
@@ -92,6 +91,37 @@
             "pageLength": 5,
         });
     });
+    function deletePatient(url, patientName){
+        swal({
+            title: 'Sure ?',
+            text: "Voulez vous supprimer le patient "+patientName+' ?',
+            type: 'warning',
+            buttons:{
+                cancel: {
+                    visible: true,
+                    text : 'Annuler',
+                    className: 'btn btn-success'
+                },        			
+                confirm: {
+                    text : 'Oui',
+                    className : 'btn btn-danger'
+                }
+            }
+        }).then((willDelete) => {
+            if (willDelete) {
+                swal("Patient "+patientName+" supprime avec succes", {
+                    icon: "success",
+                    buttons : {
+                        confirm : {
+                            className: 'btn btn-success'
+                        }
+                    }
+                }).then(e=>{
+                    window.location = url
+                })
+            }
+        });
+    }
 </script>
 
 {% endblock javascripts %}

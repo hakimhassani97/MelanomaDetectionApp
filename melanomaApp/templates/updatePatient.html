@@ -42,7 +42,7 @@
                 </div>
                 {% else %}
                         
-                <form method="POST" action="{% url 'addPatient' %}" enctype="multipart/form-data">
+                <form method="POST" action="{% url 'updatePatient' patientId=patient.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="card-body">
                         <div class="row">
@@ -104,7 +104,6 @@
                         <button type="submit" class="btn btn-success">{% trans "Modifier" %}</button>
                         &nbsp; &nbsp;
                     </div>
-
                 </form>
                 {% endif %}
             </div>

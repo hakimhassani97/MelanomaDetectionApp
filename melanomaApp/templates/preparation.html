@@ -183,7 +183,27 @@
             <!--//////////////////////// border Card //////////////////////////////-->
             
                 <div class="card-body row" id="borderCard" style="display: none;">
-                     <h3>borderCard</h3>
+                     <div class="card card-post card-round col-md-4 imgCard">
+                        <img class="card-img-top zoom" src="{{details.border.url}}">
+                        <button style="position: absolute; right: 5%; margin-top: 10px;"
+                        class="btn btn-icon btn-light btn-round btn-xs zoom ">
+                            <i class="fa fa-search-plus zoom"></i>
+                        </button>
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="info-post ml-2">
+                                    {% trans "Dimension fractale" %}
+                                    <br/><br/>
+                                        <div class="alert alert-warning" role="alert">
+                                            <i class="fas fa-info-circle"></i>
+                                            <small class="text-muted">
+                                                La dimension fractale indique les irregilaritee de contour, elle est representee par les points verts
+                                            </small>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             <!--//////////////////////// color Card //////////////////////////////-->
