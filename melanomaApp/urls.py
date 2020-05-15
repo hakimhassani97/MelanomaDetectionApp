@@ -12,6 +12,7 @@ urlpatterns = [
     path('register', views.register, name='register'),
     path('forms.html', views.forms, name='forms'),
     path('addPatient', views.addPatient, name='addPatient'),
+    path('deletePatient/<int:patientId>', views.deletePatient, name='deletePatient'),
     path('updatePatient/<int:patientId>', views.updatePatient, name='updatePatient'),
     path('patientsList', views.patientsList, name='patientsList'),
     path('preparation/<int:imgId>', views.preparation, name='preparation'),
