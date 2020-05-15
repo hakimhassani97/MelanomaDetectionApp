@@ -44,7 +44,7 @@
 							class="btn btn-primary btn-sm ">{% trans "Details" %}</a>
 							<a href={% url 'results' imgId=img.id  %}
 							class="btn btn-primary  btn-sm ">{% trans "Resultats" %}</a>
-							<a style="float:right;" href="#" class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans "Ajouter Note" %}</a>
+							<a style="float:right;" href={% url 'notesList' imgId=img.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
 							{% comment %} <button class="btn btn-icon btn-primary btn-round btn-xs ">
 								<i class="fa fa-plus"></i>
 							</button> {% endcomment %}

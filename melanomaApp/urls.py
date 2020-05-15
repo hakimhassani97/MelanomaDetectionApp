@@ -19,8 +19,8 @@ urlpatterns = [
     path('border', views.border, name='border'),
     path('color', views.color, name='color'),
     path('diameter', views.diameter, name='diameter'),
-    path('notesList', views.notesList, name='notesList'),
-    path('addNote', views.addNote, name='addNote'),
+    path('notesList/<int:imgId>', views.notesList, name='notesList'),
+    path('addNote/<int:imgId>', views.addNote, name='addNote'),
     path('deleteNote/<int:noteId>', views.deleteNote, name='deleteNote'),
 ]
 

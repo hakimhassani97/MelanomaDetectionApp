@@ -28,6 +28,13 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
+                    <div class="card-title" style ="float: right;">
+                        <a   href={% url 'preparation' imgId=image.id  %}  type="submit" class="btn btn-primary text-light btn-sm">{% trans "Details" %}</a>
+                  
+                        <a  href={% url 'notesList' imgId=image.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
+                      </div>
+                </br>
+            </br>
                     <div class="card-title" style ="float: left;">
                         <span>{% trans "Caracteristiques pour " %}</span><img class="imgCard" style="height:60px" src="{{image.image.url}}" alt="{{image.image.name}}">
                     </div>

@@ -19,7 +19,7 @@
                 <i class="flaticon-right-arrow"></i>
             </li>
             <li class="nav-item">
-                <a href="{% url 'uploadImg' %}">{% trans "Liste des Notes" %}</a>
+                <a href="#">{% trans "Liste des Notes" %}</a>
             </li>
         </ul>
     	
@@ -32,8 +32,11 @@
                         <span>{% trans "Liste des Notes" %}</span>
                     </div>
                     <div style ="float: right;" class="col-md-2">
-                        <a href="{% url 'addNote' %}"  type="submit" class="btn btn-success text-light">{% trans "Ajouter" %}</a>
+                        <a href={% url 'addNote' imgId=img.id  %}  type="submit" class="btn btn-success text-light">{% trans "Ajouter" %}</a>
 	
+		            </div>
+                    <div style ="float: right;" class="col-md-2">
+                       
 		            </div>
         
                 </div>
