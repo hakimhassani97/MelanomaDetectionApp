@@ -455,6 +455,8 @@ def updatePatient(request,patientId):
         form = AddPatientForm(request.POST, request.FILES)
         if form.is_valid():
             patient = form.save(commit=False)
+            patient.id = patientId
+            patient.save()
             msg = 'Le Patient modifié avec succes'
             success = True
             # return redirect("/login/")
