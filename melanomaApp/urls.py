@@ -8,6 +8,7 @@ urlpatterns = [
     path('uploadImg', views.uploadImg, name='uploadImg'),
     path('results/<int:imgId>', views.results, name='results'),
     path('images', views.images, name='images'),
+    path('images/patient/<int:patientId>', views.patientImages, name='patientImages'),
     path('login', views.login, name='login'),
     path('register', views.register, name='register'),
     path('forms.html', views.forms, name='forms'),

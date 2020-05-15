@@ -61,6 +61,10 @@
                                     <td>{{patient.phone}}</td>
                                     <td>
                                         <div class="form-button-action">
+                                            <a href={% url 'patientImages' patientId=patient.id %} type="button" data-toggle="tooltip"
+                                                class="btn btn-link btn-primary btn-lg" data-original-title="Liste de images">
+                                                <i class="fa fa-images"></i>
+                                            </a>
                                             <a href={% url 'updatePatient' patientId=patient.id %} type="button" data-toggle="tooltip"
                                                 class="btn btn-link btn-primary btn-lg" data-original-title="Modifier patient">
                                                 <i class="fa fa-edit"></i>

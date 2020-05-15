@@ -402,6 +402,17 @@ def images(request):
     }
     return render(request, 'images.html', context)
 
+def patientImages(request, patientId):
+    '''
+        returns a list of all the images
+    '''
+    patient = Patient.objects.get(id=patientId)
+    images = patient.image_set.all
+    context = {
+        'images': images,
+        'patient': patient
+    }
+    return render(request, 'patientImages.html', context)
 
 def addPatient(request):
     '''

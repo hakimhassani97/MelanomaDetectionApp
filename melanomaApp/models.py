@@ -33,12 +33,6 @@ class Patient(models.Model):
     
     def __str__(self):
         return self.firstName+' '+self.lastName+' ('+self.phone+')'
-    
-
-
-
-    
-
 
 class Image(models.Model):
     '''
