@@ -233,6 +233,20 @@ def uploadImg(request):
                         det.subregion.save(name, File(dest), save=False)
                     # remove temporary files
                     os.remove(imgPath)
+
+                    ######################## draw border
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    ctr = cv2.approxPolyDP(contour, 4, True)
+                    img = cv2.drawContours(img, [ctr], -1, (255, 0, 0), 1)
+                    img = cv2.drawContours(img, ctr, -1, (0, 255, 0), 5)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_border.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.border.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
                     ######################## draw preprocess
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     img = Preprocess.removeArtifactYUV(img)
@@ -411,12 +425,35 @@ def addPatient(request):
         form = AddPatientForm()
         return render(request, 'addPatient.html', {'form': form})
 
+def deletePatient(request,patientId):
+    '''
+        Update Patient
+    '''
+    patient = Patient.objects.get(id=patientId)
+    patient.delete()
+    return redirect(patientsList)
+
 def updatePatient(request,patientId):
     '''
         Update Patient
     '''
-   
-    return render(request, 'updatePatient.html')
+    msg = None
+    success = False
+    patient = Patient.objects.get(id=patientId)
+    if request.method == "POST":
+        form = AddPatientForm(request.POST, request.FILES)
+        if form.is_valid():
+            patient = form.save(commit=False)
+            msg = 'Le Patient modifié avec succes'
+            success = True
+            # return redirect("/login/")
+            return render(request, 'updatePatient.html', {"form": form, "msg": msg, "success": success})
+        else:
+            msg = 'Verifiez les champs'
+            return render(request, 'updatePatient.html', {"form": form, "msg": msg, "success": success})
+    else:
+        form = AddPatientForm(instance=patient)
+        return render(request, 'updatePatient.html', {'form': form, 'patient': patient})
 
 
 
