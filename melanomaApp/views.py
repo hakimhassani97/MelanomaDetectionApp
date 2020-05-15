@@ -276,8 +276,11 @@ def uploadImg(request):
                     (x, y), radius = cv2.minEnclosingCircle(contour)
                     center = (int(x), int(y))
                     radius = int(radius)
-                    cv2.circle(img, center, radius=1, color=(0, 255, 255), thickness=1)
-                    cv2.circle(img, center, radius=radius, color=(0,255, 0), thickness=1)     
+                    cv2.circle(img, center, radius=1, color=(0, 255, 0), thickness=3)
+                    cv2.circle(img, center, radius=radius, color=(0,255, 0), thickness=3)   
+                    point1 = (int(x +radius) ,int(y))
+                    point2 =(int(x -radius), int(y))
+                    cv2.line(img, point1, point2, (0, 255, 0), thickness=3, lineType=8)
                     imgPath = 'media/'+i.image.name
                     imgPath = imgPath.replace('.', '_enclosingCircle.')
                     cv2.imwrite(imgPath, img)
@@ -289,14 +292,16 @@ def uploadImg(request):
                     det.save()
                     
                     ################## draw openCircle
-                    img =tmp 
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = Preprocess.removeArtifactYUV(img)
+                    img = Cars.extractLesion(img, contour)
                     perimeter = cv2.arcLength(contour, True)
                     M = cv2.moments(contour)
                     x = int(M["m10"] / M["m00"])
                     y = int(M["m01"] / M["m00"])
                     radius = int(perimeter / (2 * np.pi))
-                    cv2.circle(img, (x,y), radius=1, color=(0, 255, 255), thickness=1)
-                    cv2.circle(img, (x,y), radius=radius, color=(0,255, 0), thickness=1)     
+                    cv2.circle(img, (x,y), radius=1, color=(0, 255,0), thickness=3)
+                    cv2.circle(img, (x,y), radius=radius, color=(0,255, 0), thickness=3)     
                     imgPath = 'media/'+i.image.name
                     imgPath = imgPath.replace('.', '_openCircle.')
                     cv2.imwrite(imgPath, img)
@@ -306,6 +311,7 @@ def uploadImg(request):
                     # remove temporary files
                     os.remove(imgPath)
                     det.save()
+                    
             # one Image
             # f = form.save()
             # car = Caracteristics.extractCaracteristics(f.image.path)
@@ -468,39 +474,50 @@ def diameter(request):
     return render(request, 'diameter.html')
 
 
-def addNote(request):
+def addNote(request ,imgId):
     '''
         Add Note
     '''
+    img = Image.objects.get(id=imgId)
     msg = None
     success = False
     add =False
     if request.method == "POST":
         form = AddNoteForm(request.POST, request.FILES)
         if form.is_valid():
-            Note = form.save(commit=False)
-            Note.save()
+            
+           
+
+            note = Note(title=form.cleaned_data['title'],content=form.cleaned_data['content'],image =img)
+            note.save()                
+               
+            # Note = form.save(commit=False)
+            # Note.save()
             msg = 'Note est enregistrée avec succes'
             success = True
             add =True  
-            return redirect(notesList)
+            return render(request, 'addNote.html', {"form": form, "msg": msg, "success": success ,"img" :img})
         else:
             msg = 'Verifiez les champs'
-            return render(request, 'addNote.html', {"form": form, "msg": msg, "success": success})
+            return render(request, 'addNote.html', {"form": form, "msg": msg, "success": success ,"img" :img})
     else:
         form = AddNoteForm()
-        return render(request, 'addNote.html', {'form': form})
+        return render(request, 'addNote.html', {'form': form ,"img" : img} )
 
 
 
 
-def notesList(request):
+def notesList(request ,imgId):
     '''
         returns noteList
     '''
-    notes = Note.objects.order_by('-date')
+    img = Image.objects.get(id=imgId)
+    
+    notes =Note.objects.filter(image=imgId).order_by('-date')
+    
     context = {
         'notes': notes,
+        'img' :img
     }
     return render(request, 'notesList.html', context)
 

@@ -54,7 +54,7 @@
                 </div>
                 {% else %}
                         
-                <form method="POST" action="{% url 'addNote' %}" enctype="multipart/form-data">
+                <form method="POST" action={% url 'addNote' imgId=img.id  %} enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="card-body">
                         <div class="row">

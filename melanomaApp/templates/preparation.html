@@ -29,6 +29,12 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
+                    <div class="card-title" style ="float: right;">
+                        <a   href={% url 'results' imgId=img.id  %}  type="submit" class="btn btn-success text-light btn-sm">{% trans "Results" %}</a>
+                        <a  href={% url 'notesList' imgId=img.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
+                      </div>
+                </br>
+            </br>
                     <div class="form-group">
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item" onclick="preparation()">
@@ -55,7 +61,14 @@
                         </div>
                     </div>
                 </br>
-                    <div id="titleCard" class="card-title">{% trans "Etude préparatoire" %}</div>                   
+                  
+                    <div class="card-title imgCard zoom" style ="float: left;">
+                        <div class="info-post ml-2" style="display: none;">
+                            {% trans "Image Originale" %}
+                        </div>
+                        <span class="zoom" id="titleCard">{% trans "Etude préparatoire pour : " %}</span><img class=" zoom" style="height:60px" src="{{img.image.url}}" alt="{{image.image.name}}">
+                    </div>
+                         
                 </div>
 
                   <!--//////////////////////// preparation Card //////////////////////////////-->
@@ -70,6 +83,13 @@
                             <div class="d-flex">
                                 <div class="info-post ml-2">
                                     {% trans "Pretraitement" %}
+                                    <br/><br/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fas fa-info-circle"></i>
+                                        <small class="text-muted">Cette étape prend en entrée une image dermoscopique, 
+                                                elle applique une méthode d’élimination des poils et des artefacts
+                                             afin de faciliter les prochains traitements et de ne pas fausser les résultats.</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -84,6 +104,12 @@
                             <div class="d-flex">
                                 <div class="info-post ml-2">
                                     {% trans "Segmentation" %}
+                                    <br/><br/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fas fa-info-circle"></i>
+                                        <small class="text-muted">la segmentation consiste à isoler la zone malade de la peau normale en fonction de l'homogénéité des pixels. 
+                                            L'homogénéité des pixels peut être déterminée par les caractéristiques de couleur et de texture.</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +124,13 @@
                         <div class="card-body">
                             <div class="d-flex">
                                 <div class="info-post ml-2">
-                                    {% trans "Post Traitement" %}
+                                    {% trans "PostTraitement" %}
+                                    <br/><br/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fas fa-info-circle"></i>
+                                        <small class="text-muted">L'algorithme part de la limite de la lésion et va à l'intérieur 
+                                            de cette dernière en remplissant progressivement tout ce qui se trouve dans la limite.</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -174,6 +206,13 @@
                         <div class="d-flex">
                             <div class="info-post ml-2">
                                 {% trans "Cercle Englobant" %}
+                                <br/><br/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fas fa-info-circle"></i>
+                                        <small class="text-muted">
+                                             Le diamètre de cercle le plus proche de la lésion sera considéré comme le diamètre de cette lésion.
+                                        </small>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -188,6 +227,12 @@
                         <div class="d-flex">
                             <div class="info-post ml-2">
                                 {% trans "Avec perimetre" %}
+                                <br/><br/>
+                                <div class="alert alert-warning" role="alert">
+                                    <i class="fas fa-info-circle"></i>
+                                    <small class="text-muted">Diamètre de la lesion sera 
+                                        égale à la longueur du diamètre de ce cercle.</small>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -203,7 +248,7 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" style="font-size:20px;font-weight:bolder">Modal title</h5>
+                                <h5 class="modal-title" style="font-size:20px;font-weight:bolder"></h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
@@ -237,6 +282,7 @@
         time: 1000,
     });
     {% endif %}
+    
     $('.imgCard').on('click',(e)=>{
         if($(e.target).hasClass('zoom')) {
         var src = $(e.target).closest('.imgCard').find('img').attr('src')
@@ -254,7 +300,7 @@
         card.style.display='none';
     }
     function preparation()
-    {   document.getElementById("titleCard").textContent="Etude préparatoire"
+    {   document.getElementById("titleCard").textContent="Etude préparatoire pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")
         var  borderCard = document.getElementById("borderCard")
@@ -269,7 +315,7 @@
     }
 
     function asymmetry(){
-        document.getElementById("titleCard").textContent="Etude Asymétrie"
+        document.getElementById("titleCard").textContent="Etude Asymétrie pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")
         var  borderCard = document.getElementById("borderCard")
@@ -284,7 +330,7 @@
     }
 
     function border(){
-        document.getElementById("titleCard").textContent="Etude Bordure"
+        document.getElementById("titleCard").textContent="Etude Bordure pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")
         var  borderCard = document.getElementById("borderCard")
@@ -299,7 +345,7 @@
     }
 
     function color(){
-        document.getElementById("titleCard").textContent="Etude Couleur"
+        document.getElementById("titleCard").textContent="Etude Couleur pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")
         var  borderCard = document.getElementById("borderCard")
@@ -314,7 +360,7 @@
     }
 
     function diameter(){
-        document.getElementById("titleCard").textContent="Etude Diamètre"
+        document.getElementById("titleCard").textContent="Etude Diamètre pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")
         var  borderCard = document.getElementById("borderCard")

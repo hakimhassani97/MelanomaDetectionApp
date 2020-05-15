@@ -176,12 +176,12 @@
 					<div class="collapse {% if url_name in 'notesList,addNote' %}show{% endif %}" id="notes">
 						<ul class="nav nav-collapse">
 							<li class="{% if url_name == 'notesList' %}active{% endif %}">
-								<a href="{% url 'notesList' %}">
+								<a href="#">
 									<span class="sub-item">{% trans "Liste des Notes" %}</span>
 								</a>
 							</li>
 							<li class="{% if url_name == 'addNote' %}active{% endif %}">
-								<a href="{% url 'addNote' %}">
+								<a href="#">
 									<span class="sub-item">{% trans "Ajouter Note" %}</span>
 								</a>
 							</li>
