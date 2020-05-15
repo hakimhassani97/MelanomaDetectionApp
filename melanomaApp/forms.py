@@ -53,7 +53,7 @@ class AddPatientForm(forms.ModelForm):
     lastName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Last Name","class": "form-control","type":"text"}))
     # email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder" : "Email","class": "form-control","email":"email" }))
     phone = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Phone","class": "form-control"}))
-    birthDate = forms.DateField(widget=forms.DateInput(attrs={"placeholder" : "Birth Date","class": "form-control" ,"type" :"Date"}))
+    birthDate = forms.DateField(widget=forms.DateInput(format = '%Y-%m-%d', attrs={"placeholder" : "Birth Date","class": "form-control" ,"type" :"Date"}))
     address = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Address","class": "form-control","type":"text"}))
     CHOICES = (('', 'Sexe'),('male', 'Male'),('femelle', 'Femelle'))
     sexe = forms.ChoiceField(choices=CHOICES ,widget=forms.Select(attrs={"placeholder" : "Sexe","class": "form-control"}))
