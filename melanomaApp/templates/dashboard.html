@@ -34,11 +34,11 @@
                 </div>
                 <div class="px-2 pb-2 pb-md-0 text-center">
                   <div id="circles-2"></div>
-                  <h6 class="fw-bold mt-3 mb-0">Sales</h6>
+                  <h6 class="fw-bold mt-3 mb-0">Non Melanome</h6>
                 </div>
                 <div class="px-2 pb-2 pb-md-0 text-center">
                   <div id="circles-3"></div>
-                  <h6 class="fw-bold mt-3 mb-0">Subscribers</h6>
+                  <h6 class="fw-bold mt-3 mb-0">Melanom</h6>
                 </div>
               </div>
             </div>
@@ -528,9 +528,17 @@
 	<script src="/static/assets/js/demo.js"></script>
 
 	<script>
-        {{nbPatients}}
+        
         var nbPatients = "{{nbPatients}}";
-		Circles.create({
+        var nbNonMelanom = "{{nbNonMelanom}}";
+        var nbMelanom = "{{nbMelanom}}";
+        nbNonMelanomVal =0
+        nbMelanomVal =0
+        if(nbPatients!=0){
+            var  nbNonMelanomVal =(nbNonMelanom/nbPatients)*100
+            var  nbMelanomVal = (nbMelanom/nbPatients)*100
+        }
+        Circles.create({
 			id:'circles-1',
 			radius:45,
 			value:100,
@@ -548,10 +556,10 @@
 		Circles.create({
 			id:'circles-2',
 			radius:45,
-			value:70,
+			value:nbNonMelanomVal,
 			maxValue:100,
 			width:7,
-			text: 36,
+			text: nbNonMelanom,
 			colors:['#f1f1f1', '#2BB930'],
 			duration:400,
 			wrpClass:'circles-wrp',
@@ -563,10 +571,10 @@
 		Circles.create({
 			id:'circles-3',
 			radius:45,
-			value:40,
+			value:nbMelanomVal,
 			maxValue:100,
 			width:7,
-			text: 12,
+			text: nbMelanom,
 			colors:['#f1f1f1', '#F25961'],
 			duration:400,
 			wrpClass:'circles-wrp',
