@@ -109,6 +109,8 @@ def uploadImg(request):
                     car = Caracteristics.extractCaracteristics(i.image.path)
                     car = Car(**car, image=i)
                     car.save()
+                    i.result=resultGame(i.id)
+                    i.save() 
                     # image details
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     contour = Contours.contours2(img)
@@ -382,15 +384,30 @@ def results(request, imgId):
             '''
         tbody += '</tr>'
     tbody += '</tbody>'
-    # image sample
-    T = np.array(a+b+c+d)
-    result = Game.getResult(T)
+    
+    result = image.result 
     context = {
         'image': image,
         'table': thead+tbody,
         'class': 'Melanome' if result==1 else 'Non Melanome'
     }
     return render(request, 'results.html', context)
+
+
+
+########################### calculer le resulta de jeux
+def resultGame(imgId) :
+    image = Image.objects.get(id=imgId)
+    a = [image.caracteristic.car0, image.caracteristic.car1, image.caracteristic.car2, image.caracteristic.car3,
+        image.caracteristic.car4, image.caracteristic.car5]
+    b = [image.caracteristic.car6, image.caracteristic.car7, image.caracteristic.car8, image.caracteristic.car9, image.caracteristic.car10,
+        image.caracteristic.car11, image.caracteristic.car12, image.caracteristic.car13]
+    c = [image.caracteristic.car14, image.caracteristic.car15, image.caracteristic.car16, image.caracteristic.car17, image.caracteristic.car18]
+    d = [image.caracteristic.car19, image.caracteristic.car20, image.caracteristic.car21]
+    # image sample
+    T = np.array(a+b+c+d)
+    result = Game.getResult(T)
+    return result
 
 def images(request):
     '''
@@ -574,9 +591,11 @@ def deleteNote(request,noteId):
 
 
 def dashboard(request):
-    nbPatients = Patient.objects.count()
-        
-    return render(request, 'dashboard.html' ,{'nbPatients' :nbPatients})
+
+    nbPatients = Patient.objects.raw('SELECT COUNT(*)  AS id  FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id )')[0].id
+    nbMelanom=Patient.objects.raw('SELECT COUNT(*)  AS id  FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 1 )')[0].id
+    nbNonMelanom =nbPatients - nbMelanom 
+    return render(request, 'dashboard.html' ,{'nbPatients' :nbPatients ,'nbMelanom':nbMelanom ,'nbNonMelanom' :nbNonMelanom})
 
 
 
