@@ -215,13 +215,34 @@
                                 <div class="info-post ml-2">
                                     {% trans "Longueur de Bordure" %}
                                     <br/><br/>
-                                        <div class="alert alert-warning" role="alert">
-                                            <i class="fas fa-info-circle"></i>
-                                            <small class="text-muted">
-                                                le cercle represente la bordure de la lesion, avec elimination des irregularitees pour mieux representer la caracteristique de Bordure.<br/>
-                                                la surface blue indique une presence d'irregilaritee dans la bordure
-                                            </small>
-                                        </div>
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fas fa-info-circle"></i>
+                                        <small class="text-muted">
+                                            le cercle represente la bordure de la lesion, avec elimination des irregularitees pour mieux representer la caracteristique de Bordure.<br/>
+                                            la surface blue indique une presence d'irregilaritee dans la bordure
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-post card-round col-md-4 imgCard">
+                        <img class="card-img-top zoom" src="{{details.enclosingCircle.url}}">
+                        <button style="position: absolute; right: 5%; margin-top: 10px;"
+                        class="btn btn-icon btn-light btn-round btn-xs zoom ">
+                            <i class="fa fa-search-plus zoom"></i>
+                        </button>
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="info-post ml-2">
+                                    {% trans "Rondeur / Indice d'irregularite" %}
+                                    <br/><br/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fas fa-info-circle"></i>
+                                        <small class="text-muted">
+                                            Le cercle aide a mieux visualiser la rondeur du contour
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
