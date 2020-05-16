@@ -252,7 +252,111 @@
             <!--//////////////////////// color Card //////////////////////////////-->
             
             <div class="card-body row" id="colorCard" style="display: none;">
-                    <h3>colorCard</h3>
+                <div class="card card-post card-round col-md-4 imgCard">
+                    <img class="card-img-top zoom" src="{{details.kmeans.url}}">
+                    <button style="position: absolute; right: 5%; margin-top: 10px;"
+                    class="btn btn-icon btn-light btn-round btn-xs zoom ">
+                        <i class="fa fa-search-plus zoom"></i>
+                    </button>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="info-post ml-2">
+                                {% trans "Clustering" %}
+                                <br/><br/>
+                                <div class="alert alert-warning" role="alert">
+                                    <i class="fas fa-info-circle"></i>
+                                    <small class="text-muted">
+                                        Methode de clustering (regroupement) KMEANS vers 5 groupes de couleurs, permet de differencier les nombreuses nuances de couleurs
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-post card-round col-md-4 imgCard">
+                    <img class="card-img-top zoom" src="{{details.kmeans2.url}}">
+                    <button style="position: absolute; right: 5%; margin-top: 10px;"
+                    class="btn btn-icon btn-light btn-round btn-xs zoom ">
+                        <i class="fa fa-search-plus zoom"></i>
+                    </button>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="info-post ml-2">
+                                {% trans "Clustering" %}
+                                <br/><br/>
+                                <div class="alert alert-warning" role="alert">
+                                    <i class="fas fa-info-circle"></i>
+                                    <small class="text-muted">
+                                        Methode de clustering (regroupement) KMEANS vers 3 groupes de couleurs, permet de differencier les nombreuses nuances de couleurs
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-post card-round col-md-4 imgCard">
+                    <img class="card-img-top zoom" src="{{details.hsv.url}}">
+                    <button style="position: absolute; right: 5%; margin-top: 10px;"
+                    class="btn btn-icon btn-light btn-round btn-xs zoom ">
+                        <i class="fa fa-search-plus zoom"></i>
+                    </button>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="info-post ml-2">
+                                {% trans "Intervals HSV" %}
+                                <br/><br/>
+                                <div class="alert alert-warning" role="alert">
+                                    <i class="fas fa-info-circle"></i>
+                                    <small class="text-muted">
+                                        Methode de seuillage HSV
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-post card-round col-md-4 imgCard">
+                    <img class="card-img-top zoom" src="{{details.yuv.url}}">
+                    <button style="position: absolute; right: 5%; margin-top: 10px;"
+                    class="btn btn-icon btn-light btn-round btn-xs zoom ">
+                        <i class="fa fa-search-plus zoom"></i>
+                    </button>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="info-post ml-2">
+                                {% trans "Intervals YUV" %}
+                                <br/><br/>
+                                <div class="alert alert-warning" role="alert">
+                                    <i class="fas fa-info-circle"></i>
+                                    <small class="text-muted">
+                                        Methode de seuillage YUV
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-post card-round col-md-4 imgCard">
+                    <img class="card-img-top zoom" src="{{details.ycbcr.url}}">
+                    <button style="position: absolute; right: 5%; margin-top: 10px;"
+                    class="btn btn-icon btn-light btn-round btn-xs zoom ">
+                        <i class="fa fa-search-plus zoom"></i>
+                    </button>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="info-post ml-2">
+                                {% trans "Intervals YCbCr" %}
+                                <br/><br/>
+                                <div class="alert alert-warning" role="alert">
+                                    <i class="fas fa-info-circle"></i>
+                                    <small class="text-muted">
+                                        Methode de seuillage YCbCr
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 

@@ -271,6 +271,66 @@ def uploadImg(request):
                         det.borderlength.save(name, File(dest), save=False)
                     # remove temporary files
                     os.remove(imgPath)
+                    ######################## draw kmeans
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = Cars.extractLesion(img, contour)
+                    img, center = Preprocess.KMEANS(img, K=5)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_kmeans.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.kmeans.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    ######################## draw kmeans2
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = Cars.extractLesion(img, contour)
+                    img, center = Preprocess.KMEANS(img, K=3)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_kmeans2.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.kmeans2.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    ######################## draw kmeans2
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = Cars.extractLesion(img, contour)
+                    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_hsv.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.hsv.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    ######################## draw kmeans2
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = Cars.extractLesion(img, contour)
+                    img = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_yuv.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.yuv.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
+                    ######################## draw kmeans2
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = Cars.extractLesion(img, contour)
+                    img = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_ycbcr.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.ycbcr.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
                     ######################## draw preprocess
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     img = Preprocess.removeArtifactYUV(img)
