@@ -247,6 +247,28 @@ def uploadImg(request):
                         det.border.save(name, File(dest), save=False)
                     # remove temporary files
                     os.remove(imgPath)
+                    ################## draw border length
+                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+                    img = Cars.extractLesion(img, contour)
+                    perimeter = cv2.arcLength(contour, True)
+                    M = cv2.moments(contour)
+                    x = int(M["m10"] / M["m00"])
+                    y = int(M["m01"] / M["m00"])
+                    radius = int(perimeter / (2 * np.pi))
+                    blank = np.zeros(img.shape)
+                    cv2.circle(blank, (x,y), radius=radius, color=(200,0, 0), thickness=-1)
+                    img[img != 0] = 255
+                    img = np.subtract(blank, img)
+                    cv2.circle(img, (x,y), radius=1, color=(0, 255,0), thickness=3)
+                    cv2.circle(img, (x,y), radius=radius, color=(0,255, 0), thickness=3)
+                    imgPath = 'media/'+i.image.name
+                    imgPath = imgPath.replace('.', '_borderlength.')
+                    cv2.imwrite(imgPath, img)
+                    with open(imgPath, 'rb') as dest:
+                        name = imgPath.replace('media/images/','')
+                        det.borderlength.save(name, File(dest), save=False)
+                    # remove temporary files
+                    os.remove(imgPath)
                     ######################## draw preprocess
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     img = Preprocess.removeArtifactYUV(img)
