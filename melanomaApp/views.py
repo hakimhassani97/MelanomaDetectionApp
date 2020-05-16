@@ -535,18 +535,9 @@ def addNote(request ,imgId):
     if request.method == "POST":
         form = AddNoteForm(request.POST, request.FILES)
         if form.is_valid():
-            
-           
-
             note = Note(title=form.cleaned_data['title'],content=form.cleaned_data['content'],image =img)
             note.save()                
-               
-            # Note = form.save(commit=False)
-            # Note.save()
-            msg = 'Note est enregistrée avec succes'
-            success = True
-            add =True  
-            return render(request, 'addNote.html', {"form": form, "msg": msg, "success": success ,"img" :img})
+            return redirect(notesList ,imgId)
         else:
             msg = 'Verifiez les champs'
             return render(request, 'addNote.html', {"form": form, "msg": msg, "success": success ,"img" :img})
@@ -561,14 +552,14 @@ def notesList(request ,imgId):
     '''
         returns noteList
     '''
-    img = Image.objects.get(id=imgId)
-    
+    img = Image.objects.get(id=imgId)    
     notes =Note.objects.filter(image=imgId).order_by('-date')
     
     context = {
         'notes': notes,
         'img' :img
     }
+
     return render(request, 'notesList.html', context)
 
 
@@ -578,7 +569,14 @@ def deleteNote(request,noteId):
     '''
     note = Note.objects.get(id=noteId)
     note.delete()
-    return redirect(notesList)
+    return redirect(notesList ,note.image.id)
+
+
+
+def dashboard(request):
+    nbPatients = Patient.objects.count()
+        
+    return render(request, 'dashboard.html' ,{'nbPatients' :nbPatients})
 
 
 

@@ -61,11 +61,14 @@
                                   
                                     <td>
                                         <div class="form-button-action">
-                                         
-                                            <a href={% url 'deleteNote' noteId=note.id  %} type="button" data-toggle="tooltip" title=""
-                                                class="btn btn-link btn-danger" data-original-title="Remove">
+                                        <button type="button" data-toggle="tooltip" title="" onclick="readNote('{{note.title}}','{{note.content}} ','{{note.date}}')"
+                                            class="btn btn-link btn-success" data-original-title="Supprimer">
+                                            <i class="far fa-envelope"></i>
+                                         </button>
+                                            <button type="button" data-toggle="tooltip" title="" onclick="deleteNote('{% url 'deleteNote' note.id %}','{{note.title}}')"
+                                                class="btn btn-link btn-danger" data-original-title="Supprimer">
                                                 <i class="fa fa-times"></i>
-                                           </a>
+                                        </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -102,7 +105,58 @@
 			},
 			time: 1000,
 		});
-	{% endif %}
+    {% endif %}
+    
+    function deleteNote(url, title){
+        swal({
+            title: 'Sure ?',
+            text: "Voulez vous supprimer Note "+title+' ?',
+            type: 'warning',
+            buttons:{
+                cancel: {
+                    visible: true,
+                    text : 'Annuler',
+                    className: 'btn btn-success'
+                },        			
+                confirm: {
+                    text : 'Oui',
+                    className : 'btn btn-danger'
+                }
+            }
+        }).then((willDelete) => {
+            if (willDelete) {
+                swal("Note "+title+" supprime avec succes", {
+                    icon: "success",
+                    buttons : {
+                        confirm : {
+                            className: 'btn btn-success'
+                        }
+                    }
+                }).then(e=>{
+                    window.location = url
+                })
+            }
+        });
+    }
+
+
+
+
+    function readNote(title ,content,date) {
+       
+        swal({
+            title:"Titre : "+title,
+            text: "Contenu : "+content +"\n \n date : "+date,
+            type: 'warning',
+            buttons:{
+                confirm : {
+                            className: 'btn btn-success'
+                    }
+            }
+        })
+    }
+
+
 </script>
 
 {% endblock javascripts %}
