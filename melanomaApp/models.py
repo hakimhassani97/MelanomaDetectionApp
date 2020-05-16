@@ -87,7 +87,13 @@ class Details(models.Model):
     enclosingCircle = models.ImageField(upload_to='images', null=True, blank=True)    
     openCircle = models.ImageField(upload_to='images', null=True, blank=True)   
     lengtheningIndex = models.ImageField(upload_to='images', null=True, blank=True)
-    
+
+    ######## color
+    kmeans = models.ImageField(upload_to='images', null=True, blank=True)
+    kmeans2 = models.ImageField(upload_to='images', null=True, blank=True)
+    hsv = models.ImageField(upload_to='images', null=True, blank=True)
+    yuv = models.ImageField(upload_to='images', null=True, blank=True)
+    ycbcr = models.ImageField(upload_to='images', null=True, blank=True)
 
     extract = models.ImageField(upload_to='images', null=True, blank=True)
     contour = models.ImageField(upload_to='images', null=True, blank=True)
