@@ -189,8 +189,15 @@
 					</div>
 				</li>
 			<!--            end  Notes                    -->
-
-
+			
+			<!--Dashboard -->
+			<li class="nav-item {% if url_name in 'dashboard' %}active{% endif %}">
+				<a href="{% url 'dashboard' %}">
+					<i class="fas fa-home"></i>
+					<p>{% trans "Dashboard" %}</p>
+					
+				</a>
+			</li>
 
 
 			</ul>

@@ -43,8 +43,8 @@
                         <table id="patientsTable" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Prénom</th>
                                     <th>Nom</th>
+                                    <th>Prénom</th>
                                     <td>Date de naissance</td>
                                     <td>Sexe</td>
                                     <td>Mobile</td>
@@ -54,7 +54,7 @@
                             <tbody>
                                 {% for patient in patients %}
                                 <tr>
-                                    <td>{{patient.firstName}}</td>
+                                    <td>{{patient.lastName}}</td>
                                     <td>{{patient.firstName}}</td>
                                     <td>{{patient.birthDate}}</td>
                                     <td>{{patient.sexe}}</td>

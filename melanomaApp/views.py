@@ -109,6 +109,8 @@ def uploadImg(request):
                     car = Caracteristics.extractCaracteristics(i.image.path)
                     car = Car(**car, image=i)
                     car.save()
+                    i.result=resultGame(i.id)
+                    i.save() 
                     # image details
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     contour = Contours.contours2(img)
@@ -404,15 +406,30 @@ def results(request, imgId):
             '''
         tbody += '</tr>'
     tbody += '</tbody>'
-    # image sample
-    T = np.array(a+b+c+d)
-    result = Game.getResult(T)
+    
+    result = image.result 
     context = {
         'image': image,
         'table': thead+tbody,
         'class': 'Melanome' if result==1 else 'Non Melanome'
     }
     return render(request, 'results.html', context)
+
+
+
+########################### calculer le resulta de jeux
+def resultGame(imgId) :
+    image = Image.objects.get(id=imgId)
+    a = [image.caracteristic.car0, image.caracteristic.car1, image.caracteristic.car2, image.caracteristic.car3,
+        image.caracteristic.car4, image.caracteristic.car5]
+    b = [image.caracteristic.car6, image.caracteristic.car7, image.caracteristic.car8, image.caracteristic.car9, image.caracteristic.car10,
+        image.caracteristic.car11, image.caracteristic.car12, image.caracteristic.car13]
+    c = [image.caracteristic.car14, image.caracteristic.car15, image.caracteristic.car16, image.caracteristic.car17, image.caracteristic.car18]
+    d = [image.caracteristic.car19, image.caracteristic.car20, image.caracteristic.car21]
+    # image sample
+    T = np.array(a+b+c+d)
+    result = Game.getResult(T)
+    return result
 
 def images(request):
     '''
@@ -557,18 +574,9 @@ def addNote(request ,imgId):
     if request.method == "POST":
         form = AddNoteForm(request.POST, request.FILES)
         if form.is_valid():
-            
-           
-
             note = Note(title=form.cleaned_data['title'],content=form.cleaned_data['content'],image =img)
             note.save()                
-               
-            # Note = form.save(commit=False)
-            # Note.save()
-            msg = 'Note est enregistrée avec succes'
-            success = True
-            add =True  
-            return render(request, 'addNote.html', {"form": form, "msg": msg, "success": success ,"img" :img})
+            return redirect(notesList ,imgId)
         else:
             msg = 'Verifiez les champs'
             return render(request, 'addNote.html', {"form": form, "msg": msg, "success": success ,"img" :img})
@@ -583,14 +591,14 @@ def notesList(request ,imgId):
     '''
         returns noteList
     '''
-    img = Image.objects.get(id=imgId)
-    
+    img = Image.objects.get(id=imgId)    
     notes =Note.objects.filter(image=imgId).order_by('-date')
     
     context = {
         'notes': notes,
         'img' :img
     }
+
     return render(request, 'notesList.html', context)
 
 
@@ -600,7 +608,16 @@ def deleteNote(request,noteId):
     '''
     note = Note.objects.get(id=noteId)
     note.delete()
-    return redirect(notesList)
+    return redirect(notesList ,note.image.id)
+
+
+
+def dashboard(request):
+
+    nbPatients = Patient.objects.raw('SELECT COUNT(*)  AS id  FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id )')[0].id
+    nbMelanom=Patient.objects.raw('SELECT COUNT(*)  AS id  FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 1 )')[0].id
+    nbNonMelanom =nbPatients - nbMelanom 
+    return render(request, 'dashboard.html' ,{'nbPatients' :nbPatients ,'nbMelanom':nbMelanom ,'nbNonMelanom' :nbNonMelanom})
 
 
 
