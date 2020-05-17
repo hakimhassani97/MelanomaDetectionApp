@@ -104,13 +104,14 @@ def uploadImg(request):
             for f in files:
                 i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'])
                 i.save()                
-                if 'compute' in request.POST:
-                    # image caracteristics
-                    car = Caracteristics.extractCaracteristics(i.image.path)
-                    car = Car(**car, image=i)
-                    car.save()
-                    i.result=resultGame(i.id)
-                    i.save() 
+                # if 'compute' in request.POST:
+                # image caracteristics
+                car = Caracteristics.extractCaracteristics(i.image.path)
+                car = Car(**car, image=i)
+                car.save()
+                i.result, _, _, _, _ = resultGame(i.id)
+                i.save() 
+                if 'generate' in request.POST:
                     # image details
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     contour = Contours.contours2(img)
@@ -427,6 +428,41 @@ def results(request, imgId):
         returns table of caracteristics of the image
     '''
     image = Image.objects.get(id=imgId)
+    # get game matrix
+    res, game, sMelanome, sNonMelanome, (ii, jj) = resultGame(imgId)
+    s1 = []
+    for s in sMelanome:
+        if s>=0 and s<=5 and not 'Asymetrie' in s1:
+            s1 += ['Asymetrie']
+        if s>=6 and s<=13 and not 'Bordure' in s1:
+            s1 += ['Bordure']
+        if s>=14 and s<=18 and not 'Couleur' in s1:
+            s1 += ['Couleur']
+        if s>=19 and s<=21 and not 'Diametre' in s1:
+            s1 += ['Diametre']
+    s2 = []
+    for s in sNonMelanome:
+        if s>=0 and s<=5 and not 'Asymetrie' in s2:
+            s2 += ['Asymetrie']
+        if s>=6 and s<=13 and not 'Bordure' in s2:
+            s2 += ['Bordure']
+        if s>=14 and s<=18 and not 'Couleur' in s2:
+            s2 += ['Couleur']
+        if s>=19 and s<=21 and not 'Diametre' in s2:
+            s2 += ['Diametre']
+    tgame = '<thead><tr><th class="bg-warning">Melanome \<br/> Non Melanome</th>'
+    for i in range(0, len(game[0])):
+        tgame += '<th>'+s2[i]+'</th>'
+    tgame += '</tr><tbody>'
+    for i in range(0, len(game)):
+        l = game[i]
+        tgame += '<tr><td>'+s1[i]+'</td>'
+        for j in range(0, len(l)):
+            v = l[j]
+            tgame += '<td class="'+('bg-success' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
+        tgame += '</tr>'
+    tgame += '</tbody>'
+    # get caracteristics
     a = [image.caracteristic.car0, image.caracteristic.car1, image.caracteristic.car2, image.caracteristic.car3,
         image.caracteristic.car4, image.caracteristic.car5]
     b = [image.caracteristic.car6, image.caracteristic.car7, image.caracteristic.car8, image.caracteristic.car9, image.caracteristic.car10,
@@ -471,6 +507,7 @@ def results(request, imgId):
     context = {
         'image': image,
         'table': thead+tbody,
+        'tgame': tgame,
         'class': 'Melanome' if result==1 else 'Non Melanome'
     }
     return render(request, 'results.html', context)
