@@ -104,13 +104,14 @@ def uploadImg(request):
             for f in files:
                 i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'])
                 i.save()                
-                if 'compute' in request.POST:
-                    # image caracteristics
-                    car = Caracteristics.extractCaracteristics(i.image.path)
-                    car = Car(**car, image=i)
-                    car.save()
-                    i.result=resultGame(i.id)
-                    i.save() 
+                # if 'compute' in request.POST:
+                # image caracteristics
+                car = Caracteristics.extractCaracteristics(i.image.path)
+                car = Car(**car, image=i)
+                car.save()
+                i.result=resultGame(i.id)
+                i.save() 
+                if 'generate' in request.POST:
                     # image details
                     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
                     contour = Contours.contours2(img)

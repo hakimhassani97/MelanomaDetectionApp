@@ -46,9 +46,15 @@
 										{{ field.label_tag }} {{ field }}
 									</div>
 								{% endfor %}
-								<div class="col-md-4" style="padding-top:15px">
-									<input name="compute" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-size="small"
-										data-on="{% trans "Faire les Calcules" %}" data-off="{% trans "Juste Charger l'image" %}">
+								{% comment %} <div class="col-md-3" style="padding-top:15px">
+									<input name="compute" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="small"
+										data-on="{% trans "Faire les Calculs" %}" data-off="{% trans "Juste Charger l'image" %}"/>
+								</div> {% endcomment %}
+								<div class="col-md-7" style="padding-top:15px">
+									<label for="generate">{% trans "Générer les images explicatives ?" %}</label>
+									<input name="generate" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="small"
+										data-on="{% trans "Oui" %}" data-off="{% trans "Non" %}"/>
+										<p class="text-danger">{% trans "Note : la génération des images va prendre du temps" %}</p>
 								</div>
 							</div>
 						</div>
