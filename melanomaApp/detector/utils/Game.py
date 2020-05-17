@@ -149,17 +149,17 @@ class Game:
         game = nash.Game(game)
         equilibria = game.support_enumeration()
         if len(d1)==0:
-            return 0
+            return 0, gg, sMelanome, sNonMelanome, (-1,-1)
         elif len(d2)==0:
-            return 1
+            return 1, gg, sMelanome, sNonMelanome, (-1,-1)
         else:
             for en in equilibria:
                 ii = np.argmax(en[0])
                 jj = np.argmax(en[1])
                 result = 1 if gg[ii, jj]>=0 else 0
-                return result
+                return result, gg, sMelanome, sNonMelanome, (ii,jj)
                 break
-        return -1
+        return -1, gg, sMelanome, sNonMelanome, (-1,-1)
 
 # information
 cars = range(4, 26)
