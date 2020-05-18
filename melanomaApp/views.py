@@ -102,14 +102,15 @@ def uploadImg(request):
             # multiple Images
             files = request.FILES.getlist('image')
             for f in files:
-                i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'])
+                type = 'PH2' if 'type' in request.POST else 'ISIC'
+                i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'], type=type)
                 i.save()                
                 # if 'compute' in request.POST:
                 # image caracteristics
                 car = Caracteristics.extractCaracteristics(i.image.path)
                 car = Car(**car, image=i)
                 car.save()
-                i.result, _, _, _, _ = resultGame(i.id)
+                i.result, _, _, _, _ = resultGame(i.id, type)
                 i.save() 
                 if 'generate' in request.POST:
                     # image details
@@ -429,7 +430,7 @@ def results(request, imgId):
     '''
     image = Image.objects.get(id=imgId)
     # get game matrix
-    res, game, sMelanome, sNonMelanome, (ii, jj) = resultGame(imgId)
+    res, game, sMelanome, sNonMelanome, (ii, jj) = resultGame(imgId, image.type)
     s1 = []
     for s in sMelanome:
         if s>=0 and s<=5 and not 'Asymetrie' in s1:
@@ -515,7 +516,8 @@ def results(request, imgId):
 
 
 ########################### calculer le resulta de jeux
-def resultGame(imgId) :
+def resultGame(imgId, type) :
+    Game.init(type)
     image = Image.objects.get(id=imgId)
     a = [image.caracteristic.car0, image.caracteristic.car1, image.caracteristic.car2, image.caracteristic.car3,
         image.caracteristic.car4, image.caracteristic.car5]
