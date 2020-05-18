@@ -450,7 +450,7 @@ def results(request, imgId):
             s2 += ['Couleur']
         if s>=19 and s<=21 and not 'Diametre' in s2:
             s2 += ['Diametre']
-    tgame = '<thead><tr><th class="bg-warning">Melanome \<br/> Non Melanome</th>'
+    tgame = '<thead><tr><th class="bg-warning">Non Melanome<hr/>Melanome</th>'
     for i in range(0, len(game[0])):
         tgame += '<th>'+s2[i]+'</th>'
     tgame += '</tr><tbody>'
