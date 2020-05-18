@@ -451,7 +451,7 @@ def results(request, imgId):
             s2 += ['Couleur']
         if s>=19 and s<=21 and not 'Diametre' in s2:
             s2 += ['Diametre']
-    tgame = '<thead><tr><th class="bg-warning">Non Melanome<hr/>Melanome</th>'
+    tgame = '<thead><tr><th class="bg-warning">Joueur 2 : Non Melanome<hr class="bg-dark"/>Joueur 1 : Melanome</th>'
     for i in range(0, len(game[0])):
         tgame += '<th>'+s2[i]+'</th>'
     tgame += '</tr><tbody>'
@@ -460,7 +460,10 @@ def results(request, imgId):
         tgame += '<tr><td>'+s1[i]+'</td>'
         for j in range(0, len(l)):
             v = l[j]
-            tgame += '<td class="'+('bg-success' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
+            if v>0:
+                tgame += '<td class="'+('bg-danger' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
+            elif v<0:
+                tgame += '<td class="'+('bg-success' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
         tgame += '</tr>'
     tgame += '</tbody>'
     # get caracteristics
