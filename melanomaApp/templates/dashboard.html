@@ -38,7 +38,7 @@
                 </div>
                 <div class="px-2 pb-2 pb-md-0 text-center">
                   <div id="circles-3"></div>
-                  <h6 class="fw-bold mt-3 mb-0">Melanom</h6>
+                  <h6 class="fw-bold mt-3 mb-0">Melanome</h6>
                 </div>
               </div>
             </div>
@@ -47,16 +47,16 @@
         <div class="col-md-6">
           <div class="card full-height">
             <div class="card-body">
-              <div class="card-title">Total income & spend statistics</div>
+              <div class="card-title">{% trans "Patients par mois" %}</div>
               <div class="row py-3">
                 <div class="col-md-4 d-flex flex-column justify-content-around">
                   <div>
-                    <h6 class="fw-bold text-uppercase text-success op-8">Total Income</h6>
-                    <h3 class="fw-bold">$9.782</h3>
+                    <h6 class="fw-bold text-uppercase text-success op-8">Non Melanome</h6>
+                    <h3 class="fw-bold" id ="nonMel"></h3>
                   </div>
                   <div>
-                    <h6 class="fw-bold text-uppercase text-danger op-8">Total Spend</h6>
-                    <h3 class="fw-bold">$1,248</h3>
+                    <h6 class="fw-bold text-uppercase text-danger op-8">Melanome</h6>
+                    <h3 class="fw-bold" id ="mel"></h3>
                   </div>
                 </div>
                 <div class="col-md-8">
@@ -74,7 +74,7 @@
           <div class="card">
             <div class="card-header">
               <div class="card-head-row">
-                <div class="card-title">User Statistics</div>
+                <div class="card-title">Statistiques des Patients</div>
                 <div class="card-tools">
                   <a href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
                     <span class="btn-label">
@@ -93,7 +93,9 @@
             </div>
             <div class="card-body">
               <div class="chart-container" style="min-height: 375px">
-                <canvas id="statisticsChart"></canvas>
+                <canvas id="statisticsChart">
+
+                </canvas>
               </div>
               <div id="myChartLegend"></div>
             </div>
@@ -126,399 +128,7 @@
           </div>
         </div>
       </div>
-      <div class="row row-card-no-pd">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-head-row card-tools-still-right">
-                <h4 class="card-title">Users Geolocation</h4>
-                <div class="card-tools">
-                  <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-angle-down"></span></button>
-                  <button class="btn btn-icon btn-link btn-primary btn-xs btn-refresh-card"><span class="fa fa-sync-alt"></span></button>
-                  <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-times"></span></button>
-                </div>
-              </div>
-              <p class="card-category">
-              Map of the distribution of users around the world</p>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="table-responsive table-hover table-sales">
-                    <table class="table">
-                      <tbody>
-                        <tr>
-                          <td>
-                            <div class="flag">
-                              <img src="/static/assets/img/flags/id.png" alt="indonesia">
-                            </div>
-                          </td>
-                          <td>Indonesia</td>
-                          <td class="text-right">
-                            2.320
-                          </td>
-                          <td class="text-right">
-                            42.18%
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="flag">
-                              <img src="/static/assets/img/flags/us.png" alt="united states">
-                            </div>
-                          </td>
-                          <td>USA</td>
-                          <td class="text-right">
-                            240
-                          </td>
-                          <td class="text-right">
-                            4.36%
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="flag">
-                              <img src="/static/assets/img/flags/au.png" alt="australia">
-                            </div>
-                          </td>
-                          <td>Australia</td>
-                          <td class="text-right">
-                            119
-                          </td>
-                          <td class="text-right">
-                            2.16%
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="flag">
-                              <img src="/static/assets/img/flags/ru.png" alt="russia">
-                            </div>
-                          </td>
-                          <td>Russia</td>
-                          <td class="text-right">
-                            1.081
-                          </td>
-                          <td class="text-right">
-                            19.65%
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="flag">
-                              <img src="/static/assets/img/flags/cn.png" alt="china">
-                            </div>
-                          </td>
-                          <td>China</td>
-                          <td class="text-right">
-                            1.100
-                          </td>
-                          <td class="text-right">
-                            20%
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="flag">
-                              <img src="/static/assets/img/flags/br.png" alt="brazil">
-                            </div>
-                          </td>
-                          <td>Brasil</td>
-                          <td class="text-right">
-                            640
-                          </td>
-                          <td class="text-right">
-                            11.63%
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mapcontainer">
-                    <div id="map-example" class="vmap"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Top Products</div>
-            </div>
-            <div class="card-body pb-0">
-              <div class="d-flex">
-                <div class="avatar">
-                  <img src="/static/assets/img/logoproduct.svg" alt="..." class="avatar-img rounded-circle">
-                </div>
-                <div class="flex-1 pt-1 ml-2">
-                  <h6 class="fw-bold mb-1">CSS</h6>
-                  <small class="text-muted">Cascading Style Sheets</small>
-                </div>
-                <div class="d-flex ml-auto align-items-center">
-                  <h3 class="text-info fw-bold">+$17</h3>
-                </div>
-              </div>
-              <div class="separator-dashed"></div>
-              <div class="d-flex">
-                <div class="avatar">
-                  <img src="/static/assets/img/logoproduct.svg" alt="..." class="avatar-img rounded-circle">
-                </div>
-                <div class="flex-1 pt-1 ml-2">
-                  <h6 class="fw-bold mb-1">J.CO Donuts</h6>
-                  <small class="text-muted">The Best Donuts</small>
-                </div>
-                <div class="d-flex ml-auto align-items-center">
-                  <h3 class="text-info fw-bold">+$300</h3>
-                </div>
-              </div>
-              <div class="separator-dashed"></div>
-              <div class="d-flex">
-                <div class="avatar">
-                  <img src="/static/assets/img/logoproduct3.svg" alt="..." class="avatar-img rounded-circle">
-                </div>
-                <div class="flex-1 pt-1 ml-2">
-                  <h6 class="fw-bold mb-1">Ready Pro</h6>
-                  <small class="text-muted">Bootstrap 4 Admin Dashboard</small>
-                </div>
-                <div class="d-flex ml-auto align-items-center">
-                  <h3 class="text-info fw-bold">+$350</h3>
-                </div>
-              </div>
-              <div class="separator-dashed"></div>
-              <div class="pull-in">
-                <canvas id="topProductsChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-body">
-              <div class="card-title fw-mediumbold">Suggested People</div>
-              <div class="card-list">
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="/static/assets/img/jm_denis.jpg" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ml-3">
-                    <div class="username">Jimmy Denis</div>
-                    <div class="status">Graphic Designer</div>
-                  </div>
-                  <button class="btn btn-icon btn-primary btn-round btn-xs">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="/static/assets/img/chadengle.jpg" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ml-3">
-                    <div class="username">Chad</div>
-                    <div class="status">CEO Zeleaf</div>
-                  </div>
-                  <button class="btn btn-icon btn-primary btn-round btn-xs">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="/static/assets/img/talha.jpg" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ml-3">
-                    <div class="username">Talha</div>
-                    <div class="status">Front End Designer</div>
-                  </div>
-                  <button class="btn btn-icon btn-primary btn-round btn-xs">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="/static/assets/img/mlane.jpg" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ml-3">
-                    <div class="username">John Doe</div>
-                    <div class="status">Back End Developer</div>
-                  </div>
-                  <button class="btn btn-icon btn-primary btn-round btn-xs">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="/static/assets/img/talha.jpg" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ml-3">
-                    <div class="username">Talha</div>
-                    <div class="status">Front End Designer</div>
-                  </div>
-                  <button class="btn btn-icon btn-primary btn-round btn-xs">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="/static/assets/img/jm_denis.jpg" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ml-3">
-                    <div class="username">Jimmy Denis</div>
-                    <div class="status">Graphic Designer</div>
-                  </div>
-                  <button class="btn btn-icon btn-primary btn-round btn-xs">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card card-primary bg-primary-gradient">
-            <div class="card-body">
-              <h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Active user right now</h4>
-              <h1 class="mb-4 fw-bold">17</h1>
-              <h4 class="mt-3 b-b1 pb-2 mb-5 fw-bold">Page view per minutes</h4>
-              <div id="activeUsersChart"></div>
-              <h4 class="mt-5 pb-3 mb-0 fw-bold">Top active pages</h4>
-              <ul class="list-unstyled">
-                <li class="d-flex justify-content-between pb-1 pt-1"><small>/product/readypro/index.html</small> <span>7</span></li>
-                <li class="d-flex justify-content-between pb-1 pt-1"><small>/product/atlantis/demo.html</small> <span>10</span></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card full-height">
-            <div class="card-header">
-              <div class="card-title">Feed Activity</div>
-            </div>
-            <div class="card-body">
-              <ol class="activity-feed">
-                <li class="feed-item feed-item-secondary">
-                  <time class="date" datetime="9-25">Sep 25</time>
-                  <span class="text">Responded to need <a href="#">"Volunteer opportunity"</a></span>
-                </li>
-                <li class="feed-item feed-item-success">
-                  <time class="date" datetime="9-24">Sep 24</time>
-                  <span class="text">Added an interest <a href="#">"Volunteer Activities"</a></span>
-                </li>
-                <li class="feed-item feed-item-info">
-                  <time class="date" datetime="9-23">Sep 23</time>
-                  <span class="text">Joined the group <a href="single-group.php">"Boardsmanship Forum"</a></span>
-                </li>
-                <li class="feed-item feed-item-warning">
-                  <time class="date" datetime="9-21">Sep 21</time>
-                  <span class="text">Responded to need <a href="#">"In-Kind Opportunity"</a></span>
-                </li>
-                <li class="feed-item feed-item-danger">
-                  <time class="date" datetime="9-18">Sep 18</time>
-                  <span class="text">Created need <a href="#">"Volunteer Opportunity"</a></span>
-                </li>
-                <li class="feed-item">
-                  <time class="date" datetime="9-17">Sep 17</time>
-                  <span class="text">Attending the event <a href="single-event.php">"Some New Event"</a></span>
-                </li>
-              </ol>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card full-height">
-            <div class="card-header">
-              <div class="card-head-row">
-                <div class="card-title">Support Tickets</div>
-                <div class="card-tools">
-                  <ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link" id="pills-today" data-toggle="pill" href="#pills-today" role="tab" aria-selected="true">Today</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link active" id="pills-week" data-toggle="pill" href="#pills-week" role="tab" aria-selected="false">Week</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" id="pills-month" data-toggle="pill" href="#pills-month" role="tab" aria-selected="false">Month</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="d-flex">
-                <div class="avatar avatar-online">
-                  <span class="avatar-title rounded-circle border border-white bg-info">J</span>
-                </div>
-                <div class="flex-1 ml-3 pt-1">
-                  <h6 class="text-uppercase fw-bold mb-1">Joko Subianto <span class="text-warning pl-3">pending</span></h6>
-                  <span class="text-muted">I am facing some trouble with my viewport. When i start my</span>
-                </div>
-                <div class="float-right pt-1">
-                  <small class="text-muted">8:40 PM</small>
-                </div>
-              </div>
-              <div class="separator-dashed"></div>
-              <div class="d-flex">
-                <div class="avatar avatar-offline">
-                  <span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
-                </div>
-                <div class="flex-1 ml-3 pt-1">
-                  <h6 class="text-uppercase fw-bold mb-1">Prabowo Widodo <span class="text-success pl-3">open</span></h6>
-                  <span class="text-muted">I have some query regarding the license issue.</span>
-                </div>
-                <div class="float-right pt-1">
-                  <small class="text-muted">1 Day Ago</small>
-                </div>
-              </div>
-              <div class="separator-dashed"></div>
-              <div class="d-flex">
-                <div class="avatar avatar-away">
-                  <span class="avatar-title rounded-circle border border-white bg-danger">L</span>
-                </div>
-                <div class="flex-1 ml-3 pt-1">
-                  <h6 class="text-uppercase fw-bold mb-1">Lee Chong Wei <span class="text-muted pl-3">closed</span></h6>
-                  <span class="text-muted">Is there any update plan for RTL version near future?</span>
-                </div>
-                <div class="float-right pt-1">
-                  <small class="text-muted">2 Days Ago</small>
-                </div>
-              </div>
-              <div class="separator-dashed"></div>
-              <div class="d-flex">
-                <div class="avatar avatar-offline">
-                  <span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
-                </div>
-                <div class="flex-1 ml-3 pt-1">
-                  <h6 class="text-uppercase fw-bold mb-1">Peter Parker <span class="text-success pl-3">open</span></h6>
-                  <span class="text-muted">I have some query regarding the license issue.</span>
-                </div>
-                <div class="float-right pt-1">
-                  <small class="text-muted">2 Day Ago</small>
-                </div>
-              </div>
-              <div class="separator-dashed"></div>
-              <div class="d-flex">
-                <div class="avatar avatar-away">
-                  <span class="avatar-title rounded-circle border border-white bg-danger">L</span>
-                </div>
-                <div class="flex-1 ml-3 pt-1">
-                  <h6 class="text-uppercase fw-bold mb-1">Logan Paul <span class="text-muted pl-3">closed</span></h6>
-                  <span class="text-muted">Is there any update plan for RTL version near future?</span>
-                </div>
-                <div class="float-right pt-1">
-                  <small class="text-muted">2 Days Ago</small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+     
     </div>
 
 {% endblock content %}
@@ -532,12 +142,16 @@
         var nbPatients = "{{nbPatients}}";
         var nbNonMelanom = "{{nbNonMelanom}}";
         var nbMelanom = "{{nbMelanom}}";
-        nbNonMelanomVal =0
-        nbMelanomVal =0
+        
+        var  nbNonMelanomVal =0
+        var  nbMelanomVal =0
         if(nbPatients!=0){
-            var  nbNonMelanomVal =(nbNonMelanom/nbPatients)*100
-            var  nbMelanomVal = (nbMelanom/nbPatients)*100
+            nbNonMelanomVal =(nbNonMelanom/nbPatients)*100
+            nbMelanomVal = (nbMelanom/nbPatients)*100
         }
+        document.getElementById("nonMel").textContent=nbNonMelanom 
+        document.getElementById("mel").textContent=nbMelanom 
+        
         Circles.create({
 			id:'circles-1',
 			radius:45,
@@ -584,16 +198,19 @@
 		})
 
 		var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
+    var months ='{{ months}}'; 
+    var months = months.split(",")
 
-		var mytotalIncomeChart = new Chart(totalIncomeChart, {
+    var mytotalIncomeChart = new Chart(totalIncomeChart, {
 			type: 'bar',
 			data: {
-				labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
+        //  janvier,février,mars,avril,mai,juin,juillet,août, septembre,octobre,novembre, décembre.
+				labels: ["jan", "fév", "mar", "avr", "mai", "juin", "juil", "aoû", "seb", "oct","nov","déc"],
 				datasets : [{
 					label: "Total Income",
 					backgroundColor: '#ff9e27',
 					borderColor: 'rgb(23, 125, 255)',
-					data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
+					data: [months[0], months[1], months[2], months[3], months[4], months[5], months[6], months[7], months[8], months[0] ,months[0] ,months[0]],
 				}],
 			},
 			options: {
@@ -629,7 +246,127 @@
 			lineWidth: '2',
 			lineColor: '#ffa534',
 			fillColor: 'rgba(255, 165, 52, .14)'
-		});
+    });
+    
+
+
+
+
+
+var ctx = document.getElementById('statisticsChart').getContext('2d');
+var Mmonths ='{{ Mmonths}}'; 
+var Mmonths = Mmonths.split(",")
+
+var Nmonths ='{{ Nmonths}}'; 
+var Nmonths = Nmonths.split(",")
+var statisticsChart = new Chart(ctx, {
+	type: 'line',
+	data: {
+		labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+		datasets: [ {
+			label: "Melanome",
+			borderColor: '#f3545d',
+			pointBackgroundColor: 'rgba(243, 84, 93, 0.6)',
+			pointRadius: 0,
+			backgroundColor: 'rgba(243, 84, 93, 0.4)',
+			legendColor: '#f3545d',
+			fill: true,
+			borderWidth: 2,
+      data: [Mmonths[0], Mmonths[1], Mmonths[2], Mmonths[3], Mmonths[4], Mmonths[5], Mmonths[6], Mmonths[7], Mmonths[8], Mmonths[0] ,Mmonths[0] ,Mmonths[0]],
+		
+		}, {
+			label: "Patients",
+			borderColor: '#fdaf4b',
+			pointBackgroundColor: 'rgba(253, 175, 75, 0.6)',
+			pointRadius: 0,
+			backgroundColor: 'rgba(253, 175, 75, 0.4)',
+			legendColor: '#fdaf4b',
+			fill: true,
+			borderWidth: 2,
+      data: [months[0], months[1], months[2], months[3], months[4], months[5], months[6], months[7], months[8], months[0] ,months[0] ,months[0]],
+		
+		}, {
+			label: "Non Melanome",
+			borderColor: '#177dff',
+			pointBackgroundColor: 'rgba(23, 125, 255, 0.6)',
+			pointRadius: 0,
+			backgroundColor: 'rgba(23, 125, 255, 0.4)',
+			legendColor: '#177dff',
+			fill: true,
+			borderWidth: 2,
+      data: [Nmonths[0], Nmonths[1], Nmonths[2], Nmonths[3], Nmonths[4], Nmonths[5], Nmonths[6], Nmonths[7], Nmonths[8], Nmonths[0] ,Nmonths[0] ,Nmonths[0]],
+		
+		}]
+	},
+	options : {
+		responsive: true, 
+		maintainAspectRatio: false,
+		legend: {
+			display: false
+		},
+		tooltips: {
+			bodySpacing: 4,
+			mode:"nearest",
+			intersect: 0,
+			position:"nearest",
+			xPadding:10,
+			yPadding:10,
+			caretPadding:10
+		},
+		layout:{
+			padding:{left:5,right:5,top:15,bottom:15}
+		},
+		scales: {
+			yAxes: [{
+				ticks: {
+					fontStyle: "500",
+					beginAtZero: false,
+					maxTicksLimit: 5,
+					padding: 10
+				},
+				gridLines: {
+					drawTicks: false,
+					display: false
+				}
+			}],
+			xAxes: [{
+				gridLines: {
+					zeroLineColor: "transparent"
+				},
+				ticks: {
+					padding: 10,
+					fontStyle: "500"
+				}
+			}]
+		}, 
+		legendCallback: function(chart) { 
+			var text = []; 
+			text.push('<ul class="' + chart.id + '-legend html-legend">'); 
+			for (var i = 0; i < chart.data.datasets.length; i++) { 
+				text.push('<li><span style="background-color:' + chart.data.datasets[i].legendColor + '"></span>'); 
+				if (chart.data.datasets[i].label) { 
+					text.push(chart.data.datasets[i].label); 
+				} 
+				text.push('</li>'); 
+			} 
+			text.push('</ul>'); 
+			return text.join(''); 
+		}  
+	}
+});
+
+
+// generate HTML legend
+myLegendContainer.innerHTML = statisticsChart.generateLegend();
+
+// bind onClick event to all LI-tags of the legend
+var legendItems = myLegendContainer.getElementsByTagName('li');
+for (var i = 0; i < legendItems.length; i += 1) {
+	legendItems[i].addEventListener("click", legendClickCallback, false);
+}
+
+
+
 	</script>
 
 {% endblock javascripts %}

@@ -715,11 +715,45 @@ def deleteNote(request,noteId):
 
 
 def dashboard(request):
-
+    nbMelanom =0
     nbPatients = Patient.objects.raw('SELECT COUNT(*)  AS id  FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id )')[0].id
-    nbMelanom=Patient.objects.raw('SELECT COUNT(*)  AS id  FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 1 )')[0].id
-    nbNonMelanom =nbPatients - nbMelanom 
-    return render(request, 'dashboard.html' ,{'nbPatients' :nbPatients ,'nbMelanom':nbMelanom ,'nbNonMelanom' :nbNonMelanom})
+    
+    months = [0,0,0,0,0,0,0,0,0,0,0,0]     
+    patients = Patient.objects.all()
+    month = 0
+    for p in patients :
+        month = p.dateCreation.month -1
+        months[month] =months[month] +1 
+
+    
+
+
+    melanomPatients=Patient.objects.raw('SELECT * FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 1 )') 
+    
+    Mmonths = [0,0,0,0,0,0,0,0,0,0,0,0]     
+    month = 0
+    for p in melanomPatients :
+        nbMelanom=nbMelanom+1
+        month = p.dateCreation.month -1
+        Mmonths[month] =Mmonths[month] +1 
+    nbNonMelanom =nbPatients - nbMelanom
+    nonMelanomPatients=Patient.objects.raw('SELECT * FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 0 )')
+    
+    Nmonths = [0,0,0,0,0,0,0,0,0,0,0,0]     
+    month = 0
+    for p in melanomPatients :
+        month = p.dateCreation.month -1
+        Nmonths[month] =Nmonths[month] +1 
+    
+
+
+
+
+
+
+
+
+    return render(request, 'dashboard.html' ,{'nbPatients' :nbPatients ,'nbMelanom':nbMelanom ,'nbNonMelanom' :nbNonMelanom ,'months' :months,'Mmonths':Mmonths,'Nmonths':Nmonths})
 
 
 
