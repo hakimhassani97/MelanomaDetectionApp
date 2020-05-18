@@ -62,15 +62,19 @@
                                     <td>
                                         <div class="form-button-action">
                                             <a href={% url 'patientImages' patientId=patient.id %} type="button" data-toggle="tooltip"
-                                                class="btn btn-link btn-primary btn-lg" data-original-title="Liste de images">
+                                                class="btn btn-link btn-primary" data-original-title="{% trans "Liste de images" %}">
                                                 <i class="fa fa-images"></i>
                                             </a>
+                                            <a href="{% url 'uploadImg' %}?patient={{patient.id}}" type="button" data-toggle="tooltip"
+                                                class="btn btn-link btn-primary" data-original-title="{% trans "Ajouter des images" %}">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
                                             <a href={% url 'updatePatient' patientId=patient.id %} type="button" data-toggle="tooltip"
-                                                class="btn btn-link btn-primary btn-lg" data-original-title="Modifier patient">
+                                                class="btn btn-link btn-primary" data-original-title="{% trans "Modifier patient" %}">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <button type="button" data-toggle="tooltip" title="" onclick="deletePatient('{% url 'deletePatient' patient.id %}','{{patient.firstName}} {{patient.lastName}}')"
-                                                class="btn btn-link btn-danger" data-original-title="Supprimer">
+                                                class="btn btn-link btn-danger" data-original-title="{% trans "Supprimer" %}">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </div>

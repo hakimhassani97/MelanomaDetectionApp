@@ -80,6 +80,14 @@
 	$('#uploadImg').on('submit', ()=>{
 		$('#loader').show()
 	})
+	$(document).ready(()=>{
+		var url = new URL(window.location.href);
+		var c = url.searchParams.get("patient") || null;
+		var option = $('[value='+c+']')
+		if (option.length>0 && c){
+			option.attr('selected',true)
+		}
+	})
 	{% if success %}
 	  //Notify
 		$.notify({
