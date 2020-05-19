@@ -103,314 +103,19 @@ def uploadImg(request):
             # multiple Images
             files = request.FILES.getlist('image')
             for f in files:
-                i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'])
+                type = 'PH2' if 'type' in request.POST else 'ISIC'
+                method = int(request.POST['method'])
+                i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'], type=type, method=method)
                 i.save()                
                 # if 'compute' in request.POST:
                 # image caracteristics
                 car = Caracteristics.extractCaracteristics(i.image.path)
                 car = Car(**car, image=i)
                 car.save()
-                i.result, _, _, _, _ = resultGame(i.id)
+                i.result, _, _, _, _ = resultGame(i.id, type, method)
                 i.save() 
                 if 'generate' in request.POST:
-                    # image details
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    contour = Contours.contours2(img)
-                    ######################## extractLesion
-                    img = Cars.extractLesion(img, contour)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_extract.')
-                    cv2.imwrite(imgPath, img)
-                    det = Details(image=i)
-                    with open(imgPath, 'rb') as dest:
-                        # name = i.image.name.replace('.','_extract.')
-                        name = imgPath.replace('media/images/','')
-                        det.extract.save(name, File(dest), save=False)
-                    # remove temporary files
-                    # shutil.rmtree(imgPath, ignore_errors=True)
-                    os.remove(imgPath)
-                    ######################## draw contour
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = cv2.drawContours(img, [contour], -1, (255, 255, 255), 2)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_contour.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.contour.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw circle
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    Contours.boundingCircle(img, contour)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_circle.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.circle.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw rect
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    Contours.boundingRectangleRotated(img, contour)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_rect.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.rect.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw homologue
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = Preprocess.removeArtifactYUV(img)
-                    img = Cars.extractLesion(img, contour)
-                    img[img == 0] = 255
-                    img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-                    x, y, w, h = cv2.boundingRect(contour)
-                    rect = img[y:y + h, x:x + w]
-                    rotated = imutils.rotate_bound(rect, 180)
-                    # intersection between rect and rotated (search)
-                    intersection = cv2.bitwise_and(rect, rotated)
-                    # img = np.zeros(img.shape)
-                    # img = np.add(img, 255)
-                    # img[y:y + h, x:x + w] = intersection
-                    img = intersection
-                    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-                    img[intersection <= 20] = [0, 0, 255]
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_homologue.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.homologue.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw subregion
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    ####
-                    img = Preprocess.removeArtifactYUV(img)
-                    img = Cars.extractLesion(img, contour)
-                    img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-                    # find best fit ellipse
-                    (_, _), (_, _), angle = cv2.fitEllipse(contour)
-                    # get bounding rect
-                    x, y, w, h = cv2.boundingRect(contour)
-                    padding = 0
-                    # crop the rect
-                    rect = img[y - padding:y + h + padding, x - padding:x + w + padding]
-                    # rotate the lesion according to its best fit ellipse
-                    rect = ndimage.rotate(rect, angle, reshape=True)
-                    rect[rect == 0] = 255
-                    # flip H, flip V, flip VH
-                    rectH = cv2.flip(rect, 0)
-                    rectV = cv2.flip(rect, 1)
-                    rectVH = cv2.flip(rect, -1)
-                    # lesion area
-                    lesionArea = cv2.contourArea(contour)
-                    # intersect rect and rectH
-                    intersection1 = cv2.bitwise_and(rect, rectH)
-                    intersectionArea1 = np.sum(intersection1 != 0)
-                    result1 = (intersectionArea1 / lesionArea) * 100
-                    # intersect rect and rectV
-                    intersection2 = cv2.bitwise_and(rect, rectV)
-                    intersectionArea2 = np.sum(intersection2 != 0)
-                    result2 = (intersectionArea2 / lesionArea) * 100
-                    # intersect rect and rectVH
-                    intersection3 = cv2.bitwise_and(rect, rectVH)
-                    intersectionArea3 = np.sum(intersection3 != 0)
-                    result3 = (intersectionArea3 / lesionArea) * 100
-                    res = [result1, result2, result3]
-                    asymmetry = max(res)
-                    index = res.index(asymmetry)
-                    intersections = [intersection1, intersection2, intersection3]
-                    img = intersections[index]
-                    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-                    img[intersections[index] <= 20] = [0, 0, 255]
-                    ####
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_subregion.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.subregion.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-
-                    ######################## draw border
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    ctr = cv2.approxPolyDP(contour, 4, True)
-                    img = cv2.drawContours(img, [ctr], -1, (255, 0, 0), 1)
-                    img = cv2.drawContours(img, ctr, -1, (0, 255, 0), 5)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_border.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.border.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ################## draw border length
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = Cars.extractLesion(img, contour)
-                    perimeter = cv2.arcLength(contour, True)
-                    M = cv2.moments(contour)
-                    x = int(M["m10"] / M["m00"])
-                    y = int(M["m01"] / M["m00"])
-                    radius = int(perimeter / (2 * np.pi))
-                    blank = np.zeros(img.shape)
-                    cv2.circle(blank, (x,y), radius=radius, color=(200,0, 0), thickness=-1)
-                    img[img != 0] = 255
-                    img = np.subtract(blank, img)
-                    cv2.circle(img, (x,y), radius=1, color=(0, 255,0), thickness=3)
-                    cv2.circle(img, (x,y), radius=radius, color=(0,255, 0), thickness=3)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_borderlength.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.borderlength.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw kmeans
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = Cars.extractLesion(img, contour)
-                    img, center = Preprocess.KMEANS(img, K=5)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_kmeans.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.kmeans.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw kmeans2
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = Cars.extractLesion(img, contour)
-                    img, center = Preprocess.KMEANS(img, K=3)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_kmeans2.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.kmeans2.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw kmeans2
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = Cars.extractLesion(img, contour)
-                    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_hsv.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.hsv.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw kmeans2
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = Cars.extractLesion(img, contour)
-                    img = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_yuv.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.yuv.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw kmeans2
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = Cars.extractLesion(img, contour)
-                    img = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_ycbcr.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.ycbcr.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    ######################## draw preprocess
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = Preprocess.removeArtifactYUV(img)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_preprocess.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.preprocess.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    det.save()
-
-                    ######################## draw segmentation
-                    img = cv2.drawContours(img, [contour], -1, (255,0, 255), 2)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_segmentation.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.segmentation.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    det.save()
-                    
-                    ################### draw PostTraitement
-                    
-                    img = Cars.extractLesion(img, contour)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_posttraitement.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.posttraitement.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    det.save()
-
-                    ################## draw enclosingCircle
-                    tmp =img
-                    (x, y), radius = cv2.minEnclosingCircle(contour)
-                    center = (int(x), int(y))
-                    radius = int(radius)
-                    cv2.circle(img, center, radius=1, color=(0, 255, 0), thickness=3)
-                    cv2.circle(img, center, radius=radius, color=(0,255, 0), thickness=3)   
-                    point1 = (int(x +radius) ,int(y))
-                    point2 =(int(x -radius), int(y))
-                    cv2.line(img, point1, point2, (0, 255, 0), thickness=3, lineType=8)
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_enclosingCircle.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.enclosingCircle.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    det.save()
-                    
-                    ################## draw openCircle
-                    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
-                    img = Preprocess.removeArtifactYUV(img)
-                    img = Cars.extractLesion(img, contour)
-                    perimeter = cv2.arcLength(contour, True)
-                    M = cv2.moments(contour)
-                    x = int(M["m10"] / M["m00"])
-                    y = int(M["m01"] / M["m00"])
-                    radius = int(perimeter / (2 * np.pi))
-                    cv2.circle(img, (x,y), radius=1, color=(0, 255,0), thickness=3)
-                    cv2.circle(img, (x,y), radius=radius, color=(0,255, 0), thickness=3)     
-                    imgPath = 'media/'+i.image.name
-                    imgPath = imgPath.replace('.', '_openCircle.')
-                    cv2.imwrite(imgPath, img)
-                    with open(imgPath, 'rb') as dest:
-                        name = imgPath.replace('media/images/','')
-                        det.openCircle.save(name, File(dest), save=False)
-                    # remove temporary files
-                    os.remove(imgPath)
-                    det.save()
+                    doGeneration(i)
                     
             # one Image
             # f = form.save()
@@ -424,13 +129,324 @@ def uploadImg(request):
         form = UploadImageForm()
     return render(request, 'uploadImg.html', {'form': form})
 
+def doGeneration(i):
+    '''
+        generate details for image i
+    '''
+    # image details
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    contour = Contours.contours2(img)
+    ######################## extractLesion
+    img = Cars.extractLesion(img, contour)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_extract.')
+    cv2.imwrite(imgPath, img)
+    det = Details(image=i)
+    with open(imgPath, 'rb') as dest:
+        # name = i.image.name.replace('.','_extract.')
+        name = imgPath.replace('media/images/','')
+        det.extract.save(name, File(dest), save=False)
+    # remove temporary files
+    # shutil.rmtree(imgPath, ignore_errors=True)
+    os.remove(imgPath)
+    ######################## draw contour
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = cv2.drawContours(img, [contour], -1, (255, 255, 255), 2)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_contour.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.contour.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw circle
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    Contours.boundingCircle(img, contour)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_circle.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.circle.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw rect
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    Contours.boundingRectangleRotated(img, contour)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_rect.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.rect.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw homologue
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = Preprocess.removeArtifactYUV(img)
+    img = Cars.extractLesion(img, contour)
+    img[img == 0] = 255
+    img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+    x, y, w, h = cv2.boundingRect(contour)
+    rect = img[y:y + h, x:x + w]
+    rotated = imutils.rotate_bound(rect, 180)
+    # intersection between rect and rotated (search)
+    intersection = cv2.bitwise_and(rect, rotated)
+    # img = np.zeros(img.shape)
+    # img = np.add(img, 255)
+    # img[y:y + h, x:x + w] = intersection
+    img = intersection
+    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    img[intersection <= 20] = [0, 0, 255]
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_homologue.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.homologue.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw subregion
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    ####
+    img = Preprocess.removeArtifactYUV(img)
+    img = Cars.extractLesion(img, contour)
+    img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
+    # find best fit ellipse
+    (_, _), (_, _), angle = cv2.fitEllipse(contour)
+    # get bounding rect
+    x, y, w, h = cv2.boundingRect(contour)
+    padding = 0
+    # crop the rect
+    rect = img[y - padding:y + h + padding, x - padding:x + w + padding]
+    # rotate the lesion according to its best fit ellipse
+    rect = ndimage.rotate(rect, angle, reshape=True)
+    rect[rect == 0] = 255
+    # flip H, flip V, flip VH
+    rectH = cv2.flip(rect, 0)
+    rectV = cv2.flip(rect, 1)
+    rectVH = cv2.flip(rect, -1)
+    # lesion area
+    lesionArea = cv2.contourArea(contour)
+    # intersect rect and rectH
+    intersection1 = cv2.bitwise_and(rect, rectH)
+    intersectionArea1 = np.sum(intersection1 != 0)
+    result1 = (intersectionArea1 / lesionArea) * 100
+    # intersect rect and rectV
+    intersection2 = cv2.bitwise_and(rect, rectV)
+    intersectionArea2 = np.sum(intersection2 != 0)
+    result2 = (intersectionArea2 / lesionArea) * 100
+    # intersect rect and rectVH
+    intersection3 = cv2.bitwise_and(rect, rectVH)
+    intersectionArea3 = np.sum(intersection3 != 0)
+    result3 = (intersectionArea3 / lesionArea) * 100
+    res = [result1, result2, result3]
+    asymmetry = max(res)
+    index = res.index(asymmetry)
+    intersections = [intersection1, intersection2, intersection3]
+    img = intersections[index]
+    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    img[intersections[index] <= 20] = [0, 0, 255]
+    ####
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_subregion.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.subregion.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+
+    ######################## draw border
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    ctr = cv2.approxPolyDP(contour, 4, True)
+    img = cv2.drawContours(img, [ctr], -1, (255, 0, 0), 1)
+    img = cv2.drawContours(img, ctr, -1, (0, 255, 0), 5)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_border.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.border.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ################## draw border length
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = Cars.extractLesion(img, contour)
+    perimeter = cv2.arcLength(contour, True)
+    M = cv2.moments(contour)
+    x = int(M["m10"] / M["m00"])
+    y = int(M["m01"] / M["m00"])
+    radius = int(perimeter / (2 * np.pi))
+    blank = np.zeros(img.shape)
+    cv2.circle(blank, (x,y), radius=radius, color=(200,0, 0), thickness=-1)
+    img[img != 0] = 255
+    img = np.subtract(blank, img)
+    cv2.circle(img, (x,y), radius=1, color=(0, 255,0), thickness=3)
+    cv2.circle(img, (x,y), radius=radius, color=(0,255, 0), thickness=3)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_borderlength.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.borderlength.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw kmeans
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = Cars.extractLesion(img, contour)
+    img, center = Preprocess.KMEANS(img, K=5)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_kmeans.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.kmeans.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw kmeans2
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = Cars.extractLesion(img, contour)
+    img, center = Preprocess.KMEANS(img, K=3)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_kmeans2.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.kmeans2.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw kmeans2
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = Cars.extractLesion(img, contour)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_hsv.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.hsv.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw kmeans2
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = Cars.extractLesion(img, contour)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_yuv.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.yuv.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw kmeans2
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = Cars.extractLesion(img, contour)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_ycbcr.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.ycbcr.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    ######################## draw preprocess
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = Preprocess.removeArtifactYUV(img)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_preprocess.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.preprocess.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    det.save()
+
+    ######################## draw segmentation
+    img = cv2.drawContours(img, [contour], -1, (255,0, 255), 2)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_segmentation.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.segmentation.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    det.save()
+    
+    ################### draw PostTraitement
+    
+    img = Cars.extractLesion(img, contour)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_posttraitement.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.posttraitement.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    det.save()
+
+    ################## draw enclosingCircle
+    tmp =img
+    (x, y), radius = cv2.minEnclosingCircle(contour)
+    center = (int(x), int(y))
+    radius = int(radius)
+    cv2.circle(img, center, radius=1, color=(0, 255, 0), thickness=3)
+    cv2.circle(img, center, radius=radius, color=(0,255, 0), thickness=3)   
+    point1 = (int(x +radius) ,int(y))
+    point2 =(int(x -radius), int(y))
+    cv2.line(img, point1, point2, (0, 255, 0), thickness=3, lineType=8)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_enclosingCircle.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.enclosingCircle.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    det.save()
+    
+    ################## draw openCircle
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = Preprocess.removeArtifactYUV(img)
+    img = Cars.extractLesion(img, contour)
+    perimeter = cv2.arcLength(contour, True)
+    M = cv2.moments(contour)
+    x = int(M["m10"] / M["m00"])
+    y = int(M["m01"] / M["m00"])
+    radius = int(perimeter / (2 * np.pi))
+    cv2.circle(img, (x,y), radius=1, color=(0, 255,0), thickness=3)
+    cv2.circle(img, (x,y), radius=radius, color=(0,255, 0), thickness=3)     
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_openCircle.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.openCircle.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
+    det.save()
+
+def generate(request, imgId):
+    '''
+        returns table of caracteristics of the image
+    '''
+    image = Image.objects.get(id=imgId)
+    doGeneration(image)
+    return redirect(images)
+
 def results(request, imgId):
     '''
         returns table of caracteristics of the image
     '''
     image = Image.objects.get(id=imgId)
     # get game matrix
-    res, game, sMelanome, sNonMelanome, (ii, jj) = resultGame(imgId)
+    res, game, sMelanome, sNonMelanome, (ii, jj) = resultGame(imgId, image.type, image.method)
     s1 = []
     for s in sMelanome:
         if s>=0 and s<=5 and not 'Asymetrie' in s1:
@@ -441,6 +457,10 @@ def results(request, imgId):
             s1 += ['Couleur']
         if s>=19 and s<=21 and not 'Diametre' in s1:
             s1 += ['Diametre']
+        if s>=22 and s<=23 and not 'SPCL' in s1:
+            s1 += ['SPCL']
+        if s>=24 and s<=25 and not 'Menzies' in s1:
+            s1 += ['Menzies']
     s2 = []
     for s in sNonMelanome:
         if s>=0 and s<=5 and not 'Asymetrie' in s2:
@@ -451,16 +471,27 @@ def results(request, imgId):
             s2 += ['Couleur']
         if s>=19 and s<=21 and not 'Diametre' in s2:
             s2 += ['Diametre']
-    tgame = '<thead><tr><th class="bg-warning">Melanome \<br/> Non Melanome</th>'
+        if s>=22 and s<=23 and not 'SPCL' in s2:
+            s2 += ['SPCL']
+        if s>=24 and s<=25 and not 'Menzies' in s2:
+            s2 += ['Menzies']
+    tgame = '<thead><tr><th class="bg-warning" style="overflow:hidden"><div style="float:right">Joueur 2 : Non Melanome</div><hr class="bg-dark" style="transform: rotate(10deg)"/>Joueur 1 : Melanome</th>'
     for i in range(0, len(game[0])):
-        tgame += '<th>'+s2[i]+'</th>'
+        tgame += '<th style="background-color:lightgrey">'+s2[i]+'</th>'
     tgame += '</tr><tbody>'
     for i in range(0, len(game)):
         l = game[i]
         tgame += '<tr><td>'+s1[i]+'</td>'
         for j in range(0, len(l)):
             v = l[j]
-            tgame += '<td class="'+('bg-success' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
+            # if round(v, 6) != 0:
+                # v = round(v, 6)
+            if v>0:
+                tgame += '<td class="'+('bg-danger' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
+            elif v<0:
+                tgame += '<td class="'+('bg-success' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
+            else:
+                tgame += '<td class="'+('bg-warning' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
         tgame += '</tr>'
     tgame += '</tbody>'
     # get caracteristics
@@ -470,21 +501,24 @@ def results(request, imgId):
         image.caracteristic.car11, image.caracteristic.car12, image.caracteristic.car13]
     c = [image.caracteristic.car14, image.caracteristic.car15, image.caracteristic.car16, image.caracteristic.car17, image.caracteristic.car18]
     d = [image.caracteristic.car19, image.caracteristic.car20, image.caracteristic.car21]
-    thresholdsPH2 = np.array([[2.65, 92.87, 6.39, 13.2, 17.2, 15.44], [55.73, 1560, 0.02, 0.56, 1.81, 1.35, 219, 1], [5, 2, 5, 9.51, 63.69], [560, 572.24, 4.54]])
-    thresholdsISIC = np.array([[4.23, 93.61, 7.31, 12.28, 16.17, 10.18], [73.42, 900, 0.02, 0.71, 1.37, 1.2, 145, 1.6], [3, 2, 3, 10.25, 66.93], [342, 323.27, 3.63]])
-    opsPH2 = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [0, 0, 0]])
-    opsISIC = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [0, 0, 0, 1, 1], [0, 0, 0]])
+    e = [image.caracteristic.car22, image.caracteristic.car23]
+    f = [image.caracteristic.car24, image.caracteristic.car25]
+    thresholdsPH2 = np.array([[2.65, 92.87, 6.39, 13.2, 17.2, 15.44], [55.73, 1560, 0.02, 0.56, 1.81, 1.35, 219, 1], [5, 2, 5, 9.51, 63.69], [560, 572.24, 4.54], [1, 1], [6.11, 0.01]])
+    thresholdsISIC = np.array([[4.23, 93.61, 7.31, 12.28, 16.17, 10.18], [73.42, 900, 0.02, 0.71, 1.37, 1.2, 145, 1.6], [3, 2, 3, 10.25, 66.93], [342, 323.27, 3.63], [0, 0], [0.05, 0]])
+    opsPH2 = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [0, 0, 0], [0, 0], [0, 0]])
+    opsISIC = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [0, 0, 0, 1, 1], [0, 0, 0], [0, 0], [0, 0]])
     # c[0:3] = np.array(c).astype(int)[0:3]
     # c[0] = str(c[0])+' couleurs'
     # c[1] = str(c[1])+' couleurs'
     # c[2] = str(c[2])+' couleurs'
-    cars = [{'vals':a, 'name':'Asymmetry'}, {'vals':b, 'name':'Border'}, {'vals':c, 'name':'Color'}, {'vals':d, 'name':'Diameter'}]
+    cars = [{'vals':a, 'name':'Asymmetry'}, {'vals':b, 'name':'Border'}, {'vals':c, 'name':'Color'}, {'vals':d, 'name':'Diameter'}, {'vals':e, 'name':'SPCL'}, {'vals':f, 'name':'Menzies'}]
     thead = '<thead><tr><th class="bg-warning">Caracteristique</th>'
     for m in range(1, 9):
         thead += '<th style="background-color:lightgrey">Méthode '+str(m)+'</th>'
     thead += '</tr></thead>'
     tbody = '<tbody>'
-    for i in range(len(cars)):
+    # for i in range(len(cars)):
+    for i in range(image.method):
         car = cars[i]
         tbody +='<tr><td style="background-color:rgb(255, 200, 160)">'+car['name']+'</td>'
         for j in range(len(car['vals'])):
@@ -516,7 +550,8 @@ def results(request, imgId):
 
 
 ########################### calculer le resulta de jeux
-def resultGame(imgId) :
+def resultGame(imgId, type, nbStrategies) :
+    Game.init(type)
     image = Image.objects.get(id=imgId)
     a = [image.caracteristic.car0, image.caracteristic.car1, image.caracteristic.car2, image.caracteristic.car3,
         image.caracteristic.car4, image.caracteristic.car5]
@@ -524,9 +559,11 @@ def resultGame(imgId) :
         image.caracteristic.car11, image.caracteristic.car12, image.caracteristic.car13]
     c = [image.caracteristic.car14, image.caracteristic.car15, image.caracteristic.car16, image.caracteristic.car17, image.caracteristic.car18]
     d = [image.caracteristic.car19, image.caracteristic.car20, image.caracteristic.car21]
+    e = [image.caracteristic.car22, image.caracteristic.car23]
+    f = [image.caracteristic.car24, image.caracteristic.car25]
     # image sample
-    T = np.array(a+b+c+d)
-    result = Game.getResult(T)
+    T = np.array(a+b+c+d+e+f)
+    result = Game.getResult(T, nbStrategies)
     return result
 
 def images(request):

@@ -4,8 +4,8 @@ from .utils.Asymmetry import Asymmetry
 from .utils.Border import Border
 from .utils.Color import Color
 from .utils.Diameter import Diameter
-# from .utils.SevenPointsChecklist import SevenPointsChecklist
-# from .utils.Menzies import Menzies
+from .utils.SevenPointsChecklist import SevenPointsChecklist
+from .utils.Menzies import Menzies
 
 class Caracteristics:
     @staticmethod
@@ -44,9 +44,9 @@ class Caracteristics:
         car['car20'] = Diameter.diameterOpenCircle(img, contour)
         car['car21'] = Diameter.diameterLengtheningIndex(img, contour)
         # # 7 points
-        # car.append(SevenPointsChecklist.inflammationAndBloodness(img, contour))
-        # car.append(SevenPointsChecklist.sensibility(img, contour))
+        car['car22'] = SevenPointsChecklist.inflammationAndBloodness(img, contour)
+        car['car23'] = SevenPointsChecklist.sensibility(img, contour)
         # # menzies
-        # car.append(Menzies.darkPoints(img, contour))
-        # car.append(Menzies.blueGrey(img, contour))
+        car['car24'] = Menzies.darkPoints(img, contour)
+        car['car25'] = Menzies.blueGrey(img, contour)
         return car

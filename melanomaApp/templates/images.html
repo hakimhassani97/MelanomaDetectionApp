@@ -39,9 +39,14 @@
 						</button>
 						<div class="card-body ">
 							<h5 class="card-title ">{{img.name}}</h5>
-							<p class="date text-muted ">{{img.date}}</p>
-							<a href={% url 'preparation' imgId=img.id  %}
-							class="btn btn-primary btn-sm ">{% trans "Details" %}</a>
+							<p class="date text-muted ">{% trans "Patient" %} : {{img.patient.firstName}} {{img.patient.lastName}}</p>
+							{% if img.details %}
+								<a href={% url 'preparation' imgId=img.id  %}
+								class="btn btn-primary btn-sm ">{% trans "Details" %}</a>
+							{% else %}
+							<button onclick="generate('{% url 'generate' imgId=img.id  %}')"
+								class="btn btn-primary btn-sm ">{% trans "Générer<br/> les détails" %}</button>
+							{% endif %}
 							<a href={% url 'results' imgId=img.id  %}
 							class="btn btn-primary  btn-sm ">{% trans "Resultats" %}</a>
 							<a style="float:right;" href={% url 'notesList' imgId=img.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
@@ -81,16 +86,37 @@
 {% block javascripts %}
 <script>
 
-   
+   function generate(url){
+        swal({
+            title: 'Générer les images explicatives ?',
+            text: 'La génération des images va prendre du temps!',
+            type: 'warning',
+            buttons:{
+                cancel: {
+                    visible: true,
+                    text : 'Annuler',
+                    className: 'btn btn-success'
+                },        			
+                confirm: {
+                    text : 'Oui',
+                    className : 'btn btn-warning'
+                }
+            }
+        }).then((willDelete) => {
+            if (willDelete) {
+				$('#loader').show()
+                window.location = url
+            }
+        });
+    }
     $('.imgCard').on('click',(e)=>{
-		
 		if($(e.target).hasClass('zoom')) {
-		var src = $(e.target).closest('.imgCard').find('img').attr('src')
-        var title = $(e.target).closest('.imgCard').find('.info-post').html()
-        $('#zoomModal .modal-title').html(title)
-        $('#imgModal').attr('src', src)
-		$('#zoomModal').modal('show')
-	}
+			var src = $(e.target).closest('.imgCard').find('img').attr('src')
+			var title = $(e.target).closest('.imgCard').find('.info-post').html()
+			$('#zoomModal .modal-title').html(title)
+			$('#imgModal').attr('src', src)
+			$('#zoomModal').modal('show')
+		}
     })
 </script>
 {% endblock javascripts %}
