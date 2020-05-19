@@ -28,6 +28,7 @@ urlpatterns = [
     path('dashboard', views.dashboard, name='dashboard'),
     path('settings', views.settings, name='settings'),
     path('logout', views.logout, name='logout'),
+    path('user', views.user, name='user'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

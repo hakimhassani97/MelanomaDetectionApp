@@ -196,19 +196,20 @@
 			<!--            Settings                      -->
 		
 			<li class="nav-item {% if url_name in 'logout' %}active{% endif %}">
-				<a href="{% url 'logout' %}">
+				<a onclick="removeUser()" href="{% url 'logout' %}">
 					<i class="fas fa-arrow-left"></i>
 					<p>{% trans "Se déconnecter" %}</p>
-					
 				</a>
 			</li>
-
-			
 			</ul>
 			{% endif %}
-
 		</div>
 	</div>
 </div>
 <!-- End Sidebar -->
+<script>
+	function removeUser(){
+		localStorage.setItem('user', '')
+	}
+</script>
 {% endwith %}

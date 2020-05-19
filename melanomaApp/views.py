@@ -1,7 +1,7 @@
 import cv2
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as django_logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.core.files import File
 from django.contrib.auth import authenticate, login as doLogin
 from django.contrib.auth.decorators import user_passes_test
@@ -40,6 +40,13 @@ def index(request):
     return render(request, 'index.html', context)
 # auth views
 
+def user(request):
+    '''
+        get authenticated user
+    '''
+    image = request.user.doctor.image.url if hasattr(request.user, 'doctor') else ''
+    image = str(image)
+    return JsonResponse({'image': image})
 
 def login(request):
     '''
