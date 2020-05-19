@@ -469,7 +469,8 @@ def results(request, imgId):
         tgame += '<tr><td>'+s1[i]+'</td>'
         for j in range(0, len(l)):
             v = l[j]
-            v = round(v, 6)
+            # if round(v, 6) != 0:
+                # v = round(v, 6)
             if v>0:
                 tgame += '<td class="'+('bg-danger' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
             elif v<0:
