@@ -486,7 +486,7 @@ def results(request, imgId):
             s2 += ['SPCL']
         if s>=24 and s<=25 and not 'Menzies' in s2:
             s2 += ['Menzies']
-    tgame = '<thead><tr><th class="bg-warning" style="overflow:hidden"><div style="float:right">Joueur 2 : Non Melanome</div><hr class="bg-dark" style="transform: rotate(10deg)"/>Joueur 1 : Melanome</th>'
+    tgame = '<thead><tr><th class="bg-warning" style="overflow:hidden"><div style="float:right">Joueur 2 : Non Melanome</div><hr class="bg-dark" style="transform: rotate(10deg) translateY(14px)"/>Joueur 1 : Melanome</th>'
     for i in range(0, len(game[0])):
         tgame += '<th style="background-color:lightgrey">'+s2[i]+'</th>'
     tgame += '</tr><tbody>'
