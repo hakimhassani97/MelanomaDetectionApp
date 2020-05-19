@@ -737,7 +737,32 @@ def dashboard(request):
 
 
 def settings(request) :
-   
+    passwordMsg = None
+    passwordSuccess = False
+    
+    if request.method == 'POST':
+        if request.POST.get("change_informations"):
+            changePasswordForm = ChangePassword()
+            doctorForm = RegisterForm(request.POST, request.FILES)
+            changeUserForm =ChangeUserForm(request.POST, request.FILES) 
+
+        elif request.POST.get("change_password") :
+            changePasswordForm = ChangePassword(request.POST, request.FILES)
+            doctor =Doctor.objects.get( user=request.user.id)           
+            doctorForm = RegisterForm(instance=doctor)
+            changeUserForm =ChangeUserForm(instance=request.user) 
+
+            if changePasswordForm.is_valid() :
+                passwordMsg = 'Le mot de passe modifié avec succes'
+                passwordSuccess = True                    
+                return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'changeUserForm' : changeUserForm,'doctor':doctor ,'passwordMsg':passwordMsg,'passwordSuccess':passwordSuccess}) 
+            else:
+                passwordMsg = 'Verifiez les champs'
+                return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'changeUserForm' : changeUserForm,'doctor':doctor ,'passwordMsg':passwordMsg,'passwordSuccess':passwordSuccess}) 
+                
+
+
+
     doctor =Doctor.objects.get( user=request.user.id)           
     changePasswordForm = ChangePassword()
     doctorForm = RegisterForm(instance=doctor)
