@@ -64,7 +64,7 @@ def login(request):
                     msg = 'Vous n\'etes pas un doctor'
                 else:
                     doLogin(request, user)
-                    return redirect("/")
+                    return redirect("/dashboard")
             else:
                 msg = 'Email ou mot de passe incorrectes, ou bien Votre compte n\'est pas activé'
         else:
