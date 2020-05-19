@@ -193,8 +193,17 @@
 					
 				</a>
 			</li>
+			<!--            Settings                      -->
+		
+			<li class="nav-item {% if url_name in 'logout' %}active{% endif %}">
+				<a href="{% url 'logout' %}">
+					<i class="fas fa-arrow-left"></i>
+					<p>{% trans "Se déconnecter" %}</p>
+					
+				</a>
+			</li>
 
-
+			
 			</ul>
 			{% endif %}
 
