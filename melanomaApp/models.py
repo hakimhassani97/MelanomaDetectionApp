@@ -44,12 +44,7 @@ class Image(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
     result = models.IntegerField('result', default=1)
     type = models.CharField(max_length=30, default='PH2')
-    def classification(self):
-        thresholdsPH2 = np.array([2.65, 92.87, 6.39, 13.2, 17.2, 15.44, 55.73, 1560, 0.02, 0.56, 1.81, 1.35, 219, 1, 5, 2, 5, 9.51, 63.69, 560, 572.24, 4.54])
-        thresholdsISIC = np.array([4.23, 93.61, 7.31, 12.28, 16.17, 10.18, 73.42, 900, 0.02, 0.71, 1.37, 1.2, 145, 1.6, 3, 2, 3, 10.25, 66.93, 342, 323.27, 3.63])
-        opsPH2 = np.array([0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0])
-        opsISIC = np.array([0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0])
-        return False
+    method = models.IntegerField('mothde abcd 7pcl menz', default=4)
     def __str__(self):
         return self.name+' '+str(self.date)+' '+self.image.url
 
@@ -130,9 +125,13 @@ class Caracteristic(models.Model):
     car19 = models.FloatField('diameterMinEnclosingCircle', default=0)
     car20 = models.FloatField('diameterOpenCircle', default=0)
     car21 = models.FloatField('diameterLengtheningIndex', default=0)
+    car22 = models.FloatField('inflammationAndBloodness', default=0)
+    car23 = models.FloatField('sensibility', default=0)
+    car24 = models.FloatField('darkPoints', default=0)
+    car25 = models.FloatField('blueGrey', default=0)
     date = models.DateTimeField('computing date', auto_now_add=True)
     image = models.OneToOneField(Image, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str([self.car0,self.car1,self.car2,self.car3,self.car4,self.car5,self.car6,self.car7,self.car8,self.car9,self.car10,
-        self.car11,self.car12,self.car13,self.car14,self.car15,self.car16,self.car17,self.car18,self.car19,self.car20,self.car21])
+        self.car11,self.car12,self.car13,self.car14,self.car15,self.car16,self.car17,self.car18,self.car19,self.car20,self.car21, self.car22, self.car23, self.car24, self.car25])

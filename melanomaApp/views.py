@@ -103,14 +103,15 @@ def uploadImg(request):
             files = request.FILES.getlist('image')
             for f in files:
                 type = 'PH2' if 'type' in request.POST else 'ISIC'
-                i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'], type=type)
+                method = int(request.POST['method'])
+                i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'], type=type, method=method)
                 i.save()                
                 # if 'compute' in request.POST:
                 # image caracteristics
                 car = Caracteristics.extractCaracteristics(i.image.path)
                 car = Car(**car, image=i)
                 car.save()
-                i.result, _, _, _, _ = resultGame(i.id, type)
+                i.result, _, _, _, _ = resultGame(i.id, type, method)
                 i.save() 
                 if 'generate' in request.POST:
                     # image details
@@ -430,7 +431,7 @@ def results(request, imgId):
     '''
     image = Image.objects.get(id=imgId)
     # get game matrix
-    res, game, sMelanome, sNonMelanome, (ii, jj) = resultGame(imgId, image.type)
+    res, game, sMelanome, sNonMelanome, (ii, jj) = resultGame(imgId, image.type, image.method)
     s1 = []
     for s in sMelanome:
         if s>=0 and s<=5 and not 'Asymetrie' in s1:
@@ -441,6 +442,10 @@ def results(request, imgId):
             s1 += ['Couleur']
         if s>=19 and s<=21 and not 'Diametre' in s1:
             s1 += ['Diametre']
+        if s>=22 and s<=23 and not 'SPCL' in s1:
+            s1 += ['SPCL']
+        if s>=24 and s<=25 and not 'Menzies' in s1:
+            s1 += ['Menzies']
     s2 = []
     for s in sNonMelanome:
         if s>=0 and s<=5 and not 'Asymetrie' in s2:
@@ -451,6 +456,10 @@ def results(request, imgId):
             s2 += ['Couleur']
         if s>=19 and s<=21 and not 'Diametre' in s2:
             s2 += ['Diametre']
+        if s>=22 and s<=23 and not 'SPCL' in s2:
+            s2 += ['SPCL']
+        if s>=24 and s<=25 and not 'Menzies' in s2:
+            s2 += ['Menzies']
     tgame = '<thead><tr><th class="bg-warning">Joueur 2 : Non Melanome<hr class="bg-dark"/>Joueur 1 : Melanome</th>'
     for i in range(0, len(game[0])):
         tgame += '<th>'+s2[i]+'</th>'
@@ -464,6 +473,8 @@ def results(request, imgId):
                 tgame += '<td class="'+('bg-danger' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
             elif v<0:
                 tgame += '<td class="'+('bg-success' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
+            else:
+                tgame += '<td class="'+('bg-warning' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
         tgame += '</tr>'
     tgame += '</tbody>'
     # get caracteristics
@@ -473,21 +484,24 @@ def results(request, imgId):
         image.caracteristic.car11, image.caracteristic.car12, image.caracteristic.car13]
     c = [image.caracteristic.car14, image.caracteristic.car15, image.caracteristic.car16, image.caracteristic.car17, image.caracteristic.car18]
     d = [image.caracteristic.car19, image.caracteristic.car20, image.caracteristic.car21]
-    thresholdsPH2 = np.array([[2.65, 92.87, 6.39, 13.2, 17.2, 15.44], [55.73, 1560, 0.02, 0.56, 1.81, 1.35, 219, 1], [5, 2, 5, 9.51, 63.69], [560, 572.24, 4.54]])
-    thresholdsISIC = np.array([[4.23, 93.61, 7.31, 12.28, 16.17, 10.18], [73.42, 900, 0.02, 0.71, 1.37, 1.2, 145, 1.6], [3, 2, 3, 10.25, 66.93], [342, 323.27, 3.63]])
-    opsPH2 = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [0, 0, 0]])
-    opsISIC = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [0, 0, 0, 1, 1], [0, 0, 0]])
+    e = [image.caracteristic.car22, image.caracteristic.car23]
+    f = [image.caracteristic.car24, image.caracteristic.car25]
+    thresholdsPH2 = np.array([[2.65, 92.87, 6.39, 13.2, 17.2, 15.44], [55.73, 1560, 0.02, 0.56, 1.81, 1.35, 219, 1], [5, 2, 5, 9.51, 63.69], [560, 572.24, 4.54], [1, 1], [6.11, 0.01]])
+    thresholdsISIC = np.array([[4.23, 93.61, 7.31, 12.28, 16.17, 10.18], [73.42, 900, 0.02, 0.71, 1.37, 1.2, 145, 1.6], [3, 2, 3, 10.25, 66.93], [342, 323.27, 3.63], [0, 0], [0.05, 0]])
+    opsPH2 = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [0, 0, 0], [0, 0], [0, 0]])
+    opsISIC = np.array([[0, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0, 1], [0, 0, 0, 1, 1], [0, 0, 0], [0, 0], [0, 0]])
     # c[0:3] = np.array(c).astype(int)[0:3]
     # c[0] = str(c[0])+' couleurs'
     # c[1] = str(c[1])+' couleurs'
     # c[2] = str(c[2])+' couleurs'
-    cars = [{'vals':a, 'name':'Asymmetry'}, {'vals':b, 'name':'Border'}, {'vals':c, 'name':'Color'}, {'vals':d, 'name':'Diameter'}]
+    cars = [{'vals':a, 'name':'Asymmetry'}, {'vals':b, 'name':'Border'}, {'vals':c, 'name':'Color'}, {'vals':d, 'name':'Diameter'}, {'vals':e, 'name':'SPCL'}, {'vals':f, 'name':'Menzies'}]
     thead = '<thead><tr><th class="bg-warning">Caracteristique</th>'
     for m in range(1, 9):
         thead += '<th style="background-color:lightgrey">Méthode '+str(m)+'</th>'
     thead += '</tr></thead>'
     tbody = '<tbody>'
-    for i in range(len(cars)):
+    # for i in range(len(cars)):
+    for i in range(image.method):
         car = cars[i]
         tbody +='<tr><td style="background-color:rgb(255, 200, 160)">'+car['name']+'</td>'
         for j in range(len(car['vals'])):
@@ -519,7 +533,7 @@ def results(request, imgId):
 
 
 ########################### calculer le resulta de jeux
-def resultGame(imgId, type) :
+def resultGame(imgId, type, nbStrategies) :
     Game.init(type)
     image = Image.objects.get(id=imgId)
     a = [image.caracteristic.car0, image.caracteristic.car1, image.caracteristic.car2, image.caracteristic.car3,
@@ -528,9 +542,11 @@ def resultGame(imgId, type) :
         image.caracteristic.car11, image.caracteristic.car12, image.caracteristic.car13]
     c = [image.caracteristic.car14, image.caracteristic.car15, image.caracteristic.car16, image.caracteristic.car17, image.caracteristic.car18]
     d = [image.caracteristic.car19, image.caracteristic.car20, image.caracteristic.car21]
+    e = [image.caracteristic.car22, image.caracteristic.car23]
+    f = [image.caracteristic.car24, image.caracteristic.car25]
     # image sample
-    T = np.array(a+b+c+d)
-    result = Game.getResult(T)
+    T = np.array(a+b+c+d+e+f)
+    result = Game.getResult(T, nbStrategies)
     return result
 
 def images(request):

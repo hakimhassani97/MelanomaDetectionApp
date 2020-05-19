@@ -15,9 +15,9 @@ class Game:
     ds = []
     im = 198
     # strategies info
-    sLengths = [6, 8, 5, 3]
-    sStarts = [0, 6, 14, 19]
-    sEnds = [6, 14, 19, 22]
+    sLengths = [6, 8, 5, 3, 2, 2]
+    sStarts = [0, 6, 14, 19, 22, 24]
+    sEnds = [6, 14, 19, 22, 24, 26]
     @staticmethod
     def load():
         '''
@@ -25,7 +25,7 @@ class Game:
         '''
         XData = pd.read_csv('D:/HAKIM/MIV M2/PFE/application/melanomaApp/detector/utils/resnew '+Game.type+'.csv', header=None)
         target = XData.loc[:,2].values
-        data = XData.loc[:,4:25].values
+        data = XData.loc[:,4:29].values
         return target, data
 
     @staticmethod
@@ -107,13 +107,13 @@ class Game:
         '''
         return d2 - d1
     @staticmethod
-    def getResult(T):
+    def getResult(T, nbStrategies):
         '''
             take a sample T
         '''
         # T = data[im]
         cars = Game.getColumnsToUse(T)
-        cols = range(0, 22)
+        cols = range(0, 26)
         cols = np.array(cols)
         sMelanome = cols[cars==1]
         sNonMelanome = cols[cars==0]
@@ -122,12 +122,12 @@ class Game:
         t = 1
         d1 = []
         strategies1 = []
-        for s1 in range(0, 4):
+        for s1 in range(0, nbStrategies):
             sMelanome1 = Game.getColsFromStrategy(s1, sMelanome)
             if len(sMelanome1)>0:
                 strategies1.append(s1)
                 sMelanome1 = cols[Game.sStarts[s1]:Game.sEnds[s1]]
-                mins = [[6, 8, 5, 3], [6, 7, 2, 3]]
+                mins = [[6, 8, 5, 3, 1, 1], [6, 7, 2, 3, 1, 1]]
                 maximum = min([len(sMelanome1), mins[t][s1]])
                 M = Game.getDataMatrix(sMelanome1, t=t, minimum=maximum)
                 M = np.array(M)
@@ -140,12 +140,12 @@ class Game:
         t = 0
         d2 = []
         strategies2 = []
-        for s2 in range(0, 4):
+        for s2 in range(0, nbStrategies):
             sMelanome2 = Game.getColsFromStrategy(s2, sNonMelanome)
             if len(sMelanome2)>0:
                 strategies2.append(s2)
                 sMelanome2 = cols[Game.sStarts[s2]:Game.sEnds[s2]]
-                mins = [[6, 8, 5, 3], [6, 7, 2, 3]]
+                mins = [[6, 8, 5, 3, 1, 1], [6, 7, 2, 3, 1, 1]]
                 maximum = min([len(sMelanome2), mins[t][s2]])
                 M = Game.getDataMatrix(sMelanome2, t=1, minimum=maximum)
                 M = np.array(M)
@@ -181,9 +181,9 @@ class Game:
             Game.type = type
         # load data
         if(Game.type=='PH2'):
-            Game.thresholdsPH2 = np.array([2.65, 92.87, 6.39, 13.2, 17.2, 15.44, 55.73, 1560, 0.02, 0.56, 1.81, 1.35, 219, 1, 5, 2, 5, 9.51, 63.69, 560, 572.24, 4.54])
-            Game.opsPH2 = np.array([0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0])
+            Game.thresholdsPH2 = np.array([2.65, 92.87, 6.39, 13.2, 17.2, 15.44, 55.73, 1560, 0.02, 0.56, 1.81, 1.35, 219, 1, 5, 2, 5, 9.51, 63.69, 560, 572.24, 4.54, 1, 1, 6.11, 0.01])
+            Game.opsPH2 = np.array([0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0])
         else:            
-            Game.thresholdsPH2 = np.array([4.23, 93.61, 7.31, 12.28, 16.17, 10.18, 73.42, 900, 0.02, 0.71, 1.37, 1.2, 145, 1.6, 3, 2, 3, 10.25, 66.93, 342, 323.27, 3.63])
-            Game.opsPH2 = np.array([0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0])
+            Game.thresholdsPH2 = np.array([4.23, 93.61, 7.31, 12.28, 16.17, 10.18, 73.42, 900, 0.02, 0.71, 1.37, 1.2, 145, 1.6, 3, 2, 3, 10.25, 66.93, 342, 323.27, 3.63, 0, 0, 0.05, 0])
+            Game.opsPH2 = np.array([0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0])
         Game.target, Game.data = Game.load()
