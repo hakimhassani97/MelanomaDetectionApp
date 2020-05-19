@@ -28,6 +28,14 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
+                    <div style="float:left;">
+                        Indications :
+                        <div style="float:right">
+                            <span class="badge badge-danger">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span> Melanome
+                            <br/>
+                            <span class="badge badge-success">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span> Non Melanome
+                        </div>
+                    </div>
                     <div class="card-title" style ="float: right;">
                         {% if image.details %}
                             <a href={% url 'preparation' imgId=image.id %} class="btn btn-primary text-light btn-sm">{% trans "Details" %}</a>
@@ -37,6 +45,7 @@
                         {% endif %}
                         <a href={% url 'notesList' imgId=image.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
                     </div>
+                    </br>
                     </br>
                     </br>
                     <div class="card-title" style ="float: left;">
