@@ -462,13 +462,14 @@ def results(request, imgId):
             s2 += ['Menzies']
     tgame = '<thead><tr><th class="bg-warning">Joueur 2 : Non Melanome<hr class="bg-dark"/>Joueur 1 : Melanome</th>'
     for i in range(0, len(game[0])):
-        tgame += '<th>'+s2[i]+'</th>'
+        tgame += '<th style="background-color:lightgrey">'+s2[i]+'</th>'
     tgame += '</tr><tbody>'
     for i in range(0, len(game)):
         l = game[i]
         tgame += '<tr><td>'+s1[i]+'</td>'
         for j in range(0, len(l)):
             v = l[j]
+            v = round(v, 6)
             if v>0:
                 tgame += '<td class="'+('bg-danger' if ii==i and jj==j else '')+'">'+str(v)+'</td>'
             elif v<0:
