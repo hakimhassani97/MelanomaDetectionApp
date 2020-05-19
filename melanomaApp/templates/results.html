@@ -30,14 +30,21 @@
                 <div class="card-header">
                     <div class="card-title" style ="float: right;">
                         <a   href={% url 'preparation' imgId=image.id  %}  type="submit" class="btn btn-primary text-light btn-sm">{% trans "Details" %}</a>
-                  
                         <a  href={% url 'notesList' imgId=image.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
-                      </div>
-                </br>
-            </br>
+                    </div>
+                    </br>
+                    </br>
                     <div class="card-title" style ="float: left;">
                         <span>{% trans "Caracteristiques pour " %}</span><img class="imgCard" style="height:60px" src="{{image.image.url}}" alt="{{image.image.name}}">
                     </div>
+                    <ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist" style="float: left;margin-left:5%;">
+                        <li class="nav-item">
+                            <a class="nav-link active show" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="false">{% trans "Caracteristiques" %}</a>
+                        </li>
+                        <li class="nav-item submenu">
+                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="true">Table de jeu</a>
+                        </li>
+                    </ul>
                     <div class="card-title" style ="float: right;padding-top:15px">
                         <span>{% trans "Classification finale" %} :
                             <span style="font-size:20px;" class="badge text-big badge-pill badge-{% if class == 'Melanome' %}{{'danger'}}{% else %}{{'success'}}{% endif %}">{{class}}</span>
@@ -59,22 +66,28 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="patientsTable" class="display table table-striped table-hover">
-                            {% autoescape off %}
-                                {{table}}
-                            {% endautoescape %}
-                        </table>
+                <div class="tab-content mt-2 mb-3" id="pills-tabContent">
+                    <div class="tab-pane fade active show" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="patientsTable" class="display table table-striped table-hover">
+                                    {% autoescape off %}
+                                        {{table}}
+                                    {% endautoescape %}
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="gameTable" class="display table table-striped table-hover">
-                            {% autoescape off %}
-                                {{tgame}}
-                            {% endautoescape %}
-                        </table>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="gameTable" class="display table table-striped table-hover">
+                                    {% autoescape off %}
+                                        {{tgame}}
+                                    {% endautoescape %}
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -89,6 +102,10 @@
         // Add Row
         $('#patientsTable').DataTable({
             "pageLength": 10,
+        });
+        $('#gameTable').DataTable({
+            searching:false,
+            paging:false
         });
     });
     $('.imgCard').on('click',(e)=>{
