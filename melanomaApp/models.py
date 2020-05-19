@@ -9,7 +9,7 @@ class Doctor(models.Model):
         the Doctor model
     '''
     phone = models.CharField(max_length=15, null=True, blank=True)
-    image = models.ImageField(upload_to='avatars', null=True, blank=True)
+    image = models.ImageField(upload_to='avatars', null=True, blank=True, default="avatars/av.png")
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     class Meta:
         verbose_name = 'Doctor'

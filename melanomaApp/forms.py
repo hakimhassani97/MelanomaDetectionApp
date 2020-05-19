@@ -29,6 +29,28 @@ class RegisterForm(forms.ModelForm):
         model = Doctor
         fields = ['phone', 'image']
 
+
+class ChangeUserForm(UserCreationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Username","class": "form-control"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder" : "Email","class": "form-control"}))
+    class Meta:
+        model = User
+        fields = ('username', 'email')
+
+
+class ChangePassword(UserCreationForm) :
+    oldpassword =forms.CharField(widget=forms.PasswordInput(attrs={"placeholder" : "Old Password","class": "form-control"}))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder" : "Password","class": "form-control"}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder" : "Password check","class": "form-control"}))
+    class Meta:
+        model = User
+        fields = ('oldpassword', 'password1', 'password2')
+
+
+
+
+
+
 class UploadImageForm(forms.ModelForm):
     '''
         Image lesion upload form
