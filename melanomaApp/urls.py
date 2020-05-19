@@ -26,6 +26,7 @@ urlpatterns = [
     path('deleteNote/<int:noteId>', views.deleteNote, name='deleteNote'),
     path('dashboard', views.dashboard, name='dashboard'),
     path('settings', views.settings, name='settings'),
+    path('logout', views.logout, name='logout'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

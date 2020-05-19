@@ -1,5 +1,6 @@
 import cv2
 from django.shortcuts import render, redirect
+from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
 from django.core.files import File
 from django.contrib.auth import authenticate, login as doLogin
@@ -737,13 +738,17 @@ def dashboard(request):
 
 def settings(request) :
    
-   
     doctor =Doctor.objects.get( user=request.user.id)           
     changePasswordForm = ChangePassword()
     doctorForm = RegisterForm(instance=doctor)
-    changeUserForm =ChangeUserForm(instance=request.user)
-        
-    return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'changeUserForm' : changeUserForm}) 
+    changeUserForm =ChangeUserForm(instance=request.user) 
+    return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'changeUserForm' : changeUserForm,'doctor':doctor}) 
+
+
+
+def logout(request):
+    django_logout(request)
+    return redirect(login)
 
 
 def error_404(request, exception):

@@ -1,3 +1,5 @@
+{% load i18n %}
+{% with url_name=request.resolver_match.url_name %}
 <div class="main-header">
 
 	<!-- Logo Header -->
@@ -243,6 +245,7 @@
 								<div class="user-box">
 									<div class="avatar-lg"><img src="/static/assets/img/profile.jpg" alt="image profile"
 											class="avatar-img rounded"></div>
+											
 									<div class="u-text">
 										<h4>
 											{{ request.user.user }}
@@ -257,12 +260,11 @@
 							</li>
 							<li>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">My Profile</a>
-								<a class="dropdown-item" href="#">My Balance</a>
-								<a class="dropdown-item" href="#">Inbox</a>
+
+								<a class="dropdown-item" href={% url 'settings' %}>{% trans "Paramètres" %}</a>
 								<div class="dropdown-divider"></div>
-								{% comment %} <a class="dropdown-item" href={% url 'logout' %}>Logout</a>
-								{% endcomment %}
+								<a class="dropdown-item" href={% url 'logout' %}>{% trans "Se déconnecter" %}</a>
+								
 							</li>
 						</div>
 					</ul>
@@ -276,3 +278,4 @@
 	<!-- End Navbar -->
 
 </div>
+{% endwith %}
