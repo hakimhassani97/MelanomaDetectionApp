@@ -60,10 +60,13 @@ def login(request):
             password = form.cleaned_data.get("password")
             user = authenticate(username=username, password=password)
             if user is not None:
-                doLogin(request, user)
-                return redirect("/")
+                if not hasattr(user, 'doctor'):
+                    msg = 'Vous n\'etes pas un doctor'
+                else:
+                    doLogin(request, user)
+                    return redirect("/")
             else:
-                msg = 'Email ou mot de passe incorrectes'
+                msg = 'Email ou mot de passe incorrectes, ou bien Votre compte n\'est pas activé'
         else:
             msg = 'Erreur lors de validation du formulaire'
     return render(request, "auth/login.html", {"form": form, "msg": msg})
