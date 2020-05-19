@@ -29,8 +29,13 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title" style ="float: right;">
-                        <a   href={% url 'preparation' imgId=image.id  %}  type="submit" class="btn btn-primary text-light btn-sm">{% trans "Details" %}</a>
-                        <a  href={% url 'notesList' imgId=image.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
+                        {% if image.details %}
+                            <a href={% url 'preparation' imgId=image.id %} class="btn btn-primary text-light btn-sm">{% trans "Details" %}</a>
+                        {% else %}
+                        <button onclick="generate('{% url 'generate' imgId=image.id  %}')"
+                            class="btn btn-primary btn-sm ">{% trans "Générer<br/> les détails" %}</button>
+                        {% endif %}
+                        <a href={% url 'notesList' imgId=image.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
                     </div>
                     </br>
                     </br>
@@ -115,6 +120,29 @@
         $('#imgModal').attr('src', src)
         $('#zoomModal').modal('show')
     })
+    function generate(url){
+        swal({
+            title: 'Générer les images explicatives ?',
+            text: 'La génération des images va prendre du temps!',
+            type: 'warning',
+            buttons:{
+                cancel: {
+                    visible: true,
+                    text : 'Annuler',
+                    className: 'btn btn-success'
+                },        			
+                confirm: {
+                    text : 'Oui',
+                    className : 'btn btn-warning'
+                }
+            }
+        }).then((willDelete) => {
+            if (willDelete) {
+				$('#loader').show()
+                window.location = url
+            }
+        });
+    }
 </script>
 
 {% endblock javascripts %}

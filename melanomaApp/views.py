@@ -448,7 +448,8 @@ def generate(request, imgId):
     '''
     image = Image.objects.get(id=imgId)
     doGeneration(image)
-    return redirect(images)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    # return redirect(images)
 
 def results(request, imgId):
     '''
