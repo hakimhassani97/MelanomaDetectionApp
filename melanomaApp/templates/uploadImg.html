@@ -59,24 +59,25 @@
 									<label for="generate">{% trans "Générer les images explicatives ?" %}</label>
 									<input name="generate" type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="small"
 										data-on="{% trans "Oui" %}" data-off="{% trans "Non" %}"/>
-										<p class="text-danger">{% trans "Note : la génération des images va prendre du temps" %}</p>
+									<p id="warnGenerate" style="display:none" class="text-danger">{% trans "Note : la génération des images va prendre du temps" %}</p>
 								</div>
-								<div class="col-md-4" style="padding-top:15px">
+								<div class="col-md-6" style="padding-top:15px">
                                     <label class="form-label">{% trans "Méthode" %} :</label>
                                     <div class="selectgroup w-100">
                                         <label class="selectgroup-item">
                                             <input type="radio" name="method" value="4" class="selectgroup-input" checked="">
-                                            <span style="height:60px;display:flex;justify-content:center;align-items:center" class="selectgroup-button">ABCD</span>
+                                            <span style="height:50px;display:flex;justify-content:center;align-items:center" class="selectgroup-button">ABCD</span>
                                         </label>
                                         <label class="selectgroup-item">
                                             <input type="radio" name="method" value="5" class="selectgroup-input">
-                                            <span style="height:60px;display:flex;justify-content:center;align-items:center" class="selectgroup-button">ABCD + 7PCL</span>
+                                            <span style="height:50px;display:flex;justify-content:center;align-items:center" class="selectgroup-button">ABCD + 7PCL</span>
                                         </label>
                                         <label class="selectgroup-item">
                                             <input type="radio" name="method" value="6" class="selectgroup-input">
-                                            <span style="height:60px;display:flex;justify-content:center;align-items:center" class="selectgroup-button">ABCD + 7PCL<br/>+ Menzies</span>
+                                            <span style="height:50px;display:flex;justify-content:center;align-items:center" class="selectgroup-button">ABCD + 7PCL<br/>+ Menzies</span>
                                         </label>
                                     </div>
+									<p id="warnMethod" style="display:none" class="text-danger">{% trans "Note : les méthodes 7 points checklist et Menzies sont experimentales et ne donnent pas de bons résultats" %}</p>
                                 </div>
 							</div>
 						</div>
@@ -98,12 +99,25 @@
 		$('#loader').show()
 	})
 	$(document).ready(()=>{
+		// select the patient from url
 		var url = new URL(window.location.href);
 		var c = url.searchParams.get("patient") || null;
 		var option = $('[value='+c+']')
 		if (option.length>0 && c){
 			option.attr('selected',true)
 		}
+		// handle warning messages
+		$('[name=generate]').on('change',(e)=>{
+			//$(e.target).closest('.toggle').attr('class').includes('danger')
+			$('#warnGenerate').toggle()
+		})
+		$('[name=method]').on('change',(e)=>{
+			if($(e.target).val()==4){
+				$('#warnMethod').hide()
+			}else{
+				$('#warnMethod').show()
+			}
+		})
 	})
 	{% if success %}
 	  //Notify
