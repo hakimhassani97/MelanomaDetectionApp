@@ -109,7 +109,7 @@
                                 </div>
                             </div>
                             <div class="card-action">
-                                <button type="submit" class="btn btn-success">{% trans "Changer" %}</button>
+                                <button type="submit" name="change_informations" value="change&informations" class="btn btn-success">{% trans "Changer" %}</button>
                             </div>
                         </form>
                     {% endif %}
@@ -152,21 +152,21 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                        {% if msg %}
+                        {% if passwordMsg %}
                             <br/>
-                            <p style="margin-left: 25px" class="{% if success %}text-success {% else %} text-danger{% endif %}">
-                                {{ msg | safe }}
+                            <p style="margin-left: 25px" class="{% if passwordSuccess %}text-success {% else %} text-danger{% endif %}">
+                                {{ passwordMsg | safe }}
                             </p>
                         {% else %}
                             <p style="margin-left: 25px"></p>
                         {% endif %}
                         </div>
                     </div>
-                    {% if success %}
+                    {% if passwordSuccess %}
                     <div class="row">
                         <div class="col-md-12">
                             <p style="margin-left: 25px">
-                                Veuillez vous connecter avec votre compte <a href={% url 'login' %} class="text-black">par ici</a>
+                                Le mot de passe modifié
                             </p>
                         </div>
                     </div>
@@ -216,7 +216,7 @@
                                 </div>
                             </div>
                             <div class="card-action">
-                                <button type="submit" class="btn btn-success">{% trans "Changer" %}</button>
+                                <button type="submit" name="change_password" value="change&password" class="btn btn-success">{% trans "Changer" %}</button>
                             </div>
                         </form>
                     {% endif %}
