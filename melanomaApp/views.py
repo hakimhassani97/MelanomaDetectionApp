@@ -5,7 +5,7 @@ from django.core.files import File
 from django.contrib.auth import authenticate, login as doLogin
 from django.contrib.auth.decorators import user_passes_test
 from .models import Doctor, Caracteristic as Car, Image, Patient, Details ,Note
-from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm, AddPatientForm,AddNoteForm
+from .forms import UploadImageForm, LoginForm, RegisterForm, UserRegisterForm, AddPatientForm,AddNoteForm, ChangePassword ,ChangeUserForm
 from .detector.Caracteristics import Caracteristics
 from .detector.utils.Caracteristics import Caracteristics as Cars
 from .detector.utils.Contours import Contours
@@ -711,20 +711,14 @@ def deleteNote(request,noteId):
 
 def dashboard(request):
     nbMelanom =0
-    nbPatients = Patient.objects.raw('SELECT COUNT(*)  AS id  FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id )')[0].id
-    
+    nbPatients = Patient.objects.raw('SELECT COUNT(*)  AS id  FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id )')[0].id    
     months = [0,0,0,0,0,0,0,0,0,0,0,0]     
     patients = Patient.objects.all()
     month = 0
     for p in patients :
         month = p.dateCreation.month -1
         months[month] =months[month] +1 
-
-    
-
-
     melanomPatients=Patient.objects.raw('SELECT * FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 1 )') 
-    
     Mmonths = [0,0,0,0,0,0,0,0,0,0,0,0]     
     month = 0
     for p in melanomPatients :
@@ -733,24 +727,23 @@ def dashboard(request):
         Mmonths[month] =Mmonths[month] +1 
     nbNonMelanom =nbPatients - nbMelanom
     nonMelanomPatients=Patient.objects.raw('SELECT * FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 0 )')
-    
     Nmonths = [0,0,0,0,0,0,0,0,0,0,0,0]     
     month = 0
     for p in melanomPatients :
         month = p.dateCreation.month -1
         Nmonths[month] =Nmonths[month] +1 
-    
-
-
-
-
-
-
-
-
     return render(request, 'dashboard.html' ,{'nbPatients' :nbPatients ,'nbMelanom':nbMelanom ,'nbNonMelanom' :nbNonMelanom ,'months' :months,'Mmonths':Mmonths,'Nmonths':Nmonths})
 
 
+def settings(request) :
+   
+   
+    doctor =Doctor.objects.get( user=request.user.id)           
+    changePasswordForm = ChangePassword()
+    doctorForm = RegisterForm(instance=doctor)
+    changeUserForm =ChangeUserForm(instance=request.user)
+        
+    return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'changeUserForm' : changeUserForm}) 
 
 
 def error_404(request, exception):
