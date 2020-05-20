@@ -43,6 +43,7 @@ class Image(models.Model):
     image = models.ImageField(upload_to='images', default=None)
     date = models.DateTimeField('upload date', auto_now_add=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True, related_name='images')
     result = models.IntegerField('result', default=1)
     type = models.CharField(max_length=30, default='PH2')
     method = models.IntegerField('mothde abcd 7pcl menz', default=4)

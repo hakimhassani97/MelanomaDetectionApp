@@ -115,7 +115,7 @@ def uploadImg(request):
             for f in files:
                 type = 'PH2' if 'type' in request.POST else 'ISIC'
                 method = int(request.POST['method'])
-                i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'], type=type, method=method)
+                i = Image(name=form.cleaned_data['name'], image=f, patient=form.cleaned_data['patient'], type=type, method=method, doctor=request.user.doctor)
                 i.save()                
                 # if 'compute' in request.POST:
                 # image caracteristics
