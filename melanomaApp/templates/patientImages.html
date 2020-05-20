@@ -50,6 +50,9 @@
 							<a href={% url 'results' imgId=img.id  %}
 							class="btn btn-primary  btn-sm ">{% trans "Resultats" %}</a>
 							<a style="float:right;" href={% url 'notesList' imgId=img.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
+							<span style="float:right;" class="badge text-big badge-pill badge-{% if img.result == 1 %}{{'danger'}}{% else %}{{'success'}}{% endif %}">
+								{% if img.result == 1 %}{{'Melanome'}}{% else %}{{'Non Melanome'}}{% endif %}
+							</span>
 							{% comment %} <button class="btn btn-icon btn-primary btn-round btn-xs ">
 								<i class="fa fa-plus"></i>
 							</button> {% endcomment %}
