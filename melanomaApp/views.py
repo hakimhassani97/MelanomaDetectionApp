@@ -102,7 +102,7 @@ def register(request):
         userform = UserRegisterForm()
     return render(request, "auth/register.html", {"form": form, "userform": userform, "msg": msg, "success": success})
 
-
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def uploadImg(request):
     '''
         process the request img
@@ -451,6 +451,7 @@ def generate(request, imgId):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     # return redirect(images)
 
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def results(request, imgId):
     '''
         returns table of caracteristics of the image
@@ -577,6 +578,7 @@ def resultGame(imgId, type, nbStrategies) :
     result = Game.getResult(T, nbStrategies)
     return result
 
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def images(request):
     '''
         returns a list of all the images
@@ -588,6 +590,7 @@ def images(request):
     }
     return render(request, 'images.html', context)
 
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def patientImages(request, patientId):
     '''
         returns a list of all the images
@@ -600,6 +603,7 @@ def patientImages(request, patientId):
     }
     return render(request, 'patientImages.html', context)
 
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def addPatient(request):
     '''
         Add Patient
@@ -623,6 +627,7 @@ def addPatient(request):
         form = AddPatientForm()
         return render(request, 'addPatient.html', {'form': form})
 
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def deletePatient(request,patientId):
     '''
         Update Patient
@@ -631,6 +636,7 @@ def deletePatient(request,patientId):
     patient.delete()
     return redirect(patientsList)
 
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def updatePatient(request,patientId):
     '''
         Update Patient
@@ -656,7 +662,7 @@ def updatePatient(request,patientId):
         return render(request, 'updatePatient.html', {'form': form, 'patient': patient})
 
 
-
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def patientsList(request):
     '''
         returns a list of all Patients
@@ -668,7 +674,7 @@ def patientsList(request):
     return render(request, 'patientsList.html', context)
 
 
-
+@user_passes_test(checkDoctorIsLoggedIn, login_url='/login')
 def preparation(request,imgId):
     '''
         returns preparation
