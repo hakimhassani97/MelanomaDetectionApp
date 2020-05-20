@@ -610,6 +610,7 @@ def addPatient(request):
         form = AddPatientForm(request.POST, request.FILES)
         if form.is_valid():
             Patient = form.save(commit=False)
+            Patient.doctor = request.user.doctor
             Patient.save()
             msg = 'Le Patient est enregistrée avec succes'
             success = True
@@ -660,7 +661,7 @@ def patientsList(request):
     '''
         returns a list of all Patients
     '''
-    patients = Patient.objects.all()
+    patients = request.user.doctor.patients.all()
     context = {
         'patients': patients,
     }
