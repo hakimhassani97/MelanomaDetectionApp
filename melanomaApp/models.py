@@ -31,6 +31,7 @@ class Patient(models.Model):
     email = models.EmailField(max_length=254,null=True, blank=True)
     sexe = models.CharField(max_length=30, null=False, blank=False, default="male")
     dateCreation = models.DateTimeField('Creation date', auto_now_add=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True, related_name='patients')
     
     def __str__(self):
         return self.firstName+' '+self.lastName+' ('+self.phone+')'
