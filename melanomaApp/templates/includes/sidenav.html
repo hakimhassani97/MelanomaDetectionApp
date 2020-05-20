@@ -16,29 +16,28 @@
 				<div class="info">
 					<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 						<span>
-							{{ request.user.user }}
-							<span class="user-level">
+							<span class="user-level" style="margin-top:11px">
 								{{ request.user.username }}
 							</span>
-							<span class="caret"></span>
+							{% comment %} <span class="caret"></span> {% endcomment %}
 						</span>
 					</a>
 					<div class="clearfix"></div>
 
-					<div class="collapse in" id="collapseExample">
+					{% comment %} <div class="collapse in" id="collapseExample">
 						<ul class="nav">
 							<li>
 								<a href="#profile">
 									<span class="link-collapse">My Profile</span>
 								</a>
 							</li>
-							{% comment %} <li>
+							<li>
 								<a href={% url 'logout' %}>
 									<span class="link-collapse">Logout</span>
 								</a>
-							</li> {% endcomment %}
+							</li>
 						</ul>
-					</div>
+					</div> {% endcomment %}
 				</div>
 			</div>
 			<ul class="nav nav-primary">
@@ -102,11 +101,6 @@
 							<li class="{% if url_name == 'images' %}active{% endif %}">
 								<a href="{% url 'images' %}">
 									<span class="sub-item">{% trans "Liste des Images" %}</span>
-								</a>
-							</li>
-							<li class="{% if url_name == 'forms' %}active{% endif %}">
-								<a href="{% url 'forms' %}">
-									<span class="sub-item">{% trans "Basic Form" %}</span>
 								</a>
 							</li>
 						</ul>
