@@ -28,7 +28,22 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <span>{% trans "Ajouter Note" %}</span>
+                        <span>{% trans "Ajouter une Note pour" %} : </span><img class="imgCard" style="height:60px" src="{{img.image.url}}" alt="{{img.image.name}}">
+                    </div>
+                </div>
+                <div id="zoomModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="font-size:20px;font-weight:bolder">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img class="img-responsive" id="imgModal" style="width:100%" src="">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -89,3 +104,14 @@
     </div>
 </div>
 {% endblock content %}
+{% block javascripts %}
+    <script>
+        $('.imgCard').on('click',(e)=>{
+            var src = $(e.target).attr('src')
+            var title = $(e.target).attr('alt')
+            $('#zoomModal .modal-title').html(title)
+            $('#imgModal').attr('src', src)
+            $('#zoomModal').modal('show')
+        })
+    </script>
+{% endblock %}
