@@ -33,9 +33,7 @@
                         <a   href={% url 'results' imgId=img.id  %}  type="submit" class="btn btn-success text-light btn-sm">{% trans "Results" %}</a>
                         <a  href={% url 'notesList' imgId=img.id  %} class="btn btn-outline-secondary btn-rounded  btn-sm "><i class="flaticon-pen"></i>{% trans " Notes" %}</a>
                       </div>
-                </br>
-            </br>
-                    <div class="form-group">
+                    {% comment %} <div class="form-group">
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item" onclick="preparation()">
                                 <input type="radio" name="value" value="50" class="selectgroup-input"
@@ -59,8 +57,7 @@
                                 <span class="selectgroup-button">{% trans "Diamètre" %}</span>
                             </label>
                         </div>
-                    </div>
-                </br>
+                    </div> {% endcomment %}
                   
                     <div class="card-title imgCard zoom" style ="float: left;">
                         <div class="info-post ml-2" style="display: none;">
@@ -466,8 +463,10 @@
     function hide(card){
         card.style.display='none';
     }
-    function preparation()
-    {   document.getElementById("titleCard").textContent="Etude préparatoire pour : "
+    function preparation(){
+        $("li[id$='Nav']").removeClass('active')
+        $('#preparationNav').addClass('active')
+        document.getElementById("titleCard").textContent="Etude préparatoire pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")
         var  borderCard = document.getElementById("borderCard")
@@ -482,6 +481,8 @@
     }
 
     function asymmetry(){
+        $("li[id$='Nav']").removeClass('active')
+        $('#asymmetryNav').addClass('active')
         document.getElementById("titleCard").textContent="Etude Asymétrie pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")
@@ -497,6 +498,8 @@
     }
 
     function border(){
+        $("li[id$='Nav']").removeClass('active')
+        $('#borderNav').addClass('active')
         document.getElementById("titleCard").textContent="Etude Bordure pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")
@@ -512,6 +515,8 @@
     }
 
     function color(){
+        $("li[id$='Nav']").removeClass('active')
+        $('#colorNav').addClass('active')
         document.getElementById("titleCard").textContent="Etude Couleur pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")
@@ -527,6 +532,8 @@
     }
 
     function diameter(){
+        $("li[id$='Nav']").removeClass('active')
+        $('#diameterNav').addClass('active')
         document.getElementById("titleCard").textContent="Etude Diamètre pour : "
         var  preparationCard = document.getElementById("preparationCard")
         var  asymmetryCard = document.getElementById("asymmetryCard")

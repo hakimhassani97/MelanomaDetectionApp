@@ -114,7 +114,7 @@
 				</li>
 
 
-
+				{% if url_name in 'preparation' %}
 				<li
 					class="nav-item {% if url_name in 'preparation,asymmetry,border,color,diameter' %}active{% endif %}">
 					<a data-toggle="collapse" href="#traitement">
@@ -126,35 +126,35 @@
 						id="traitement">
 						<ul class="nav nav-collapse">
 
-							<li class="{% if url_name == 'preparation' %}active{% endif %}">
+							<li onclick="preparation()" id="preparationNav" class="{% if url_name == 'preparation' %}active{% endif %}">
 								<a href="#">
 									<span class="sub-item">{% trans "Préparation" %}</span>
 								</a>
 							</li>
-							<li class="{% if url_name == 'asymmetry' %}active{% endif %}">
-								<a href="{% url 'asymmetry' %}">
+							<li onclick="asymmetry()" id="asymmetryNav" class="{% if url_name == 'asymmetry' %}active{% endif %}">
+								<a href="#">
 									<span class="sub-item">{% trans "Asymétrie" %}</span>
 								</a>
 							</li>
-							<li class="{% if url_name == 'border' %}active{% endif %}">
-								<a href="{% url 'border' %}">
+							<li onclick="border()" id="borderNav" class="{% if url_name == 'border' %}active{% endif %}">
+								<a href="#">
 									<span class="sub-item">{% trans "Bordure" %}</span>
 								</a>
 							</li>
-							<li class="{% if url_name == 'color' %}active{% endif %}">
-								<a href="{% url 'color' %}">
+							<li onclick="color()" id="colorNav" class="{% if url_name == 'color' %}active{% endif %}">
+								<a href="#">
 									<span class="sub-item">{% trans "Couleur" %}</span>
 								</a>
 							</li>
-							<li class="{% if url_name == 'diameter' %}active{% endif %}">
-								<a href="{% url 'diameter' %}">
+							<li onclick="diameter()" id="diameterNav" class="{% if url_name == 'diameter' %}active{% endif %}">
+								<a href="#">
 									<span class="sub-item">{% trans "Diamètre" %}</span>
 								</a>
 							</li>
 						</ul>
 					</div>
 				</li>
-
+				{% endif %}
 
 				<!--             end patients                      -->
 
