@@ -192,16 +192,16 @@
 						<div class="quick-actions-scroll scrollbar-outer">
 							<div class="quick-actions-items">
 								<div class="row m-0">
-									<a class="col-6 col-md-4 p-0" href="#">
+									<a class="col-6 col-md-4 p-0" href="{% url 'addPatient' %}">
 										<div class="quick-actions-item">
-											<i class="flaticon-file-1"></i>
-											<span class="text">Generated Report</span>
+											<i class="flaticon-add-user"></i>
+											<span class="text">{% trans "Ajouter un patient" %}</span>
 										</div>
 									</a>
-									<a class="col-6 col-md-4 p-0" href="#">
+									<a class="col-6 col-md-4 p-0" href="{% url 'uploadImg' %}">
 										<div class="quick-actions-item">
-											<i class="flaticon-database"></i>
-											<span class="text">Create New Database</span>
+											<i class="flaticon-picture"></i>
+											<span class="text">{% trans "Importer une image" %}</span>
 										</div>
 									</a>
 									<a class="col-6 col-md-4 p-0" href="#">
