@@ -76,19 +76,7 @@
               <div class="card-head-row">
                 <div class="card-title">Statistiques des Patients</div>
                 <div class="card-tools">
-                  <a href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
-                    <span class="btn-label">
-                      <i class="fa fa-pencil"></i>
-                    </span>
-                    Export
-                  </a>
-                  <a href="#" class="btn btn-info btn-border btn-round btn-sm">
-                    <span class="btn-label">
-                      <i class="fa fa-print"></i>
-                    </span>
-                    Print
-                  </a>
-                </div>
+                                  </div>
               </div>
             </div>
             <div class="card-body">
@@ -104,23 +92,19 @@
         <div class="col-md-4">
           <div class="card card-primary">
             <div class="card-header">
-              <div class="card-title">Daily Sales</div>
-              <div class="card-category">March 25 - April 02</div>
+              <div class="card-title">Totale Images :</div>
             </div>
             <div class="card-body pb-0">
               <div class="mb-4 mt-2">
-                <h1>$4,578.58</h1>
-              </div>
-              <div class="pull-in">
-                <canvas id="dailySalesChart"></canvas>
+                <h1>{{NbImage}} images </h1>
               </div>
             </div>
           </div>
           <div class="card">
             <div class="card-body pb-0">
-              <div class="h1 fw-bold float-right text-warning">+7%</div>
-              <h2 class="mb-2">213</h2>
-              <p class="text-muted">Transactions</p>
+              <div class="h4 fw-bold float-right text-danger">{{NbMelanomImage}}% Melanome</div>
+              <h2 class="mb-2">{{NbImage}} Images</h2>
+              <p class="text-muted">Images Melanome/mois :</p>
               <div class="pull-in sparkline-fix">
                 <div id="lineChart"></div>
               </div>
@@ -200,7 +184,10 @@
 		var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
     var months ='{{ months}}'; 
     var months = months.split(",")
-
+	var MmonthsImages ='{{ MmonthsImages}}'; 
+    var MmonthsImages = MmonthsImages.split(",")
+	
+	
     var mytotalIncomeChart = new Chart(totalIncomeChart, {
 			type: 'bar',
 			data: {
@@ -210,7 +197,7 @@
 					label: "Total Income",
 					backgroundColor: '#ff9e27',
 					borderColor: 'rgb(23, 125, 255)',
-					data: [months[0], months[1], months[2], months[3], months[4], months[5], months[6], months[7], months[8], months[0] ,months[0] ,months[0]],
+					data: [months[0][1], months[1], months[2], months[3], months[4], months[5], months[6], months[7], months[8], months[9] ,months[10] ,months[11][1]],
 				}],
 			},
 			options: {
@@ -239,21 +226,22 @@
 			}
 		});
 
-		$('#lineChart').sparkline([105,103,123,100,95,105,115], {
+		$('#lineChart').sparkline([MmonthsImages[0][1],MmonthsImages[1],MmonthsImages[2],MmonthsImages[3],
+		MmonthsImages[4],MmonthsImages[5],MmonthsImages[6] ,MmonthsImages[7],MmonthsImages[8] ,MmonthsImages[9],MmonthsImages[10],MmonthsImages[11][1]], {
 			type: 'line',
 			height: '70',
 			width: '100%',
 			lineWidth: '2',
-			lineColor: '#ffa534',
+			lineColor: '#f3545d',
 			fillColor: 'rgba(255, 165, 52, .14)'
     });
 
 	var ctx = document.getElementById('statisticsChart').getContext('2d');
 	var Mmonths ='{{ Mmonths}}'; 
 	var Mmonths = Mmonths.split(",")
-
 	var Nmonths ='{{ Nmonths}}'; 
-	var Nmonths = Nmonths.split(",")
+	var Nmonths = Nmonths.split(",") 
+	
 	var statisticsChart = new Chart(ctx, {
 		type: 'line',
 		data: {
@@ -267,7 +255,7 @@
 				legendColor: '#f3545d',
 				fill: true,
 				borderWidth: 2,
-		data: [Mmonths[0], Mmonths[1], Mmonths[2], Mmonths[3], Mmonths[4], Mmonths[5], Mmonths[6], Mmonths[7], Mmonths[8], Mmonths[0] ,Mmonths[0] ,Mmonths[0]],
+		data: [Mmonths[0][1], Mmonths[1], Mmonths[2], Mmonths[3], Mmonths[4], Mmonths[5], Mmonths[6], Mmonths[7], Mmonths[8], Mmonths[9] ,Mmonths[10] ,Mmonths[11][1]],
 			
 			}, {
 				label: "Patients",
@@ -278,7 +266,7 @@
 				legendColor: '#fdaf4b',
 				fill: true,
 				borderWidth: 2,
-		data: [months[0], months[1], months[2], months[3], months[4], months[5], months[6], months[7], months[8], months[0] ,months[0] ,months[0]],
+		data: [months[0][1], months[1], months[2], months[3], months[4], months[5], months[6], months[7], months[8], months[9] ,months[10] ,months[11][1]],
 			
 			}, {
 				label: "Non Melanome",
@@ -289,7 +277,7 @@
 				legendColor: '#177dff',
 				fill: true,
 				borderWidth: 2,
-		data: [Nmonths[0], Nmonths[1], Nmonths[2], Nmonths[3], Nmonths[4], Nmonths[5], Nmonths[6], Nmonths[7], Nmonths[8], Nmonths[0] ,Nmonths[0] ,Nmonths[0]],
+		data: [Nmonths[0][1], Nmonths[1], Nmonths[2], Nmonths[3], Nmonths[4], Nmonths[5], Nmonths[6], Nmonths[7], Nmonths[8], Nmonths[9] ,Nmonths[10] ,Nmonths[11][1]],
 			
 			}]
 		},
