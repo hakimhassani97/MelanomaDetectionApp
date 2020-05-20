@@ -759,6 +759,7 @@ def deleteNote(request,noteId):
 
 def dashboard(request):
     nbMelanom =0
+    
     nbPatients = Patient.objects.raw('SELECT COUNT(*)  AS id  FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id )')[0].id    
     months = [0,0,0,0,0,0,0,0,0,0,0,0]     
     patients = Patient.objects.all()
@@ -774,32 +775,64 @@ def dashboard(request):
         month = p.dateCreation.month -1
         Mmonths[month] =Mmonths[month] +1 
     nbNonMelanom =nbPatients - nbMelanom
-    nonMelanomPatients=Patient.objects.raw('SELECT * FROM melanomaApp_patient p WHERE EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 0 )')
+    nonMelanomPatients=Patient.objects.raw('SELECT * FROM melanomaApp_patient p WHERE (Not EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 1 )) AND EXISTS (SELECT 1 FROM melanomaApp_image WHERE patient_id = p.id AND result = 0 ) ')
+    
     Nmonths = [0,0,0,0,0,0,0,0,0,0,0,0]     
     month = 0
-    for p in melanomPatients :
+    for p in nonMelanomPatients :
+        print(p.dateCreation)
         month = p.dateCreation.month -1
         Nmonths[month] =Nmonths[month] +1 
-    return render(request, 'dashboard.html' ,{'nbPatients' :nbPatients ,'nbMelanom':nbMelanom ,'nbNonMelanom' :nbNonMelanom ,'months' :months,'Mmonths':Mmonths,'Nmonths':Nmonths})
+    
+    
+    NbImage=Image.objects.raw('SELECT COUNT(*)  AS id FROM melanomaApp_image')[0].id 
+    
+    MelanomImage=Image.objects.raw('SELECT * FROM melanomaApp_image WHERE result = 1') 
+    MmonthsImages = [0,0,0,0,0,0,0,0,0,0,0,0]     
+    month = 0
+    NbMelanomImage =0
+    for image in MelanomImage :
+        NbMelanomImage =NbMelanomImage +1
+        month = image.date.month -1
+        MmonthsImages[month] =MmonthsImages[month] +1 
+    NbMelanomImage =int((NbMelanomImage/NbImage)*100)
+    NbNonMelanomImage =NbImage - NbMelanomImage
+    
+    return render(request, 'dashboard.html' ,{'nbPatients' :nbPatients ,'nbMelanom':nbMelanom ,'nbNonMelanom' :nbNonMelanom ,'months' :months,'Mmonths':Mmonths,'Nmonths':Nmonths ,'NbImage' :NbImage ,'NbMelanomImage':NbMelanomImage ,'NbNonMelanomImage' :NbNonMelanomImage ,'MmonthsImages' :MmonthsImages})
 
 
 def settings(request) :
     passwordMsg = None
     passwordSuccess = False
+    informationMsg = None
+    informationSuccess = False
+    doctor =Doctor.objects.get( user=request.user.id)           
     
     if request.method == 'POST':
         if request.POST.get("change_informations"):
             changePasswordForm = ChangePassword()
             doctorForm = RegisterForm(request.POST, request.FILES)
             changeUserForm =ChangeUserForm(request.POST, request.FILES) 
-
+            if doctorForm.is_valid() &  changeUserForm.is_valid() :
+               
+               
+               
+                passwordMsg = 'Les informations modifié avec succes'
+                passwordSuccess = True                    
+                return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'changeUserForm' : changeUserForm,'doctor':doctor ,'informationMsg':informationMsg,'informationSuccess':informationSuccess}) 
+                
+            else :   
+                passwordMsg = 'Verifiez les champs'
+                return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'changeUserForm' : changeUserForm,'doctor':doctor ,'informationMsg':informationMsg,'informationSuccess':informationSuccess}) 
+                
         elif request.POST.get("change_password") :
             changePasswordForm = ChangePassword(request.POST, request.FILES)
-            doctor =Doctor.objects.get( user=request.user.id)           
             doctorForm = RegisterForm(instance=doctor)
             changeUserForm =ChangeUserForm(instance=request.user) 
 
-            if changePasswordForm.is_valid() :
+            if changePasswordForm.is_valid() & (authenticate(username=request.user.username, password=changePasswordForm.cleaned_data['oldpassword']) is not None)  :
+                request.user.set_password(changePasswordForm.cleaned_data['password1'])
+                request.user.save()
                 passwordMsg = 'Le mot de passe modifié avec succes'
                 passwordSuccess = True                    
                 return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'changeUserForm' : changeUserForm,'doctor':doctor ,'passwordMsg':passwordMsg,'passwordSuccess':passwordSuccess}) 
@@ -810,7 +843,6 @@ def settings(request) :
 
 
 
-    doctor =Doctor.objects.get( user=request.user.id)           
     changePasswordForm = ChangePassword()
     doctorForm = RegisterForm(instance=doctor)
     changeUserForm =ChangeUserForm(instance=request.user) 
