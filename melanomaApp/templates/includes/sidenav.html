@@ -159,6 +159,7 @@
 				<!--             end patients                      -->
 
 				<!--             Notes                    -->
+				{% if url_name in 'notesList,addNote' %}
 				<li class="nav-item {% if url_name in 'notesList,addNote' %}active{% endif %}">
 					<a data-toggle="collapse" href="#notes">
 						<i class="far fa-sticky-note"></i>
@@ -169,18 +170,19 @@
 					<div class="collapse {% if url_name in 'notesList,addNote' %}show{% endif %}" id="notes">
 						<ul class="nav nav-collapse">
 							<li class="{% if url_name == 'notesList' %}active{% endif %}">
-								<a href="#">
+								<a href="{% url 'notesList' img.id %}">
 									<span class="sub-item">{% trans "Liste des Notes" %}</span>
 								</a>
 							</li>
 							<li class="{% if url_name == 'addNote' %}active{% endif %}">
-								<a href="#">
+								<a href="{% url 'addNote' img.id %}">
 									<span class="sub-item">{% trans "Ajouter Note" %}</span>
 								</a>
 							</li>
 						</ul>
 					</div>
 				</li>
+				{% endif %}
 			<!--            end  Notes                    -->
 			
 
