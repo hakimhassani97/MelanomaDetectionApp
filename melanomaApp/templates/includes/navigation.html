@@ -250,13 +250,12 @@
 											class="avatar-img rounded"></div>
 									<div class="u-text">
 										<h4>
-											{{ request.user.user }}
+											{{ request.user.username }}
 										</h4>
 										<p class="text-muted">
 											{{ request.user.email }}
 										</p>
-
-										<a href="#" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+										{% comment %} <a href="#" class="btn btn-xs btn-secondary btn-sm">View Profile</a> {% endcomment %}
 									</div>
 								</div>
 							</li>
