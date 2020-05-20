@@ -581,7 +581,8 @@ def images(request):
     '''
         returns a list of all the images
     '''
-    images = Image.objects.order_by('-date')
+    # images = Image.objects.order_by('-date')
+    images = request.user.doctor.images.all().order_by('-date')
     context = {
         'images': images,
     }
