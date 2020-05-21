@@ -60,7 +60,7 @@ class Menzies:
             res = res + mask
         # get contours
         ret, thresh = cv2.threshold(res, 0, 100, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
-        c, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         # filter contours
         def f(cnt):
             return cv2.arcLength(cnt, closed=True)>10 and cv2.arcLength(cnt, closed=True)<30

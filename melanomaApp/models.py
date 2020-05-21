@@ -8,6 +8,8 @@ class Doctor(models.Model):
     '''
         the Doctor model
     '''
+    firstName = models.CharField(max_length=30, null=False, blank=False ,default="Doctor")
+    lastName = models.CharField(max_length=30, null=False, blank=False ,default="Doctor")    
     phone = models.CharField(max_length=15, null=True, blank=True)
     image = models.ImageField(upload_to='avatars', null=True, blank=True, default="avatars/av.png")
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
