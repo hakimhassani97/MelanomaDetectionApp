@@ -23,19 +23,13 @@ class RegisterForm(forms.ModelForm):
     '''
         Doctor registration form
     '''
+    firstName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "First Name","class": "form-control","type":"text"}))
+    lastName = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Last Name","class": "form-control","type":"text"}))
     image = forms.ImageField(widget=forms.FileInput(attrs={"placeholder" : "Image","class": "form-control"}))
     phone = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Phone","class": "form-control"}))
     class Meta:
         model = Doctor
-        fields = ['phone', 'image']
-
-
-class ChangeUserForm(UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder" : "Username","class": "form-control"}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder" : "Email","class": "form-control"}))
-    class Meta:
-        model = User
-        fields = ('username', 'email')
+        fields = ['phone', 'image','firstName','lastName']
 
 
 class ChangePassword(UserCreationForm) :

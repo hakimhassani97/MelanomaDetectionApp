@@ -14,7 +14,7 @@ class Contours:
         # apply threshold
         ret, thresh = cv2.threshold(imgray, 127, 255, 0)
         # get contours
-        c,contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return contours
 
     '''
@@ -32,7 +32,7 @@ class Contours:
         # apply OTSU threshold
         ret, thresh = Preprocess.OTSUThreshold(img)
         # search for contours and select the biggest one
-        c, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)
+        contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)
         cnt = max(contours, key=cv2.contourArea)
         return cnt
 
