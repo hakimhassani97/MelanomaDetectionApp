@@ -23,8 +23,7 @@ class Game:
         '''
             load data from csv
         '''
-        
-        XData = pd.read_csv('C:/Users/ezi/Documents/GitHub/MelanomaDetectionApp/melanomaApp/detector/utils/resnew '+Game.type+'.csv', header=None)
+        XData = pd.read_csv('D:/HAKIM/MIV M2/PFE/application/melanomaApp/detector/utils/resnew '+Game.type+'.csv', header=None)
         target = XData.loc[:,2].values
         data = XData.loc[:,4:29].values
         return target, data
