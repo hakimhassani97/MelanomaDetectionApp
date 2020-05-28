@@ -645,12 +645,14 @@ def updatePatient(request,patientId):
     success = False
     patient = Patient.objects.get(id=patientId)
     date = patient.dateCreation
+    doctor =patient.doctor
     if request.method == "POST":
         form = AddPatientForm(request.POST, request.FILES)
         if form.is_valid():
             patient = form.save(commit=False)
             patient.id = patientId
             patient.dateCreation = date
+            patient.doctor =doctor
             patient.save()
             msg = 'Le Patient modifié avec succes'
             success = True
