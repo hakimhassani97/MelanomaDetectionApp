@@ -1,12 +1,12 @@
 {% extends "layouts/base.html" %}
 {% load i18n %}
-{% block title %} {% trans "Creer un compte" %} {% endblock title %}
+{% block title %} {% trans "Créer un compte" %} {% endblock title %}
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 {% block content %}
     <div class="page-inner">
         <div class="page-header">
-            <h4 class="page-title">{% trans "Creer un compte" %}</h4>
+            <h4 class="page-title">{% trans "Créer un compte" %}</h4>
             <ul class="breadcrumbs">
                 <li class="nav-home">
                     <a href="{% url 'login' %}">
@@ -23,7 +23,7 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'register' %}">{% trans "Creer un compte" %}</a>
+                    <a href="{% url 'register' %}">{% trans "Créer un compte" %}</a>
                 </li>
             </ul>
         </div>
@@ -32,7 +32,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <span>{% trans "Creer un compte" %}</span>
+                            <span>{% trans "Créer un compte" %}</span>
                         </div>
                     </div>
                     <div class="row">
@@ -158,7 +158,7 @@
                             <div class="card-action">
                                 <button type="submit" class="btn btn-success">{% trans "Enregistrer" %}</button>
                                 &nbsp; &nbsp;
-                                <span>{% trans "Vous avez deja un compte ?" %}</span> <a href={% url 'login' %} >{% trans "Se connecter" %}</a>
+                                <span>{% trans "Vous avez déja un compte ?" %}</span> <a href={% url 'login' %} >{% trans "Se connecter" %}</a>
                             </div>
                         </form>
                     {% endif %}
