@@ -647,10 +647,12 @@ def updatePatient(request,patientId):
     if request.method == "POST":
         form = AddPatientForm(request.POST, request.FILES)
         if form.is_valid():
-            patient = form.save(commit=False)
-            patient.id = patientId
-            patient.save()
-            msg = 'Le Patient modifié avec succes'
+            p = form.save(commit=False)
+            p.id = patientId
+            p.doctor = request.user.doctor
+            p.dateCreation = patient.dateCreation
+            p.save()
+            msg = 'Patient modifié avec succes'
             success = True
             # return redirect("/login/")
             return render(request, 'updatePatient.html', {"form": form, "msg": msg, "success": success})
