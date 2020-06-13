@@ -61,7 +61,7 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 if not hasattr(user, 'doctor'):
-                    msg = 'Vous n\'etes pas un doctor'
+                    msg = 'Vous n\'êtes pas un doctor'
                 else:
                     doLogin(request, user)
                     return redirect("/dashboard")
@@ -92,7 +92,7 @@ def register(request):
             username = userform.cleaned_data.get("username")
             raw_password = userform.cleaned_data.get("password1")
             user = authenticate(username=username, password=raw_password)
-            msg = 'Compte Cree avec succes, veuillez attendre notre validation'
+            msg = 'Compte Créé avec succès, veuillez attendre notre validation'
             success = True
             # return redirect("/login/")
         else:
@@ -616,7 +616,7 @@ def addPatient(request):
             Patient = form.save(commit=False)
             Patient.doctor = request.user.doctor
             Patient.save()
-            msg = 'Le Patient est enregistrée avec succes'
+            msg = 'Le patient est enregistré avec succès'
             success = True
             # return redirect("/login/")
             return render(request, 'addPatient.html', {"form": form, "msg": msg, "success": success})
@@ -652,7 +652,7 @@ def updatePatient(request,patientId):
             p.doctor = request.user.doctor
             p.dateCreation = patient.dateCreation
             p.save()
-            msg = 'Patient modifié avec succes'
+            msg = 'Patient modifié avec succès'
             success = True
             # return redirect("/login/")
             return render(request, 'updatePatient.html', {"form": form, "msg": msg, "success": success})
@@ -836,7 +836,7 @@ def settings(request) :
                 
                 doctor.save()
                 
-                passwordMsg = 'Les informations modifié avec succes'
+                passwordMsg = 'Informations modifiées avec succès'
                 passwordSuccess = True                    
                 return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'doctor':doctor ,'informationMsg':informationMsg,'informationSuccess':informationSuccess}) 
             
@@ -852,7 +852,7 @@ def settings(request) :
             if changePasswordForm.is_valid() & (authenticate(username=request.user.username, password=changePasswordForm.cleaned_data['oldpassword']) is not None)  :
                 request.user.set_password(changePasswordForm.cleaned_data['password1'])
                 request.user.save()
-                passwordMsg = 'Le mot de passe modifié avec succes'
+                passwordMsg = 'Mot de passe modifié avec succès'
                 passwordSuccess = True                    
                 return render(request,'settings.html',{'ChangePasswordForm':changePasswordForm ,'doctorForm': doctorForm ,'doctor':doctor ,'passwordMsg':passwordMsg,'passwordSuccess':passwordSuccess}) 
             else:
