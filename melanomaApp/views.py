@@ -181,6 +181,27 @@ def doGeneration(i):
         det.circle.save(name, File(dest), save=False)
     # remove temporary files
     os.remove(imgPath)
+    ######################## asymmetry distance between centers
+    img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
+    img = cv2.drawContours(img, [contour], -1, (0, 255, 255), 2)
+    M = cv2.moments(contour)
+    xe = int(M["m10"] / M["m00"])
+    ye = int(M["m01"] / M["m00"])
+    cv2.circle(img, (xe, ye), radius=2, color=(0, 255, 255), thickness=2)
+    (xCiCe, yCiCe), radius = cv2.minEnclosingCircle(contour)
+    xCiCe = int(xCiCe)
+    yCiCe = int(yCiCe)
+    cv2.circle(img, (xCiCe, yCiCe), radius=2, color=(0, 0, 255), thickness=2)
+    cv2.circle(img, (xCiCe, yCiCe), radius=int(radius), color=(0, 0, 255), thickness=2)
+    cv2.line(img, (xCiCe, yCiCe), (xe, ye), (255, 255, 0), 1)
+    imgPath = 'media/'+i.image.name
+    imgPath = imgPath.replace('.', '_distance.')
+    cv2.imwrite(imgPath, img)
+    with open(imgPath, 'rb') as dest:
+        name = imgPath.replace('media/images/','')
+        det.distance.save(name, File(dest), save=False)
+    # remove temporary files
+    os.remove(imgPath)
     ######################## draw rect
     img = cv2.imread(i.image.path, cv2.IMREAD_COLOR)
     Contours.boundingRectangleRotated(img, contour)
