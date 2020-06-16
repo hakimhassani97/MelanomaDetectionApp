@@ -79,6 +79,7 @@ class Details(models.Model):
     ###### asymmetry
     homologue = models.ImageField(upload_to='images', null=True, blank=True)
     subregion = models.ImageField(upload_to='images', null=True, blank=True)
+    distance = models.ImageField(upload_to='images', null=True, blank=True)
 
     ###### border
     border = models.ImageField(upload_to='images', null=True, blank=True)
