@@ -140,6 +140,24 @@
             
                 <div class="card-body row" id="asymmetryCard" style="display: none;">
                     <div class="card card-post card-round col-md-4 imgCard">
+                        <img class="card-img-top zoom" src="{{details.distance.url}}">
+                        <button style="position: absolute; right: 5%; margin-top: 10px;"
+						 class="btn btn-icon btn-light btn-round btn-xs zoom ">
+							<i class="fa fa-search-plus zoom"></i>
+						</button>
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="info-post ml-2">
+                                    {% trans "Asymétrie par distance entre les centres" %}<br/><br/>
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fas fa-info-circle"></i>
+                                        <small class="text-muted">la distance entre le centre de masse de la lésion et le centre du cercle englobant la lésion aident à representer l'Asymétrie</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-post card-round col-md-4 imgCard">
                         <img class="card-img-top zoom" src="{{details.homologue.url}}">
                         <button style="position: absolute; right: 5%; margin-top: 10px;"
 						 class="btn btn-icon btn-light btn-round btn-xs zoom ">
@@ -148,10 +166,10 @@
                         <div class="card-body">
                             <div class="d-flex">
                                 <div class="info-post ml-2">
-                                    {% trans "Assymetrie par pixels homologues" %}<br/><br/>
+                                    {% trans "Asymétrie par pixels homologues" %}<br/><br/>
                                     <div class="alert alert-warning" role="alert">
                                         <i class="fas fa-info-circle"></i>
-                                        <small class="text-muted">Les pixels noirs dans l'image indiquent une assymetrie dans la lesion</small>
+                                        <small class="text-muted">Les pixels noirs dans l'image indiquent une Asymétrie dans la lesion</small>
                                     </div>
                                 </div>
                             </div>
@@ -166,10 +184,10 @@
                         <div class="card-body">
                             <div class="d-flex">
                                 <div class="info-post ml-2">
-                                    {% trans "Assymetrie par sous regions" %}<br/><br/>
+                                    {% trans "Asymétrie par sous regions" %}<br/><br/>
                                     <div class="alert alert-warning" role="alert">
                                         <i class="fas fa-info-circle"></i>
-                                        <small class="text-muted">Les pixels noirs dans l'image indiquent une assymetrie dans la lesion</small>
+                                        <small class="text-muted">Les pixels noirs dans l'image indiquent une Asymétrie dans la lesion</small>
                                     </div>
                                 </div>
                             </div>
