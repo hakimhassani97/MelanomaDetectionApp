@@ -198,19 +198,7 @@
 											<span class="text">{% trans "Ajouter un patient" %}</span>
 										</div>
 									</a>
-									<a class="col-6 col-md-4 p-0" href="{% url 'uploadImg' %}">
-										<div class="quick-actions-item">
-											<i class="flaticon-picture"></i>
-											<span class="text">{% trans "Importer une image" %}</span>
-										</div>
-									</a>
-									<a class="col-6 col-md-4 p-0" href="#">
-										<div class="quick-actions-item">
-											<i class="flaticon-pen"></i>
-											<span class="text">Create New Post</span>
-										</div>
-									</a>
-									<a class="col-6 col-md-4 p-0" href="#">
+									<a class="col-6 col-md-4 p-0" href="{% url 'patientsList' %}">
 										<div class="quick-actions-item">
 											<i class="flaticon-users"></i>
 											<span class="text">{% trans "Liste des patients" %}</span>
@@ -219,13 +207,13 @@
 									<a class="col-6 col-md-4 p-0" href="{% url 'uploadImg' %}">
 										<div class="quick-actions-item">
 											<i class="flaticon-picture"></i>
-											<span class="text">{% trans "Liste des images" %}</span>
+											<span class="text">{% trans "Importer une image" %}</span>
 										</div>
 									</a>
-									<a class="col-6 col-md-4 p-0" href="#">
+									<a class="col-6 col-md-4 p-0" href="{% url 'images' %}">
 										<div class="quick-actions-item">
-											<i class="flaticon-file"></i>
-											<span class="text">Create New Invoice</span>
+											<i class="flaticon-picture"></i>
+											<span class="text">{% trans "Liste des images" %}</span>
 										</div>
 									</a>
 								</div>
