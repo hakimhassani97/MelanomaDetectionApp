@@ -112,10 +112,10 @@
             }
         });
     }
-    $('.imgCard').on('click',(e)=>{
+    $('.zoom').on('click',(e)=>{
 		if($(e.target).hasClass('zoom')) {
-			var src = $(e.target).closest('.imgCard').find('img').attr('src')
-			var title = $(e.target).closest('.imgCard').find('.info-post').html()
+			var src = $(e.target).closest('img').attr('src')
+			var title = $(e.target).closest('.card').find('.text-muted').html()
 			$('#zoomModal .modal-title').html(title)
 			$('#imgModal').attr('src', src)
 			$('#zoomModal').modal('show')
