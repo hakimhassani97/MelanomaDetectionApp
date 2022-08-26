@@ -1,4 +1,6 @@
 # Melanoma Detection Web App
+
+A web app that uses Image Processing and multiple classification algorithms combined with a Game Theory Model to classify lesion images into `Tumor` or `Non Tumor` images
   
 make migrations : `python manage.py makemigrations melanomaApp`
   
